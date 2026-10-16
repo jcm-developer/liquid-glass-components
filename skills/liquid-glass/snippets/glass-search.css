@@ -1,0 +1,94 @@
+/* ============================================
+   GLASS SEARCH FIELD COMPONENT
+   Liquid Glass Components v1.0.0
+   ============================================ */
+
+/* --- HTML Structure ---
+<div class="glass-search" role="search">
+  <svg class="glass-search__icon" aria-hidden="true">...</svg>
+  <input class="glass-search__input" type="search" placeholder="Search..." aria-label="Search">
+</div>
+*/
+
+.glass-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--glass-gap);
+  min-height: 44px;
+  padding: var(--glass-padding-sm) var(--glass-padding-lg);
+  border-radius: var(--glass-border-radius-pill);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  box-shadow: var(--glass-shadow), var(--glass-shadow-inset);
+  border: var(--glass-border-width) solid transparent;
+  isolation: isolate;
+  transform: translateZ(0);
+  transition: width var(--glass-duration-morph) var(--glass-easing-spring);
+}
+
+.glass-search::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--glass-border-width);
+  background: linear-gradient(135deg, var(--glass-border-top) 0%, transparent 60%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glass-search__icon {
+  width: 18px;
+  height: 18px;
+  stroke: var(--glass-text-secondary);
+  stroke-width: 2;
+  fill: none;
+  flex-shrink: 0;
+}
+
+.glass-search__input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--glass-text-primary);
+  font-family: var(--glass-font-sans);
+  font-weight: var(--glass-font-weight-body);
+  font-size: 0.9375rem;
+}
+
+.glass-search__input::placeholder {
+  color: var(--glass-text-secondary);
+}
+
+.glass-search:focus-within {
+  background: var(--glass-bg-hover);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-shadow-inset), var(--glass-focus-ring);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-search {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--glass-solid-bg);
+    border-color: var(--glass-solid-border);
+  }
+  .glass-search::before { display: none; }
+}
+
+@media (forced-colors: active) {
+  .glass-search {
+    background: Canvas;
+    border: 2px solid CanvasText;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+  .glass-search::before { display: none; }
+  .glass-search__input {
+    color: CanvasText;
+  }
+}

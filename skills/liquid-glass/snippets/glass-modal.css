@@ -1,0 +1,132 @@
+/* ============================================
+   GLASS MODAL / SHEET COMPONENT
+   Liquid Glass Components v1.0.0
+   ============================================ */
+
+/* --- HTML Structure ---
+<dialog class="glass-modal" aria-labelledby="modal-title">
+  <div class="glass-modal__panel">
+    <header class="glass-modal__header">
+      <h2 class="glass-modal__title" id="modal-title">Title</h2>
+      <button class="glass-btn glass-btn--icon" aria-label="Close">×</button>
+    </header>
+    <div class="glass-modal__body">Content</div>
+  </div>
+</dialog>
+*/
+
+.glass-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--glass-padding-xl);
+  background: none;
+  border: none;
+}
+
+/* Backdrop overlay */
+.glass-modal::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.glass-modal__panel {
+  position: relative;
+  width: min(100%, 480px);
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: var(--glass-padding-xl);
+  border-radius: var(--glass-border-radius-xl);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur-prominent)) saturate(var(--glass-saturation)) contrast(var(--glass-contrast));
+  -webkit-backdrop-filter: blur(var(--glass-blur-prominent)) saturate(var(--glass-saturation)) contrast(var(--glass-contrast));
+  box-shadow: var(--glass-shadow-elevated), var(--glass-shadow-inset);
+  border: var(--glass-border-width) solid transparent;
+  color: var(--glass-text-primary);
+  font-family: var(--glass-font-sans);
+  isolation: isolate;
+  contain: layout paint;
+  transform: translateZ(0);
+}
+
+/* Specular border */
+.glass-modal__panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--glass-border-width);
+  background: linear-gradient(
+    135deg,
+    var(--glass-border-top) 0%,
+    rgba(255, 255, 255, 0.15) 40%,
+    transparent 60%,
+    var(--glass-border-bottom) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glass-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--glass-padding-lg);
+}
+
+.glass-modal__title {
+  font-size: 1.25rem;
+  font-weight: var(--glass-font-weight-heading);
+  margin: 0;
+}
+
+.glass-modal__body {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  font-weight: var(--glass-font-weight-body);
+}
+
+/* Bottom sheet variant */
+.glass-modal--sheet {
+  align-items: flex-end;
+}
+
+.glass-modal--sheet .glass-modal__panel {
+  width: 100%;
+  max-width: 100%;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  max-height: 85vh;
+}
+
+/* --- Accessibility Fallbacks --- */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-modal__panel {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--glass-solid-bg);
+    border-color: var(--glass-solid-border);
+  }
+  .glass-modal__panel::before { display: none; }
+  .glass-modal::backdrop {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .glass-modal__panel {
+    background: Canvas;
+    border: 2px solid CanvasText;
+    color: CanvasText;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+  .glass-modal__panel::before { display: none; }
+}

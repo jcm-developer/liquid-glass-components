@@ -1,0 +1,44 @@
+---
+description: "Liquid Glass design system — translucent, accessible glass UI components using backdrop-filter, mask-composite borders, and CSS springs. Use when creating navigation bars, tab bars, toolbars, modals, popovers, buttons, or any chrome/control layer with glass aesthetic."
+globs: "**/*.css, **/*.html, **/*.tsx, **/*.jsx, **/*.vue, **/*.svelte, **/*.astro"
+alwaysApply: false
+---
+
+# Liquid Glass Design Rules
+
+## Core Principles
+- Glass belongs ONLY to navigation/chrome layer (tab bars, toolbars, sidebars, modals, popovers, FABs)
+- NEVER apply glass to content (articles, feeds, table cells, list items)
+- NEVER stack glass on glass — use flat fills for subdivisions
+- Concentric radii: inner radius = outer radius − padding
+
+## Base Glass Surface CSS
+```css
+.glass-surface {
+  position: relative;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px) saturate(180%) contrast(108%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%) contrast(108%);
+  box-shadow: 0 8px 32px -4px rgba(0,0,0,0.12), inset 0 1px 1px rgba(255,255,255,0.6);
+  border: 1px solid transparent;
+  border-radius: 24px;
+  isolation: isolate;
+  contain: layout paint;
+  transform: translateZ(0);
+}
+```
+
+## Specular Border (::before)
+Use `mask-composite: exclude` technique. NEVER use `border-image` with `border-radius`.
+
+## Mandatory Fallbacks (include ALL):
+- `@media (prefers-reduced-transparency: reduce)` → solid bg, no backdrop-filter
+- `@media (prefers-reduced-motion: reduce)` → no transitions
+- `@media (prefers-contrast: more)` → 2px solid borders, no shadows
+- `@media (forced-colors: active)` → Canvas/CanvasText system colors
+
+## Typography: min font-weight 500, min 16px body. No mix-blend-mode on text.
+## Performance: max 1 backdrop-filter on mobile. No will-change: backdrop-filter.
+## Animation: use CSS linear() spring curves. No JS animation libraries needed.
+
+See `skills/liquid-glass/snippets/tokens.css` for full design token system.

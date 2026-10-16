@@ -1,0 +1,88 @@
+/* ============================================
+   GLASS TOAST / NOTIFICATION COMPONENT
+   Liquid Glass Components v1.0.0
+   ============================================ */
+
+/* --- HTML Structure ---
+<div class="glass-toast" role="status" aria-live="polite">
+  <span class="glass-toast__message">Changes saved successfully.</span>
+  <button class="glass-toast__dismiss" aria-label="Dismiss">×</button>
+</div>
+*/
+
+.glass-toast {
+  position: fixed;
+  bottom: var(--glass-padding-xl);
+  left: 50%;
+  transform: translateX(-50%) translateY(0) translateZ(0);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: var(--glass-padding-md);
+  padding: var(--glass-padding-md) var(--glass-padding-xl);
+  border-radius: var(--glass-border-radius-pill);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  box-shadow: var(--glass-shadow-elevated), var(--glass-shadow-inset);
+  border: var(--glass-border-width) solid transparent;
+  color: var(--glass-text-primary);
+  font-family: var(--glass-font-sans);
+  font-weight: var(--glass-font-weight-body);
+  font-size: 0.875rem;
+  isolation: isolate;
+}
+
+.glass-toast::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--glass-border-width);
+  background: linear-gradient(135deg, var(--glass-border-top) 0%, transparent 60%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glass-toast__dismiss {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--glass-text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background var(--glass-duration-fast);
+}
+
+.glass-toast__dismiss:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--glass-text-primary);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-toast {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--glass-solid-bg);
+    border-color: var(--glass-solid-border);
+  }
+  .glass-toast::before { display: none; }
+}
+
+@media (forced-colors: active) {
+  .glass-toast {
+    background: Canvas;
+    border: 2px solid CanvasText;
+    color: CanvasText;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+  .glass-toast::before { display: none; }
+}

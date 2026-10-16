@@ -1,0 +1,96 @@
+/* ============================================
+   GLASS TOOLBAR / NAVBAR COMPONENT
+   Liquid Glass Components v1.0.0
+   ============================================ */
+
+/* --- HTML Structure ---
+<header class="glass-toolbar" role="banner">
+  <nav class="glass-toolbar__content" aria-label="Main">
+    <a class="glass-toolbar__brand" href="/">Brand</a>
+    <div class="glass-toolbar__actions">
+      <button class="glass-btn glass-btn--icon" aria-label="Menu">...</button>
+    </div>
+  </nav>
+</header>
+*/
+
+.glass-toolbar {
+  position: fixed;
+  top: var(--glass-padding-lg);
+  left: 50%;
+  transform: translateX(-50%) translateZ(0);
+  z-index: 50;
+  width: min(calc(100% - var(--glass-padding-xl) * 2), 960px);
+  padding: var(--glass-padding-sm) var(--glass-padding-lg);
+  border-radius: var(--glass-border-radius-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) contrast(var(--glass-contrast));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) contrast(var(--glass-contrast));
+  box-shadow: var(--glass-shadow-elevated), var(--glass-shadow-inset);
+  border: var(--glass-border-width) solid transparent;
+  isolation: isolate;
+  contain: layout paint;
+}
+
+/* Specular border */
+.glass-toolbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--glass-border-width);
+  background: linear-gradient(
+    135deg,
+    var(--glass-border-top) 0%,
+    rgba(255, 255, 255, 0.15) 40%,
+    transparent 60%,
+    var(--glass-border-bottom) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glass-toolbar__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--glass-padding-lg);
+}
+
+.glass-toolbar__brand {
+  font-family: var(--glass-font-sans);
+  font-weight: var(--glass-font-weight-heading);
+  font-size: 1rem;
+  color: var(--glass-text-primary);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.glass-toolbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--glass-gap);
+}
+
+/* --- Accessibility Fallbacks --- */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-toolbar {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--glass-solid-bg);
+    border-color: var(--glass-solid-border);
+  }
+  .glass-toolbar::before { display: none; }
+}
+
+@media (forced-colors: active) {
+  .glass-toolbar {
+    background: Canvas;
+    border: 2px solid CanvasText;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+  .glass-toolbar::before { display: none; }
+}

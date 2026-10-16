@@ -1,0 +1,2856 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liquid Glass Components — Open Source Design System</title>
+  <meta name="description" content="An open-source design system and AI skill for building web interfaces with Apple's Liquid Glass aesthetic — accessible, performant, framework-agnostic.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       1. LIQUID GLASS DESIGN TOKENS
+       ========================================================================== */
+    :root {
+      /* Surface & Optics (Dark mode default) */
+      --glass-blur: 20px;
+      --glass-bg-opacity: 0.12;
+      --glass-bg: rgba(255, 255, 255, var(--glass-bg-opacity));
+      --glass-saturation: 180%;
+      --glass-contrast: 105%;
+      --glass-border-opacity: 0.25;
+      --glass-border: rgba(255, 255, 255, var(--glass-border-opacity));
+      --glass-border-width: 1px;
+      --glass-border-top: rgba(255, 255, 255, 0.45);
+      --glass-border-bottom: rgba(255, 255, 255, 0.08);
+
+      /* Shadows & Inset Bevel */
+      --glass-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.38), 0 2px 10px 0 rgba(0, 0, 0, 0.24);
+      --glass-shadow-sm: 0 4px 16px 0 rgba(0, 0, 0, 0.25);
+      --glass-shadow-lg: 0 20px 50px 0 rgba(0, 0, 0, 0.5), 0 4px 16px 0 rgba(0, 0, 0, 0.3);
+      --glass-shadow-inset: inset 0 1px 1px 0 rgba(255, 255, 255, 0.28), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.22);
+      --glass-glow: 0 0 24px rgba(56, 189, 248, 0.25);
+
+      /* Radii Hierarchy */
+      --glass-border-radius-xs: 6px;
+      --glass-border-radius-sm: 10px;
+      --glass-border-radius-md: 16px;
+      --glass-border-radius-lg: 24px;
+      --glass-border-radius-xl: 32px;
+      --glass-border-radius-pill: 9999px;
+
+      /* Typography */
+      --glass-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+      --glass-font-mono: 'JetBrains Mono', ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      --glass-text-primary: #ffffff;
+      --glass-text-secondary: rgba(255, 255, 255, 0.72);
+      --glass-text-tertiary: rgba(255, 255, 255, 0.48);
+      --glass-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+      --glass-font-weight-body: 500;
+      --glass-font-weight-semibold: 600;
+      --glass-font-weight-bold: 700;
+
+      /* Brand & Accent */
+      --glass-accent: #38bdf8;
+      --glass-accent-glow: rgba(56, 189, 248, 0.35);
+      --glass-accent-hover: #7dd3fc;
+      --glass-accent-active: #0284c7;
+      --glass-accent-text: #ffffff;
+
+      /* Fallback Solid Colors */
+      --glass-solid-bg: #14161f;
+      --glass-solid-border: rgba(255, 255, 255, 0.16);
+
+      /* Spring Animation Physics (Native linear curve) */
+      --glass-easing-spring: linear(0, 0.006, 0.025 2.8%, 0.101 6.1%, 0.539 18.9%, 0.721 25.3%, 0.849 31.5%, 0.932 38.1%, 0.978 45.4%, 0.997 53.6%, 1 65.5%, 1);
+      --glass-spring-duration: 0.5s;
+
+      /* Page Shell */
+      --page-bg: #090a0f;
+      --page-text: #ffffff;
+      --panel-bg: rgba(18, 20, 29, 0.7);
+    }
+
+    /* Light Mode Overrides */
+    html.light {
+      --glass-bg-opacity: 0.65;
+      --glass-bg: rgba(255, 255, 255, var(--glass-bg-opacity));
+      --glass-saturation: 160%;
+      --glass-contrast: 100%;
+      --glass-border-opacity: 0.35;
+      --glass-border: rgba(0, 0, 0, 0.12);
+      --glass-border-top: rgba(255, 255, 255, 0.9);
+      --glass-border-bottom: rgba(0, 0, 0, 0.06);
+
+      --glass-shadow: 0 10px 32px 0 rgba(0, 0, 0, 0.08), 0 2px 8px 0 rgba(0, 0, 0, 0.04);
+      --glass-shadow-sm: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
+      --glass-shadow-lg: 0 20px 48px 0 rgba(0, 0, 0, 0.12), 0 4px 12px 0 rgba(0, 0, 0, 0.05);
+      --glass-shadow-inset: inset 0 1px 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.04);
+      --glass-glow: 0 0 24px rgba(2, 132, 199, 0.2);
+
+      --glass-text-primary: #0f172a;
+      --glass-text-secondary: rgba(15, 23, 42, 0.72);
+      --glass-text-tertiary: rgba(15, 23, 42, 0.48);
+      --glass-text-shadow: none;
+
+      --glass-accent: #0284c7;
+      --glass-accent-glow: rgba(2, 132, 199, 0.25);
+      --glass-accent-hover: #0369a1;
+      --glass-accent-active: #075985;
+      --glass-accent-text: #ffffff;
+
+      --glass-solid-bg: #f8fafc;
+      --glass-solid-border: rgba(0, 0, 0, 0.14);
+
+      --page-bg: #f1f5f9;
+      --page-text: #0f172a;
+      --panel-bg: rgba(255, 255, 255, 0.85);
+    }
+
+    /* Accessibility Overrides */
+    @media (prefers-reduced-transparency: reduce) {
+      .glass-surface, .glass-btn, .glass-interactive {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: var(--glass-solid-bg) !important;
+        border-color: var(--glass-solid-border) !important;
+      }
+      .glass-surface::before, .glass-btn::before, .glass-interactive::before {
+        display: none !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .hero-tilt-card {
+        transform: none !important;
+      }
+      .mesh-bg-canvas {
+        animation: none !important;
+      }
+    }
+
+    @media (prefers-contrast: more) {
+      .glass-surface, .glass-btn, .glass-interactive {
+        background: var(--glass-bg);
+        border: 2px solid var(--glass-border) !important;
+        box-shadow: none !important;
+      }
+      .glass-surface::before, .glass-btn::before {
+        display: none !important;
+      }
+    }
+
+    @media (forced-colors: active) {
+      .glass-surface, .glass-btn, .glass-interactive {
+        background: Canvas !important;
+        border: 2px solid CanvasText !important;
+        color: CanvasText !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        box-shadow: none !important;
+      }
+      .glass-surface::before, .glass-btn::before {
+        display: none !important;
+      }
+    }
+
+    /* ==========================================================================
+       2. RESET & BASE LAYOUT
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      color-scheme: dark light;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--page-bg);
+      color: var(--glass-text-primary);
+      font-family: var(--glass-font-sans);
+      font-weight: var(--glass-font-weight-body);
+      line-height: 1.55;
+      letter-spacing: -0.011em;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      position: relative;
+      transition: background-color 0.4s ease, color 0.3s ease;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    input {
+      font-family: inherit;
+    }
+
+    /* Dual-Ring Focus Accessibility */
+    :focus-visible {
+      outline: 2px solid #000000;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #000000;
+    }
+
+    @media (forced-colors: active) {
+      :focus-visible {
+        outline: 3px solid Highlight !important;
+        box-shadow: none !important;
+      }
+    }
+
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ==========================================================================
+       3. BACKGROUND SYSTEMS (Mesh, Dark, Light, Dots)
+       ========================================================================== */
+    .bg-canvas-wrapper {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Mesh Gradient Layer (Default) */
+    .mesh-gradient-bg {
+      position: absolute;
+      inset: -20%;
+      width: 140%;
+      height: 140%;
+      background:
+        radial-gradient(circle at 18% 22%, rgba(99, 102, 241, 0.42) 0%, transparent 45%),
+        radial-gradient(circle at 82% 16%, rgba(236, 72, 153, 0.38) 0%, transparent 48%),
+        radial-gradient(circle at 74% 80%, rgba(6, 182, 212, 0.36) 0%, transparent 44%),
+        radial-gradient(circle at 24% 78%, rgba(139, 92, 246, 0.42) 0%, transparent 46%),
+        radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.22) 0%, transparent 55%),
+        #090a0f;
+      filter: blur(40px);
+      animation: meshFloat 24s ease-in-out infinite alternate;
+      transition: opacity 0.5s ease;
+      opacity: 1;
+    }
+
+    html.light .mesh-gradient-bg {
+      background:
+        radial-gradient(circle at 20% 25%, rgba(99, 102, 241, 0.28) 0%, transparent 45%),
+        radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.24) 0%, transparent 48%),
+        radial-gradient(circle at 75% 75%, rgba(6, 182, 212, 0.26) 0%, transparent 45%),
+        radial-gradient(circle at 25% 75%, rgba(139, 92, 246, 0.26) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.16) 0%, transparent 55%),
+        #f1f5f9;
+    }
+
+    /* Additional Dynamic Fluid Blobs for Glass Refraction */
+    .mesh-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.6;
+      animation: orbMove 18s ease-in-out infinite alternate;
+    }
+    .mesh-orb-1 {
+      width: 450px;
+      height: 450px;
+      top: 10%;
+      left: 15%;
+      background: radial-gradient(circle, #6366f1 0%, transparent 70%);
+      animation-duration: 20s;
+    }
+    .mesh-orb-2 {
+      width: 500px;
+      height: 500px;
+      top: 20%;
+      right: 12%;
+      background: radial-gradient(circle, #ec4899 0%, transparent 70%);
+      animation-duration: 25s;
+      animation-delay: -5s;
+    }
+    .mesh-orb-3 {
+      width: 550px;
+      height: 550px;
+      bottom: 15%;
+      left: 30%;
+      background: radial-gradient(circle, #06b6d4 0%, transparent 70%);
+      animation-duration: 22s;
+      animation-delay: -10s;
+    }
+
+    @keyframes meshFloat {
+      0% {
+        transform: rotate(0deg) scale(1) translate(0px, 0px);
+      }
+      50% {
+        transform: rotate(2deg) scale(1.05) translate(25px, -30px);
+      }
+      100% {
+        transform: rotate(-2deg) scale(0.98) translate(-25px, 25px);
+      }
+    }
+
+    @keyframes orbMove {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+      50% {
+        transform: translate(60px, -45px) scale(1.12);
+      }
+      100% {
+        transform: translate(-50px, 50px) scale(0.92);
+      }
+    }
+
+    /* Background Modes: Body class switches */
+    body.bg-dark-mode .bg-canvas-wrapper {
+      opacity: 0;
+    }
+    body.bg-dark-mode {
+      background-color: #0b0d14 !important;
+    }
+
+    body.bg-light-mode .bg-canvas-wrapper {
+      opacity: 0;
+    }
+    body.bg-light-mode {
+      background-color: #eef2f6 !important;
+    }
+
+    body.bg-dots-mode .bg-canvas-wrapper {
+      opacity: 0;
+    }
+    body.bg-dots-mode {
+      background-color: #0c0e14 !important;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1.5px, transparent 1.5px) !important;
+      background-size: 24px 24px !important;
+    }
+    html.light body.bg-dots-mode {
+      background-color: #f8fafc !important;
+      background-image: radial-gradient(rgba(0, 0, 0, 0.16) 1.5px, transparent 1.5px) !important;
+    }
+
+    /* ==========================================================================
+       4. LIQUID GLASS CORE COMPONENT CLASSES
+       ========================================================================== */
+    .glass-surface {
+      position: relative;
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) contrast(var(--glass-contrast));
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) contrast(var(--glass-contrast));
+      box-shadow: var(--glass-shadow), var(--glass-shadow-inset);
+      border: var(--glass-border-width) solid transparent;
+      border-radius: var(--glass-border-radius-lg);
+      color: var(--glass-text-primary);
+      isolation: isolate;
+      contain: layout paint;
+      transform: translateZ(0);
+      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Specular Border Gradient via mask-composite */
+    .glass-surface::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: var(--glass-border-width);
+      background: linear-gradient(
+        135deg,
+        var(--glass-border-top) 0%,
+        rgba(255, 255, 255, 0.16) 35%,
+        transparent 60%,
+        var(--glass-border-bottom) 100%
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Glass Buttons & Interactive Elements */
+    .glass-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 24px;
+      font-size: 0.95rem;
+      font-weight: var(--glass-font-weight-semibold);
+      color: var(--glass-text-primary);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+      border: var(--glass-border-width) solid transparent;
+      border-radius: var(--glass-border-radius-pill);
+      box-shadow: var(--glass-shadow-sm), var(--glass-shadow-inset);
+      cursor: pointer;
+      user-select: none;
+      isolation: isolate;
+      contain: layout paint;
+      transform: translateZ(0);
+      transition: transform 0.4s var(--glass-easing-spring), background 0.25s ease, box-shadow 0.25s ease, color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .glass-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: var(--glass-border-width);
+      background: linear-gradient(
+        135deg,
+        var(--glass-border-top) 0%,
+        rgba(255, 255, 255, 0.25) 30%,
+        transparent 60%,
+        var(--glass-border-bottom) 100%
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .glass-btn:hover {
+      background: rgba(255, 255, 255, calc(var(--glass-bg-opacity) + 0.08));
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: var(--glass-shadow), var(--glass-shadow-inset);
+    }
+
+    .glass-btn:active {
+      transform: scale(0.96);
+      background: rgba(255, 255, 255, calc(var(--glass-bg-opacity) + 0.02));
+      transition-duration: 0.15s;
+    }
+
+    /* Primary Accent Button */
+    .glass-btn--primary {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.35) 0%, rgba(14, 165, 233, 0.22) 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 20px rgba(56, 189, 248, 0.35), var(--glass-shadow-inset);
+    }
+    .glass-btn--primary:hover {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.45) 0%, rgba(14, 165, 233, 0.32) 100%);
+      box-shadow: 0 6px 28px rgba(56, 189, 248, 0.5), var(--glass-shadow-inset);
+    }
+
+    /* Glass Icon Button */
+    .glass-icon-btn {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .glass-icon-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+      transition: transform 0.3s var(--glass-easing-spring);
+    }
+    .glass-icon-btn:hover svg {
+      transform: scale(1.12);
+    }
+
+    /* ==========================================================================
+       5. NAVBAR (Floating Glass Toolbar)
+       ========================================================================== */
+    .navbar-wrapper {
+      position: fixed;
+      top: 16px;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      padding: 0 16px;
+      pointer-events: none;
+    }
+
+    .navbar {
+      pointer-events: auto;
+      width: 100%;
+      max-width: 1080px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px 0 20px;
+      border-radius: var(--glass-border-radius-pill);
+      box-shadow: var(--glass-shadow), var(--glass-shadow-inset);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--glass-text-primary);
+    }
+    .nav-brand-bubble {
+      font-size: 1.3rem;
+      filter: drop-shadow(0 2px 4px rgba(56, 189, 248, 0.4));
+      display: inline-block;
+      animation: gentlePulse 4s ease-in-out infinite;
+    }
+    @keyframes gentlePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-link {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--glass-text-secondary);
+      padding: 8px 14px;
+      border-radius: var(--glass-border-radius-pill);
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+    .nav-link:hover {
+      color: var(--glass-text-primary);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    html.light .nav-link:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .github-nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: var(--glass-border-radius-pill);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.2s ease;
+    }
+    .github-nav-link:hover {
+      background: rgba(255, 255, 255, 0.14);
+      transform: translateY(-1px);
+    }
+    .github-nav-link svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* ==========================================================================
+       6. HERO SECTION & INTERACTIVE 3D TILT CARD
+       ========================================================================== */
+    .hero-section {
+      padding-top: 140px;
+      padding-bottom: 70px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      margin-bottom: 24px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      border-radius: var(--glass-border-radius-pill);
+      color: var(--glass-accent);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
+    }
+    .hero-badge-spark {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--glass-accent);
+      box-shadow: 0 0 8px var(--glass-accent);
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4.4rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+      margin-bottom: 20px;
+      max-width: 860px;
+      background: linear-gradient(180deg, #ffffff 30%, rgba(255, 255, 255, 0.7) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: var(--glass-text-shadow);
+    }
+    html.light .hero-title {
+      background: linear-gradient(180deg, #0f172a 30%, #334155 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.05rem, 2vw, 1.28rem);
+      font-weight: 400;
+      color: var(--glass-text-secondary);
+      max-width: 680px;
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 50px;
+    }
+
+    /* 3D Tilt Hero Showcase Card */
+    .hero-card-container {
+      perspective: 1000px;
+      width: 100%;
+      max-width: 660px;
+      margin: 0 auto 36px;
+    }
+
+    .hero-tilt-card {
+      position: relative;
+      width: 100%;
+      padding: 36px;
+      border-radius: var(--glass-border-radius-xl);
+      text-align: left;
+      transform-style: preserve-3d;
+      transition: transform 0.6s var(--glass-easing-spring), box-shadow 0.3s ease;
+      will-change: transform;
+      cursor: crosshair;
+      overflow: hidden;
+    }
+
+    .hero-tilt-card:hover {
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45), 0 0 30px rgba(56, 189, 248, 0.15), var(--glass-shadow-inset);
+    }
+
+    /* Shimmer reflection highlight reacting to mouse */
+    .hero-tilt-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(
+        circle at var(--shine-x, 50%) var(--shine-y, 50%),
+        rgba(255, 255, 255, 0.22) 0%,
+        transparent 65%
+      );
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Inside the Hero Tilt Card: Apple-style Spatial Audio / Media widget */
+    .hero-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .hero-card-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border-radius: var(--glass-border-radius-pill);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--glass-text-secondary);
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulseGreen 2s infinite;
+    }
+    @keyframes pulseGreen {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    .hero-card-body {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .hero-album-art {
+      width: 90px;
+      height: 90px;
+      min-width: 90px;
+      border-radius: var(--glass-border-radius-md);
+      background: linear-gradient(135deg, #3b82f6, #ec4899, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-album-art::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
+    }
+
+    .hero-track-info {
+      flex: 1;
+    }
+    .hero-track-title {
+      font-size: 1.28rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      letter-spacing: -0.015em;
+    }
+    .hero-track-subtitle {
+      font-size: 0.92rem;
+      color: var(--glass-text-secondary);
+      margin-bottom: 12px;
+    }
+
+    /* Waveform visualizer */
+    .hero-wave-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 20px;
+    }
+    .hero-wave-bar {
+      width: 4px;
+      background: var(--glass-accent);
+      border-radius: 2px;
+      animation: waveDance 1.2s ease-in-out infinite alternate;
+    }
+    .hero-wave-bar:nth-child(1) { height: 8px; animation-delay: 0.1s; }
+    .hero-wave-bar:nth-child(2) { height: 16px; animation-delay: 0.3s; }
+    .hero-wave-bar:nth-child(3) { height: 12px; animation-delay: 0.5s; }
+    .hero-wave-bar:nth-child(4) { height: 20px; animation-delay: 0.2s; }
+    .hero-wave-bar:nth-child(5) { height: 14px; animation-delay: 0.4s; }
+    .hero-wave-bar:nth-child(6) { height: 18px; animation-delay: 0.15s; }
+    .hero-wave-bar:nth-child(7) { height: 10px; animation-delay: 0.35s; }
+
+    @keyframes waveDance {
+      0% { height: 6px; }
+      100% { height: 20px; }
+    }
+
+    .hero-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    html.light .hero-controls-row {
+      border-top-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .hero-mini-badges {
+      display: flex;
+      gap: 8px;
+    }
+    .hero-mini-tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      padding: 4px 10px;
+      border-radius: var(--glass-border-radius-pill);
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--glass-text-secondary);
+    }
+    html.light .hero-mini-tag {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .hero-tilt-instruction {
+      font-size: 0.78rem;
+      color: var(--glass-text-tertiary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ==========================================================================
+       7. BACKGROUND SWITCHER (Floating Dock)
+       ========================================================================== */
+    .bg-switcher-dock {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px;
+      border-radius: var(--glass-border-radius-pill);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+      box-shadow: var(--glass-shadow-sm), var(--glass-shadow-inset);
+      border: 1px solid var(--glass-border);
+      margin-top: 12px;
+    }
+
+    .bg-dock-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      color: var(--glass-text-secondary);
+      border-radius: var(--glass-border-radius-pill);
+      transition: all 0.25s var(--glass-easing-spring);
+      cursor: pointer;
+    }
+
+    .bg-dock-btn:hover {
+      color: var(--glass-text-primary);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .bg-dock-btn.active {
+      color: var(--glass-text-primary);
+      background: rgba(255, 255, 255, 0.2);
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+    }
+    html.light .bg-dock-btn.active {
+      background: rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    /* ==========================================================================
+       8. SECTION HEADINGS & COMMON STYLES
+       ========================================================================== */
+    .section-wrap {
+      padding: 90px 0;
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-tag {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--glass-accent);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.75rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      margin-bottom: 14px;
+      color: var(--glass-text-primary);
+    }
+
+    .section-description {
+      font-size: 1.05rem;
+      color: var(--glass-text-secondary);
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       9. TOKEN TUNER SECTION
+       ========================================================================== */
+    .tuner-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .tuner-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tuner-panel {
+      padding: 36px;
+      border-radius: var(--glass-border-radius-xl);
+    }
+
+    .tuner-slider-group {
+      margin-bottom: 24px;
+    }
+
+    .tuner-slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .tuner-label {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--glass-text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tuner-val-badge {
+      font-family: var(--glass-font-mono);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: var(--glass-border-radius-sm);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: var(--glass-accent);
+    }
+    html.light .tuner-val-badge {
+      background: rgba(0, 0, 0, 0.06);
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    /* Range slider custom styling */
+    .tuner-range {
+      width: 100%;
+      height: 6px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    html.light .tuner-range {
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    .tuner-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+      cursor: pointer;
+      border: 2px solid var(--glass-accent);
+      transition: transform 0.2s var(--glass-easing-spring);
+    }
+    .tuner-range::-webkit-slider-thumb:hover {
+      transform: scale(1.18);
+    }
+    .tuner-range::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+      cursor: pointer;
+      border: 2px solid var(--glass-accent);
+      transition: transform 0.2s var(--glass-easing-spring);
+    }
+
+    .tuner-minmax {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      color: var(--glass-text-tertiary);
+      margin-top: 6px;
+      font-family: var(--glass-font-mono);
+    }
+
+    .tuner-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    html.light .tuner-actions {
+      border-top-color: rgba(0, 0, 0, 0.08);
+    }
+
+    /* Tuner Preview Canvas */
+    .tuner-preview-wrapper {
+      position: relative;
+      border-radius: var(--glass-border-radius-xl);
+      padding: 40px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 480px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Vibrant under-backdrop for Tuner Preview */
+    .tuner-preview-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #4f46e5 0%, #ec4899 45%, #06b6d4 100%);
+      z-index: 0;
+    }
+    .tuner-preview-pattern {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 40%),
+        radial-gradient(circle at 70% 70%, rgba(0, 0, 0, 0.35) 0%, transparent 50%),
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.08) 0, rgba(255, 255, 255, 0.08) 2px, transparent 0, transparent 20px);
+      z-index: 1;
+    }
+
+    .tuner-preview-card {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 440px;
+      padding: 32px;
+      border-radius: var(--glass-border-radius-lg);
+    }
+
+    .preview-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .preview-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: var(--glass-border-radius-pill);
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .preview-card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .preview-card-desc {
+      font-size: 0.9rem;
+      color: var(--glass-text-secondary);
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .preview-code-block {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 16px;
+      border-radius: var(--glass-border-radius-sm);
+      font-family: var(--glass-font-mono);
+      font-size: 0.78rem;
+      color: #93c5fd;
+      line-height: 1.6;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+
+    /* ==========================================================================
+       10. COMPONENT EXPLORER (BENTO GRID)
+       ========================================================================== */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 24px;
+    }
+
+    .bento-item {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.35s var(--glass-easing-spring), box-shadow 0.35s ease;
+    }
+    .bento-item:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--glass-shadow-lg), var(--glass-shadow-inset);
+    }
+
+    .bento-col-4 { grid-column: span 4; }
+    .bento-col-6 { grid-column: span 6; }
+    .bento-col-8 { grid-column: span 8; }
+    .bento-col-12 { grid-column: span 12; }
+
+    @media (max-width: 960px) {
+      .bento-col-4, .bento-col-6, .bento-col-8 {
+        grid-column: span 12;
+      }
+    }
+
+    .bento-demo-stage {
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 0 24px;
+      position: relative;
+      width: 100%;
+    }
+
+    .bento-meta {
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    html.light .bento-meta {
+      border-top-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .bento-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--glass-text-primary);
+    }
+    .bento-tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      padding: 3px 8px;
+      border-radius: var(--glass-border-radius-pill);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--glass-text-secondary);
+    }
+
+    /* Sub-component: Glass Card Inside Bento */
+    .demo-inner-card {
+      width: 100%;
+      padding: 20px;
+      border-radius: var(--glass-border-radius-md);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    html.light .demo-inner-card {
+      background: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+
+    /* Sub-component: Glass Tab Bar */
+    .glass-tab-bar {
+      display: inline-flex;
+      position: relative;
+      padding: 5px;
+      border-radius: var(--glass-border-radius-pill);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+    html.light .glass-tab-bar {
+      background: rgba(0, 0, 0, 0.05);
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .glass-tab-btn {
+      position: relative;
+      z-index: 2;
+      padding: 8px 18px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--glass-text-secondary);
+      border-radius: var(--glass-border-radius-pill);
+      transition: color 0.2s ease;
+      cursor: pointer;
+    }
+    .glass-tab-btn.active {
+      color: var(--glass-text-primary);
+      background: rgba(255, 255, 255, 0.22);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+    }
+    html.light .glass-tab-btn.active {
+      background: rgba(255, 255, 255, 0.9);
+      color: #0f172a;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Sub-component: Glass Segmented Control */
+    .glass-segmented {
+      display: inline-flex;
+      padding: 4px;
+      border-radius: var(--glass-border-radius-sm);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      width: 100%;
+      max-width: 320px;
+    }
+    .glass-segmented-item {
+      flex: 1;
+      text-align: center;
+      padding: 8px 12px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--glass-text-secondary);
+      border-radius: 8px;
+      transition: all 0.25s var(--glass-easing-spring);
+      cursor: pointer;
+    }
+    .glass-segmented-item.active {
+      color: var(--glass-text-primary);
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+    }
+    html.light .glass-segmented-item.active {
+      background: rgba(255, 255, 255, 0.9);
+      color: #0f172a;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Sub-component: Glass Toggle / Switch */
+    .glass-switch-container {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .glass-switch {
+      position: relative;
+      width: 58px;
+      height: 34px;
+      border-radius: 17px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      cursor: pointer;
+      transition: background 0.3s ease, border-color 0.3s ease;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
+    }
+    .glass-switch[aria-checked="true"] {
+      background: #10b981;
+      border-color: #34d399;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 14px rgba(16, 185, 129, 0.4);
+    }
+    .glass-switch-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+      transition: transform 0.4s var(--glass-easing-spring);
+    }
+    .glass-switch[aria-checked="true"] .glass-switch-thumb {
+      transform: translateX(24px);
+    }
+
+    /* Sub-component: Glass Search Field */
+    .glass-search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      max-width: 340px;
+    }
+    .glass-search-input {
+      width: 100%;
+      padding: 12px 40px 12px 44px;
+      font-size: 0.92rem;
+      color: var(--glass-text-primary);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--glass-border);
+      border-radius: var(--glass-border-radius-pill);
+      outline: none;
+      box-shadow: var(--glass-shadow-inset);
+      transition: all 0.25s ease;
+    }
+    .glass-search-input::placeholder {
+      color: var(--glass-text-tertiary);
+    }
+    .glass-search-input:focus {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: var(--glass-accent);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25), var(--glass-shadow-inset);
+    }
+    .glass-search-icon {
+      position: absolute;
+      left: 16px;
+      pointer-events: none;
+      color: var(--glass-text-tertiary);
+      display: flex;
+      align-items: center;
+    }
+    .glass-search-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+    .glass-search-clear {
+      position: absolute;
+      right: 14px;
+      color: var(--glass-text-tertiary);
+      display: none;
+      cursor: pointer;
+    }
+    .glass-search-clear svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+    .glass-search-clear:hover {
+      color: var(--glass-text-primary);
+    }
+
+    /* Sub-component: Glass Toast */
+    .demo-toast {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      border-radius: var(--glass-border-radius-pill);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), var(--glass-shadow-inset);
+      max-width: 380px;
+      animation: floatToast 4s ease-in-out infinite alternate;
+    }
+    @keyframes floatToast {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-4px); }
+    }
+    .toast-icon-wrap {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .toast-icon-wrap svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+    .toast-text {
+      font-size: 0.86rem;
+      font-weight: 500;
+    }
+    .toast-action-btn {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--glass-accent);
+      margin-left: auto;
+      padding: 4px 8px;
+      border-radius: var(--glass-border-radius-sm);
+    }
+
+    /* ==========================================================================
+       11. INSTALL SECTION (TABBED INTERFACE FOR AGENTS)
+       ========================================================================== */
+    .install-container {
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    .install-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      scrollbar-width: none;
+    }
+    .install-tabs::-webkit-scrollbar {
+      display: none;
+    }
+    html.light .install-tabs {
+      border-bottom-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .install-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--glass-text-secondary);
+      border-radius: var(--glass-border-radius-pill);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .install-tab-btn:hover {
+      color: var(--glass-text-primary);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .install-tab-btn.active {
+      color: var(--glass-text-primary);
+      background: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    html.light .install-tab-btn.active {
+      background: rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .install-card {
+      padding: 32px;
+      border-radius: var(--glass-border-radius-xl);
+      position: relative;
+    }
+
+    .install-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .install-agent-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .install-path-badge {
+      font-family: var(--glass-font-mono);
+      font-size: 0.8rem;
+      color: var(--glass-text-tertiary);
+    }
+
+    .install-code-box {
+      position: relative;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--glass-border-radius-md);
+      padding: 20px 24px;
+      font-family: var(--glass-font-mono);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+      overflow-x: auto;
+    }
+    html.light .install-code-box {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    .code-comment {
+      color: #64748b;
+    }
+    .code-cmd {
+      color: #38bdf8;
+    }
+
+    .copy-corner-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      padding: 8px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--glass-border-radius-pill);
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .copy-corner-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+      transform: translateY(-1px);
+    }
+    .copy-corner-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    /* ==========================================================================
+       12. UNIVERSAL PROMPT SECTION
+       ========================================================================== */
+    .prompt-container {
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    .prompt-card {
+      padding: 36px;
+      border-radius: var(--glass-border-radius-xl);
+    }
+
+    .prompt-code-wrap {
+      position: relative;
+      margin: 20px 0 28px;
+    }
+
+    .prompt-code-box {
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--glass-border-radius-lg);
+      padding: 24px;
+      font-family: var(--glass-font-mono);
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 420px;
+      overflow-y: auto;
+    }
+    html.light .prompt-code-box {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    .prompt-highlight-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+    @media (max-width: 768px) {
+      .prompt-highlight-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .prompt-mini-stat {
+      padding: 14px;
+      border-radius: var(--glass-border-radius-md);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
+    }
+    html.light .prompt-mini-stat {
+      background: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.06);
+    }
+    .stat-title {
+      font-size: 0.76rem;
+      color: var(--glass-text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+    .stat-desc {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--glass-text-primary);
+    }
+
+    /* ==========================================================================
+       13. FOOTER
+       ========================================================================== */
+    .site-footer {
+      padding: 80px 0 50px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 60px;
+    }
+    html.light .site-footer {
+      border-top-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .footer-links a {
+      font-size: 0.9rem;
+      color: var(--glass-text-secondary);
+      transition: color 0.2s ease;
+    }
+    .footer-links a:hover {
+      color: var(--glass-text-primary);
+    }
+
+    .footer-disclaimer {
+      font-size: 0.8rem;
+      color: var(--glass-text-tertiary);
+      line-height: 1.6;
+      padding: 24px;
+      border-radius: var(--glass-border-radius-md);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 28px;
+    }
+    html.light .footer-disclaimer {
+      background: rgba(0, 0, 0, 0.02);
+      border-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      color: var(--glass-text-tertiary);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    /* Global Dynamic Toast */
+    .toast-notification {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 22px;
+      border-radius: var(--glass-border-radius-pill);
+      background: rgba(18, 20, 29, 0.85);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      font-size: 0.92rem;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+      pointer-events: none;
+      transition: all 0.35s var(--glass-easing-spring);
+    }
+    .toast-notification.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .toast-check-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #10b981;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+
+    /* Mobile Adaptations */
+    @media (max-width: 768px) {
+      .navbar {
+        height: 52px;
+        padding: 0 12px;
+      }
+      .nav-links {
+        display: none;
+      }
+      .hero-section {
+        padding-top: 110px;
+        padding-bottom: 50px;
+      }
+      .hero-tilt-card {
+        padding: 24px;
+      }
+      .hero-card-body {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .bg-switcher-dock {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .tuner-preview-wrapper {
+        padding: 20px;
+        min-height: 400px;
+      }
+      .tuner-preview-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body class="bg-mesh">
+
+  <!-- Background Layer -->
+  <div class="bg-canvas-wrapper" aria-hidden="true">
+    <div class="mesh-gradient-bg"></div>
+    <div class="mesh-orb mesh-orb-1"></div>
+    <div class="mesh-orb mesh-orb-2"></div>
+    <div class="mesh-orb mesh-orb-3"></div>
+  </div>
+
+  <!-- Global Toast Feedback Element -->
+  <div id="global-toast" class="toast-notification" role="status" aria-live="polite">
+    <div class="toast-check-icon">✓</div>
+    <span id="toast-message">Copied to clipboard</span>
+  </div>
+
+  <!-- ==========================================================================
+       NAVBAR
+       ========================================================================== -->
+  <header class="navbar-wrapper">
+    <nav class="navbar glass-surface" aria-label="Main Navigation">
+      <a href="#" class="nav-brand">
+        <span class="nav-brand-bubble">🫧</span>
+        <span>Liquid Glass</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#components" class="nav-link">Components</a>
+        <a href="#tuner" class="nav-link">Token Tuner</a>
+        <a href="#install" class="nav-link">AI Skill</a>
+        <a href="#prompt" class="nav-link">Prompt</a>
+      </div>
+
+      <div class="nav-actions">
+        <a href="https://github.com/jcm-developer/liquid-glass-components" target="_blank" rel="noopener noreferrer" class="github-nav-link" aria-label="GitHub Repository">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span>GitHub</span>
+        </a>
+
+        <!-- Dark / Light Theme Toggle -->
+        <button id="theme-toggle" class="glass-btn glass-icon-btn" aria-label="Toggle Dark and Light Mode" title="Toggle theme">
+          <svg id="theme-sun-icon" style="display:none;" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg>
+          <svg id="theme-moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.3 2a10 10 0 0 0-.19 20 10.04 10.04 0 0 0 9.95-8.83 1 1 0 0 0-1.25-1.11 8.04 8.04 0 0 1-10.19-10.2 1 1 0 0 0-1.12-1.24A10.2 10.2 0 0 0 12.3 2z"/></svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ==========================================================================
+         HERO SECTION
+         ========================================================================== -->
+    <section class="hero-section container" aria-labelledby="hero-title">
+      <div class="hero-badge">
+        <span class="hero-badge-spark"></span>
+        <span>Liquid Glass Design System</span>
+      </div>
+
+      <h1 id="hero-title" class="hero-title">Liquid Glass Components</h1>
+
+      <p class="hero-subtitle">
+        An open-source design system and AI skill for building web interfaces with Apple's Liquid Glass aesthetic — accessible, performant, framework-agnostic.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#components" class="glass-btn glass-btn--primary">
+          <span>Explore Components</span>
+          <span>↓</span>
+        </a>
+        <button id="hero-copy-prompt-btn" class="glass-btn" aria-label="Copy Universal AI Agent Prompt">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+          <span id="hero-copy-text">Copy Prompt</span>
+        </button>
+      </div>
+
+      <!-- Interactive 3D Tilt Card -->
+      <div class="hero-card-container">
+        <article id="hero-card" class="hero-tilt-card glass-surface" aria-label="Interactive 3D Glass Hero Demo">
+          <div class="hero-card-header">
+            <div class="hero-card-status-pill">
+              <span class="pulse-dot"></span>
+              <span>Spatial Audio Engine · Translucent</span>
+            </div>
+            <div class="hero-mini-tag">60 FPS Native Spring</div>
+          </div>
+
+          <div class="hero-card-body">
+            <div class="hero-album-art">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="#ffffff" aria-hidden="true"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+            </div>
+            <div class="hero-track-info">
+              <h2 class="hero-track-title">Refraction (Liquid Mix)</h2>
+              <p class="hero-track-subtitle">Liquid Glass Design System · Apple WWDC 2025 Inspiration</p>
+              
+              <div class="hero-wave-bars" aria-hidden="true">
+                <span class="hero-wave-bar"></span>
+                <span class="hero-wave-bar"></span>
+                <span class="hero-wave-bar"></span>
+                <span class="hero-wave-bar"></span>
+                <span class="hero-wave-bar"></span>
+                <span class="hero-wave-bar"></span>
+                <span class="hero-wave-bar"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-controls-row">
+            <div class="hero-mini-badges">
+              <span class="hero-mini-tag">20px Blur</span>
+              <span class="hero-mini-tag">180% Saturation</span>
+              <span class="hero-mini-tag">Specular Mask</span>
+            </div>
+            <div class="hero-tilt-instruction">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"/></svg>
+              <span>Tilt cursor to interact (max 6°)</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Background Switcher Dock -->
+      <nav class="bg-switcher-dock" aria-label="Background Switcher Dock">
+        <button class="bg-dock-btn active" data-bg="mesh" aria-pressed="true">
+          <span>🫧</span>
+          <span>Mesh Gradient</span>
+        </button>
+        <button class="bg-dock-btn" data-bg="dark" aria-pressed="false">
+          <span>🌑</span>
+          <span>Dark Solid</span>
+        </button>
+        <button class="bg-dock-btn" data-bg="light" aria-pressed="false">
+          <span>☀️</span>
+          <span>Light Solid</span>
+        </button>
+        <button class="bg-dock-btn" data-bg="dots" aria-pressed="false">
+          <span>⠶</span>
+          <span>Dots Grid</span>
+        </button>
+      </nav>
+    </section>
+
+    <!-- ==========================================================================
+         TOKEN TUNER SECTION
+         ========================================================================== -->
+    <section id="tuner" class="section-wrap container" aria-labelledby="tuner-title">
+      <div class="section-header">
+        <span class="section-tag">Interactive Physics & Optics</span>
+        <h2 id="tuner-title" class="section-title">Token Tuner</h2>
+        <p class="section-description">
+          Adjust the physical parameters of Liquid Glass in real time. Experience the live optical refraction and export your custom tokens directly to CSS.
+        </p>
+      </div>
+
+      <div class="tuner-grid">
+        <!-- Controls Panel -->
+        <div class="tuner-panel glass-surface">
+          <!-- Blur Slider -->
+          <div class="tuner-slider-group">
+            <div class="tuner-slider-header">
+              <label for="slider-blur" class="tuner-label">
+                <span>Gaussian Blur</span>
+              </label>
+              <span id="badge-blur" class="tuner-val-badge">20px</span>
+            </div>
+            <input type="range" id="slider-blur" class="tuner-range" min="4" max="40" step="1" value="20" aria-label="Gaussian Blur Radius">
+            <div class="tuner-minmax">
+              <span>4px (Ultra Sharp)</span>
+              <span>40px (Dense Frost)</span>
+            </div>
+          </div>
+
+          <!-- Opacity Slider -->
+          <div class="tuner-slider-group">
+            <div class="tuner-slider-header">
+              <label for="slider-opacity" class="tuner-label">
+                <span>Surface Fill Opacity</span>
+              </label>
+              <span id="badge-opacity" class="tuner-val-badge">0.12</span>
+            </div>
+            <input type="range" id="slider-opacity" class="tuner-range" min="0.02" max="0.50" step="0.01" value="0.12" aria-label="Surface Fill Opacity">
+            <div class="tuner-minmax">
+              <span>0.02 (Clear Glass)</span>
+              <span>0.50 (Opaque Slate)</span>
+            </div>
+          </div>
+
+          <!-- Saturation Slider -->
+          <div class="tuner-slider-group">
+            <div class="tuner-slider-header">
+              <label for="slider-saturation" class="tuner-label">
+                <span>Backdrop Saturation Boost</span>
+              </label>
+              <span id="badge-saturation" class="tuner-val-badge">180%</span>
+            </div>
+            <input type="range" id="slider-saturation" class="tuner-range" min="100" max="220" step="5" value="180" aria-label="Backdrop Saturation Boost">
+            <div class="tuner-minmax">
+              <span>100% (Neutral)</span>
+              <span>220% (Vivid Prism)</span>
+            </div>
+          </div>
+
+          <!-- Border Opacity Slider -->
+          <div class="tuner-slider-group">
+            <div class="tuner-slider-header">
+              <label for="slider-border" class="tuner-label">
+                <span>Specular Border Opacity</span>
+              </label>
+              <span id="badge-border" class="tuner-val-badge">0.25</span>
+            </div>
+            <input type="range" id="slider-border" class="tuner-range" min="0.05" max="0.60" step="0.01" value="0.25" aria-label="Specular Border Opacity">
+            <div class="tuner-minmax">
+              <span>0.05 (Subtle Rim)</span>
+              <span>0.60 (Crisp Refraction)</span>
+            </div>
+          </div>
+
+          <div class="tuner-actions">
+            <button id="btn-copy-tokens" class="glass-btn glass-btn--primary" style="flex: 1;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Copy CSS Variables</span>
+            </button>
+            <button id="btn-reset-tokens" class="glass-btn" style="padding: 12px 18px;" title="Reset default tokens">
+              <span>Reset</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Preview Stage with rich backdrop -->
+        <div class="tuner-preview-wrapper">
+          <div class="tuner-preview-bg"></div>
+          <div class="tuner-preview-pattern"></div>
+
+          <div id="tuner-preview-card" class="tuner-preview-card glass-surface">
+            <div class="preview-card-header">
+              <span class="preview-badge">Live Token Preview</span>
+              <span class="hero-mini-tag">Concentric Radii</span>
+            </div>
+            
+            <h3 class="preview-card-title">Real-Time Refraction</h3>
+            <p class="preview-card-desc">
+              Notice how the background colors diffuse through the surface while specular edge highlights maintain clarity.
+            </p>
+
+            <pre class="preview-code-block" id="preview-code-display">:root {
+  --glass-blur: 20px;
+  --glass-bg: rgba(255, 255, 255, 0.12);
+  --glass-saturation: 180%;
+  --glass-border: rgba(255, 255, 255, 0.25);
+}</pre>
+
+            <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between;">
+              <button class="glass-btn" style="padding: 8px 16px; font-size: 0.85rem;">Interactive Pill</button>
+              <span style="font-size: 0.8rem; font-weight: 600; opacity: 0.9;">WCAG AA Verified</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         COMPONENT EXPLORER (BENTO GRID)
+         ========================================================================== -->
+    <section id="components" class="section-wrap container" aria-labelledby="components-title">
+      <div class="section-header">
+        <span class="section-tag">Design System Showcase</span>
+        <h2 id="components-title" class="section-title">Component Explorer</h2>
+        <p class="section-description">
+          A suite of live, accessible components following Apple HIG guidelines — featuring concentric radii, specular bevels, and spring physics.
+        </p>
+      </div>
+
+      <div class="bento-grid">
+        <!-- 1. Glass Card (Span 6) -->
+        <div class="bento-item bento-col-6 glass-surface">
+          <div class="bento-demo-stage">
+            <div class="demo-inner-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <span style="font-weight:700; font-size:1.05rem;">Spatial Glass Panel</span>
+                <span class="hero-mini-tag" style="background:rgba(56,189,248,0.2); color:var(--glass-accent);">Layer 2</span>
+              </div>
+              <p style="font-size:0.88rem; color:var(--glass-text-secondary); line-height:1.5;">
+                Engineered with multi-layered ambient occlusion shadows and dual-gradient specular borders. Ideal for floating dialogs, sheets, and popovers.
+              </p>
+            </div>
+          </div>
+          <div class="bento-meta">
+            <span class="bento-name">Glass Card</span>
+            <span class="bento-tag">Panel / Sheet</span>
+          </div>
+        </div>
+
+        <!-- 2. Glass Button Pill (Span 6) -->
+        <div class="bento-item bento-col-6 glass-surface">
+          <div class="bento-demo-stage" style="flex-direction:row; flex-wrap:wrap; gap:14px; justify-content:center;">
+            <button class="glass-btn glass-btn--primary">
+              <span>Primary Pill</span>
+              <span>→</span>
+            </button>
+            <button class="glass-btn">
+              <span>Secondary</span>
+            </button>
+            <button class="glass-btn" style="opacity: 0.55; cursor: not-allowed;" title="Disabled state" disabled>
+              <span>Disabled</span>
+            </button>
+          </div>
+          <div class="bento-meta">
+            <span class="bento-name">Glass Button (Pill)</span>
+            <span class="bento-tag">Spring Scale: 0.96</span>
+          </div>
+        </div>
+
+        <!-- 3. Glass Icon Buttons (Span 4) -->
+        <div class="bento-item bento-col-4 glass-surface">
+          <div class="bento-demo-stage" style="flex-direction:row; gap:16px;">
+            <!-- Heart Button -->
+            <button class="glass-btn glass-icon-btn" id="demo-btn-heart" aria-label="Like" aria-pressed="false">
+              <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </button>
+            <!-- Bookmark Button -->
+            <button class="glass-btn glass-icon-btn" id="demo-btn-bookmark" aria-label="Bookmark" aria-pressed="false">
+              <svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+            </button>
+            <!-- Share Button -->
+            <button class="glass-btn glass-icon-btn" id="demo-btn-share" aria-label="Share">
+              <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/></svg>
+            </button>
+          </div>
+          <div class="bento-meta">
+            <span class="bento-name">Glass Icon Buttons</span>
+            <span class="bento-tag">44×44px Touch Target</span>
+          </div>
+        </div>
+
+        <!-- 4. Glass Tab Bar (Span 8) -->
+        <div class="bento-item bento-col-8 glass-surface">
+          <div class="bento-demo-stage">
+            <div class="glass-tab-bar" role="tablist" aria-label="Demo Tab Bar">
+              <button class="glass-tab-btn active" role="tab" aria-selected="true" data-tab="tab-overview">Overview</button>
+              <button class="glass-tab-btn" role="tab" aria-selected="false" data-tab="tab-tokens">Design Tokens</button>
+              <button class="glass-tab-btn" role="tab" aria-selected="false" data-tab="tab-physics">Spring Physics</button>
+            </div>
+
+            <!-- Tab dynamic snippet text -->
+            <div id="tab-demo-content" style="margin-top:16px; font-size:0.86rem; color:var(--glass-text-secondary); text-align:center;">
+              Translucent chrome navigation with smooth active indicator transitions.
+            </div>
+          </div>
+          <div class="bento-meta">
+            <span class="bento-name">Glass Tab Bar</span>
+            <span class="bento-tag">Accessible role="tablist"</span>
+          </div>
+        </div>
+
+        <!-- 5. Glass Segmented Control (Span 6) -->
+        <div class="bento-item bento-col-6 glass-surface">
+          <div class="bento-demo-stage">
+            <div class="glass-segmented" role="radiogroup" aria-label="Frequency options">
+              <button class="glass-segmented-item active" role="radio" aria-checked="true">Daily</button>
+              <button class="glass-segmented-item" role="radio" aria-checked="false">Weekly</button>
+              <button class="glass-segmented-item" role="radio" aria-checked="false">Monthly</button>
+            </div>
+          </div>
+          <div class="bento-meta">
+            <span class="bento-name">Glass Segmented Control</span>
+            <span class="bento-tag">3 Option Switcher</span>
+          </div>
+        </div>
+
+        <!-- 6. Glass Toggle / Switch (Span 6) -->
+        <div class="bento-item bento-col-6 glass-surface">
+          <div class="bento-demo-stage">
+            <div class="glass-switch-container">
+              <button id="demo-toggle-switch" class="glass-switch" role="switch" aria-checked="true" aria-label="Spatial Audio Toggle">
+                <span class="glass-switch-thumb"></span>
+              </button>
+              <span id="demo-toggle-label" style="font-weight:600; font-size:0.92rem;">Liquid Physics: Enabled</span>
+            </div>
+          </div>
+          <div class="bento-meta">
+            <span class="bento-name">Glass Toggle / Switch</span>
+            <span class="bento-tag">Spring Thumb Animation</span>
+          </div>
+        </div>
+
+        <!-- 7. Glass Search Field (Span 6) -->
+        <div class="bento-item bento-col-6 glass-surface">
+          <div class="bento-demo-stage">
+            <div class="glass-search-box">
+              <span class="glass-search-icon">
+                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+              </span>
+              <input type="text" id="demo-search-input" class="glass-search-input" placeholder="Search components..." aria-label="Search components">
+              <button id="demo-search-clear" class="glass-search-clear" aria-label="Clear search input">
+                <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="bento-meta">
+            <span class="bento-name">Glass Search Field</span>
+            <span class="bento-tag">Expandable Pill</span>
+          </div>
+        </div>
+
+        <!-- 8. Glass Toast (Span 6) -->
+        <div class="bento-item bento-col-6 glass-surface">
+          <div class="bento-demo-stage" style="gap:12px;">
+            <div class="demo-toast" role="status">
+              <span class="toast-icon-wrap">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </span>
+              <span class="toast-text">Changes synced to cloud</span>
+              <button class="toast-action-btn" onclick="showToastNotification('Synced changes reverted!')">Undo</button>
+            </div>
+            <button class="glass-btn" style="font-size:0.82rem; padding:8px 16px; margin-top:4px;" onclick="showToastNotification('Interactive Toast demo triggered!')">
+              Trigger Toast Notification
+            </button>
+          </div>
+          <div class="bento-meta">
+            <span class="bento-name">Glass Toast</span>
+            <span class="bento-tag">Floating Notification</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         INSTALL AS AI SKILL SECTION
+         ========================================================================== -->
+    <section id="install" class="section-wrap container" aria-labelledby="install-title">
+      <div class="section-header">
+        <span class="section-tag">Instant Integration</span>
+        <h2 id="install-title" class="section-title">Install as AI Skill</h2>
+        <p class="section-description">
+          Equip Claude Code, Cursor, Copilot, Codex, Gemini CLI, or Windsurf with native Liquid Glass engineering rules in seconds.
+        </p>
+      </div>
+
+      <div class="install-container">
+        <!-- Agent Tabs -->
+        <div class="install-tabs" role="tablist" aria-label="Agent Installation Guides">
+          <button class="install-tab-btn active" role="tab" aria-selected="true" data-agent="claude">Claude Code</button>
+          <button class="install-tab-btn" role="tab" aria-selected="false" data-agent="cursor">Cursor</button>
+          <button class="install-tab-btn" role="tab" aria-selected="false" data-agent="copilot">Copilot</button>
+          <button class="install-tab-btn" role="tab" aria-selected="false" data-agent="codex">Codex</button>
+          <button class="install-tab-btn" role="tab" aria-selected="false" data-agent="gemini">Gemini CLI</button>
+          <button class="install-tab-btn" role="tab" aria-selected="false" data-agent="windsurf">Windsurf</button>
+        </div>
+
+        <!-- Installation Card -->
+        <div class="install-card glass-surface">
+          <div class="install-card-header">
+            <div class="install-agent-title">
+              <span id="agent-display-name">Claude Code</span>
+            </div>
+            <span id="agent-path-badge" class="install-path-badge">.claude/skills/liquid-glass/SKILL.md</span>
+          </div>
+
+          <div class="install-code-box">
+            <button class="copy-corner-btn" id="install-copy-btn" aria-label="Copy install instructions">
+              <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Copy</span>
+            </button>
+            <pre id="install-code-content"><code><span class="code-comment"># Option A: npx skills (recommended)</span>
+<span class="code-cmd">npx skills add jcm-developer/liquid-glass-components</span>
+
+<span class="code-comment"># Option B: Manual clone</span>
+<span class="code-cmd">git clone https://github.com/jcm-developer/liquid-glass-components /tmp/lgc</span>
+<span class="code-cmd">cp -r /tmp/lgc/skills/liquid-glass .claude/skills/</span>
+<span class="code-cmd">rm -rf /tmp/lgc</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         UNIVERSAL PROMPT SECTION
+         ========================================================================== -->
+    <section id="prompt" class="section-wrap container" aria-labelledby="prompt-title">
+      <div class="section-header">
+        <span class="section-tag">Framework & Agent Agnostic</span>
+        <h2 id="prompt-title" class="section-title">Universal AI Agent Prompt</h2>
+        <p class="section-description">
+          Paste this single prompt into any LLM or AI coding agent to instantly load design tokens, WCAG AA standards, and component templates into your project.
+        </p>
+      </div>
+
+      <div class="prompt-container">
+        <div class="prompt-card glass-surface">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-weight: 700; font-size: 1.05rem;">Agent Prompt Instructions</span>
+              <span class="hero-mini-tag">Works with any agent</span>
+            </div>
+            <button id="btn-copy-prompt-bottom" class="glass-btn glass-btn--primary" style="padding: 10px 20px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+              <span>Copy Universal Prompt</span>
+            </button>
+          </div>
+
+          <div class="prompt-code-wrap">
+            <pre class="prompt-code-box" id="universal-prompt-text">Install the "liquid-glass" skill from https://github.com/jcm-developer/liquid-glass-components and use it in this project.
+
+1. Detect which agent/environment you are (Claude Code, Cursor, Codex, Gemini CLI, Windsurf, Copilot) and choose the corresponding installation method from the repo's README.
+2. Copy the `skills/liquid-glass` folder to the appropriate skills/rules location for your agent (project-level unless told otherwise). If your agent uses a proprietary format (.mdc, .instructions.md, AGENTS.md), use the corresponding adapter from the `agents/` folder.
+3. Read SKILL.md and the files in `references/` and `snippets/` before writing code.
+4. Review the current project stack (framework, styling system, existing tokens) and integrate the skill's tokens without breaking existing styles.
+5. Confirm the installation path and give me a 3-line summary of the main rules.
+6. Then ask me which component I want to create or restyle first with Liquid Glass.
+
+Always respect: WCAG AA contrast (&ge;4.5:1), prefers-reduced-transparency fallback, prefers-reduced-motion suppression, no glass on content layer, no glass on glass, min font-weight 500 on glass, max 1 backdrop-filter layer on mobile.</pre>
+          </div>
+
+          <div class="prompt-highlight-row">
+            <div class="prompt-mini-stat">
+              <div class="stat-title">Contrast</div>
+              <div class="stat-desc">WCAG AA &ge;4.5:1</div>
+            </div>
+            <div class="prompt-mini-stat">
+              <div class="stat-title">Typography</div>
+              <div class="stat-desc">Min Weight 500</div>
+            </div>
+            <div class="prompt-mini-stat">
+              <div class="stat-title">Architecture</div>
+              <div class="stat-desc">No Glass-on-Glass</div>
+            </div>
+            <div class="prompt-mini-stat">
+              <div class="stat-title">Mobile Limits</div>
+              <div class="stat-desc">Max 1 Filter Layer</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span>🫧</span>
+          <span>Liquid Glass Components</span>
+        </div>
+
+        <div class="footer-links">
+          <a href="#components">Components</a>
+          <a href="#tuner">Token Tuner</a>
+          <a href="#install">Installation</a>
+          <a href="https://github.com/jcm-developer/liquid-glass-components" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+      </div>
+
+      <div class="footer-disclaimer">
+        <strong>Legal Disclaimer & Trademark Notice:</strong> Liquid Glass Components is an independent, community-driven open-source project. This project is <strong>not</strong> affiliated, associated, authorized, endorsed by, or in any way officially connected with <strong>Apple Inc.</strong>, or any of its subsidiaries or its affiliates. The official Apple website can be found at <a href="https://www.apple.com" target="_blank" rel="noopener" style="text-decoration: underline;">apple.com</a>. The names Apple, Liquid Glass, macOS, iOS, iPadOS, watchOS, visionOS, SF Pro, and SF Symbols are registered trademarks or trademarks of Apple Inc. References to Apple design terminology are made solely for descriptive, comparative, and nominative purposes under fair use principles.
+      </div>
+
+      <div class="footer-bottom">
+        <div>Released under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener" style="text-decoration:underline;">MIT License</a>. Free for personal and commercial applications.</div>
+        <div>Crafted with pure modern CSS and vanilla JavaScript. Zero build steps.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       JAVASCRIPT INTERACTIONS
+       ========================================================================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      /* ----------------------------------------------------------------------
+         1. Toast Notification Utility
+         ---------------------------------------------------------------------- */
+      const toastEl = document.getElementById('global-toast');
+      const toastMsgEl = document.getElementById('toast-message');
+      let toastTimer = null;
+
+      window.showToastNotification = function(message) {
+        if (!toastEl) return;
+        toastMsgEl.textContent = message;
+        toastEl.classList.add('show');
+
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toastEl.classList.remove('show');
+        }, 2600);
+      };
+
+      /* ----------------------------------------------------------------------
+         2. Copy Universal Prompt to Clipboard
+         ---------------------------------------------------------------------- */
+      const promptText = `Install the "liquid-glass" skill from https://github.com/jcm-developer/liquid-glass-components and use it in this project.
+
+1. Detect which agent/environment you are (Claude Code, Cursor, Codex, Gemini CLI, Windsurf, Copilot) and choose the corresponding installation method from the repo's README.
+2. Copy the \`skills/liquid-glass\` folder to the appropriate skills/rules location for your agent (project-level unless told otherwise). If your agent uses a proprietary format (.mdc, .instructions.md, AGENTS.md), use the corresponding adapter from the \`agents/\` folder.
+3. Read SKILL.md and the files in \`references/\` and \`snippets/\` before writing code.
+4. Review the current project stack (framework, styling system, existing tokens) and integrate the skill's tokens without breaking existing styles.
+5. Confirm the installation path and give me a 3-line summary of the main rules.
+6. Then ask me which component I want to create or restyle first with Liquid Glass.
+
+Always respect: WCAG AA contrast (≥4.5:1), prefers-reduced-transparency fallback, prefers-reduced-motion suppression, no glass on content layer, no glass on glass, min font-weight 500 on glass, max 1 backdrop-filter layer on mobile.`;
+
+      function copyPrompt(buttonEl, labelEl) {
+        navigator.clipboard.writeText(promptText).then(() => {
+          showToastNotification('Universal Prompt copied to clipboard!');
+          if (labelEl) {
+            const original = labelEl.textContent;
+            labelEl.textContent = 'Copied!';
+            setTimeout(() => {
+              labelEl.textContent = original;
+            }, 2000);
+          }
+        }).catch(() => {
+          showToastNotification('Failed to copy. Please copy manually.');
+        });
+      }
+
+      const heroCopyBtn = document.getElementById('hero-copy-prompt-btn');
+      const heroCopyText = document.getElementById('hero-copy-text');
+      if (heroCopyBtn) {
+        heroCopyBtn.addEventListener('click', () => copyPrompt(heroCopyBtn, heroCopyText));
+      }
+
+      const promptBottomBtn = document.getElementById('btn-copy-prompt-bottom');
+      if (promptBottomBtn) {
+        promptBottomBtn.addEventListener('click', () => {
+          const btnSpan = promptBottomBtn.querySelector('span');
+          copyPrompt(promptBottomBtn, btnSpan);
+        });
+      }
+
+      /* ----------------------------------------------------------------------
+         3. Dark / Light Mode Toggle
+         ---------------------------------------------------------------------- */
+      const themeToggleBtn = document.getElementById('theme-toggle');
+      const sunIcon = document.getElementById('theme-sun-icon');
+      const moonIcon = document.getElementById('theme-moon-icon');
+      const htmlEl = document.documentElement;
+
+      function updateThemeIcons(isLight) {
+        if (isLight) {
+          sunIcon.style.display = 'block';
+          moonIcon.style.display = 'none';
+        } else {
+          sunIcon.style.display = 'none';
+          moonIcon.style.display = 'block';
+        }
+      }
+
+      // Check saved theme or preference
+      const savedTheme = localStorage.getItem('lgc-theme');
+      if (savedTheme === 'light') {
+        htmlEl.classList.remove('dark');
+        htmlEl.classList.add('light');
+        updateThemeIcons(true);
+      } else {
+        htmlEl.classList.add('dark');
+        htmlEl.classList.remove('light');
+        updateThemeIcons(false);
+      }
+
+      if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+          const isCurrentlyLight = htmlEl.classList.contains('light');
+          if (isCurrentlyLight) {
+            htmlEl.classList.remove('light');
+            htmlEl.classList.add('dark');
+            localStorage.setItem('lgc-theme', 'dark');
+            updateThemeIcons(false);
+            showToastNotification('Dark mode activated');
+          } else {
+            htmlEl.classList.remove('dark');
+            htmlEl.classList.add('light');
+            localStorage.setItem('lgc-theme', 'light');
+            updateThemeIcons(true);
+            showToastNotification('Light mode activated');
+          }
+        });
+      }
+
+      /* ----------------------------------------------------------------------
+         4. Background Switcher Dock
+         ---------------------------------------------------------------------- */
+      const bgDockButtons = document.querySelectorAll('.bg-dock-btn');
+      const bodyEl = document.body;
+
+      bgDockButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          bgDockButtons.forEach(b => {
+            b.classList.remove('active');
+            b.setAttribute('aria-pressed', 'false');
+          });
+          btn.classList.add('active');
+          btn.setAttribute('aria-pressed', 'true');
+
+          const bgMode = btn.getAttribute('data-bg');
+          bodyEl.classList.remove('bg-mesh', 'bg-dark-mode', 'bg-light-mode', 'bg-dots-mode');
+
+          if (bgMode === 'mesh') {
+            bodyEl.classList.add('bg-mesh');
+            showToastNotification('Mesh Gradient background active');
+          } else if (bgMode === 'dark') {
+            bodyEl.classList.add('bg-dark-mode');
+            showToastNotification('Dark Solid background active');
+          } else if (bgMode === 'light') {
+            bodyEl.classList.add('bg-light-mode');
+            showToastNotification('Light Solid background active');
+          } else if (bgMode === 'dots') {
+            bodyEl.classList.add('bg-dots-mode');
+            showToastNotification('Dots Grid background active');
+          }
+        });
+      });
+
+      /* ----------------------------------------------------------------------
+         5. Interactive 3D Tilt Hero Card (Max 6 degrees)
+         ---------------------------------------------------------------------- */
+      const heroCard = document.getElementById('hero-card');
+      if (heroCard) {
+        let isHovered = false;
+
+        heroCard.addEventListener('pointerenter', () => {
+          isHovered = true;
+          heroCard.style.transition = 'transform 0.1s ease-out, box-shadow 0.3s ease';
+        });
+
+        heroCard.addEventListener('pointermove', (e) => {
+          if (!isHovered) return;
+          const rect = heroCard.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          // Max tilt 6 degrees
+          const rotateX = ((y - centerY) / centerY) * -6;
+          const rotateY = ((x - centerX) / centerX) * 6;
+
+          heroCard.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateZ(0)`;
+
+          // Shimmer position
+          const shineX = (x / rect.width) * 100;
+          const shineY = (y / rect.height) * 100;
+          heroCard.style.setProperty('--shine-x', `${shineX}%`);
+          heroCard.style.setProperty('--shine-y', `${shineY}%`);
+        });
+
+        heroCard.addEventListener('pointerleave', () => {
+          isHovered = false;
+          heroCard.style.transition = 'transform 0.6s var(--glass-easing-spring), box-shadow 0.3s ease';
+          heroCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0)';
+        });
+      }
+
+      /* ----------------------------------------------------------------------
+         6. Token Tuner Live Controls & Code Generator
+         ---------------------------------------------------------------------- */
+      const sliderBlur = document.getElementById('slider-blur');
+      const sliderOpacity = document.getElementById('slider-opacity');
+      const sliderSaturation = document.getElementById('slider-saturation');
+      const sliderBorder = document.getElementById('slider-border');
+
+      const badgeBlur = document.getElementById('badge-blur');
+      const badgeOpacity = document.getElementById('badge-opacity');
+      const badgeSaturation = document.getElementById('badge-saturation');
+      const badgeBorder = document.getElementById('badge-border');
+
+      const previewCard = document.getElementById('tuner-preview-card');
+      const previewCodeDisplay = document.getElementById('preview-code-display');
+      const copyTokensBtn = document.getElementById('btn-copy-tokens');
+      const resetTokensBtn = document.getElementById('btn-reset-tokens');
+
+      const defaultTokens = {
+        blur: 20,
+        opacity: 0.12,
+        saturation: 180,
+        border: 0.25
+      };
+
+      function updateTokens() {
+        const blurVal = sliderBlur.value;
+        const opacityVal = parseFloat(sliderOpacity.value).toFixed(2);
+        const satVal = sliderSaturation.value;
+        const borderVal = parseFloat(sliderBorder.value).toFixed(2);
+
+        // Update badges
+        badgeBlur.textContent = `${blurVal}px`;
+        badgeOpacity.textContent = `${opacityVal}`;
+        badgeSaturation.textContent = `${satVal}%`;
+        badgeBorder.textContent = `${borderVal}`;
+
+        // Update CSS custom properties on root so all components reflect them
+        document.documentElement.style.setProperty('--glass-blur', `${blurVal}px`);
+        document.documentElement.style.setProperty('--glass-bg-opacity', opacityVal);
+        document.documentElement.style.setProperty('--glass-bg', `rgba(255, 255, 255, ${opacityVal})`);
+        document.documentElement.style.setProperty('--glass-saturation', `${satVal}%`);
+        document.documentElement.style.setProperty('--glass-border-opacity', borderVal);
+        document.documentElement.style.setProperty('--glass-border', `rgba(255, 255, 255, ${borderVal})`);
+
+        // Format code snippet
+        const cssSnippet = `:root {
+  --glass-blur: ${blurVal}px;
+  --glass-bg: rgba(255, 255, 255, ${opacityVal});
+  --glass-saturation: ${satVal}%;
+  --glass-border: rgba(255, 255, 255, ${borderVal});
+}`;
+        if (previewCodeDisplay) {
+          previewCodeDisplay.textContent = cssSnippet;
+        }
+      }
+
+      if (sliderBlur && sliderOpacity && sliderSaturation && sliderBorder) {
+        sliderBlur.addEventListener('input', updateTokens);
+        sliderOpacity.addEventListener('input', updateTokens);
+        sliderSaturation.addEventListener('input', updateTokens);
+        sliderBorder.addEventListener('input', updateTokens);
+      }
+
+      if (copyTokensBtn) {
+        copyTokensBtn.addEventListener('click', () => {
+          const code = previewCodeDisplay.textContent;
+          navigator.clipboard.writeText(code).then(() => {
+            showToastNotification('CSS variables copied to clipboard!');
+            const btnSpan = copyTokensBtn.querySelector('span');
+            const originalText = btnSpan.textContent;
+            btnSpan.textContent = 'Copied!';
+            setTimeout(() => {
+              btnSpan.textContent = originalText;
+            }, 2000);
+          });
+        });
+      }
+
+      if (resetTokensBtn) {
+        resetTokensBtn.addEventListener('click', () => {
+          sliderBlur.value = defaultTokens.blur;
+          sliderOpacity.value = defaultTokens.opacity;
+          sliderSaturation.value = defaultTokens.saturation;
+          sliderBorder.value = defaultTokens.border;
+          updateTokens();
+          showToastNotification('Tokens reset to defaults');
+        });
+      }
+
+      /* ----------------------------------------------------------------------
+         7. Bento Grid Interactive Elements
+         ---------------------------------------------------------------------- */
+      // Heart Button
+      const heartBtn = document.getElementById('demo-btn-heart');
+      if (heartBtn) {
+        heartBtn.addEventListener('click', () => {
+          const isLiked = heartBtn.getAttribute('aria-pressed') === 'true';
+          heartBtn.setAttribute('aria-pressed', (!isLiked).toString());
+          if (!isLiked) {
+            heartBtn.style.color = '#f43f5e';
+            showToastNotification('Added to favorites');
+          } else {
+            heartBtn.style.color = 'inherit';
+            showToastNotification('Removed from favorites');
+          }
+        });
+      }
+
+      // Bookmark Button
+      const bookmarkBtn = document.getElementById('demo-btn-bookmark');
+      if (bookmarkBtn) {
+        bookmarkBtn.addEventListener('click', () => {
+          const isSaved = bookmarkBtn.getAttribute('aria-pressed') === 'true';
+          bookmarkBtn.setAttribute('aria-pressed', (!isSaved).toString());
+          if (!isSaved) {
+            bookmarkBtn.style.color = '#38bdf8';
+            showToastNotification('Saved to bookmark collection');
+          } else {
+            bookmarkBtn.style.color = 'inherit';
+            showToastNotification('Bookmark removed');
+          }
+        });
+      }
+
+      // Share Button
+      const shareBtn = document.getElementById('demo-btn-share');
+      if (shareBtn) {
+        shareBtn.addEventListener('click', () => {
+          if (navigator.share) {
+            navigator.share({
+              title: 'Liquid Glass Components',
+              url: window.location.href
+            }).catch(() => {});
+          } else {
+            navigator.clipboard.writeText(window.location.href);
+            showToastNotification('Link copied to clipboard!');
+          }
+        });
+      }
+
+      // Tab Bar Component
+      const tabButtons = document.querySelectorAll('.glass-tab-btn');
+      const tabDemoContent = document.getElementById('tab-demo-content');
+      const tabDescriptions = {
+        'tab-overview': 'Translucent chrome navigation with smooth active indicator transitions.',
+        'tab-tokens': 'Dynamic CSS properties computed with WCAG AA accessibility contrast fallbacks.',
+        'tab-physics': 'Native linear spring easing curves providing 60 FPS fluid tactile interactions.'
+      };
+
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabButtons.forEach(b => {
+            b.classList.remove('active');
+            b.setAttribute('aria-selected', 'false');
+          });
+          btn.classList.add('active');
+          btn.setAttribute('aria-selected', 'true');
+          const tabId = btn.getAttribute('data-tab');
+          if (tabDemoContent && tabDescriptions[tabId]) {
+            tabDemoContent.textContent = tabDescriptions[tabId];
+          }
+        });
+      });
+
+      // Segmented Control
+      const segmentItems = document.querySelectorAll('.glass-segmented-item');
+      segmentItems.forEach(item => {
+        item.addEventListener('click', () => {
+          segmentItems.forEach(i => {
+            i.classList.remove('active');
+            i.setAttribute('aria-checked', 'false');
+          });
+          item.classList.add('active');
+          item.setAttribute('aria-checked', 'true');
+          showToastNotification(`Filter switched to: ${item.textContent}`);
+        });
+      });
+
+      // Toggle Switch
+      const toggleSwitch = document.getElementById('demo-toggle-switch');
+      const toggleLabel = document.getElementById('demo-toggle-label');
+      if (toggleSwitch && toggleLabel) {
+        const toggleHandler = () => {
+          const isChecked = toggleSwitch.getAttribute('aria-checked') === 'true';
+          const nextState = !isChecked;
+          toggleSwitch.setAttribute('aria-checked', nextState.toString());
+          toggleLabel.textContent = `Liquid Physics: ${nextState ? 'Enabled' : 'Disabled'}`;
+          showToastNotification(`Liquid physics ${nextState ? 'enabled' : 'disabled'}`);
+        };
+        toggleSwitch.addEventListener('click', toggleHandler);
+        toggleSwitch.addEventListener('keydown', (e) => {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            toggleHandler();
+          }
+        });
+      }
+
+      // Search Box
+      const searchInput = document.getElementById('demo-search-input');
+      const searchClear = document.getElementById('demo-search-clear');
+      if (searchInput && searchClear) {
+        searchInput.addEventListener('input', () => {
+          searchClear.style.display = searchInput.value.length > 0 ? 'flex' : 'none';
+        });
+        searchClear.addEventListener('click', () => {
+          searchInput.value = '';
+          searchClear.style.display = 'none';
+          searchInput.focus();
+        });
+      }
+
+      /* ----------------------------------------------------------------------
+         8. Install Section Agent Tabs
+         ---------------------------------------------------------------------- */
+      const installTabs = document.querySelectorAll('.install-tab-btn');
+      const agentDisplayName = document.getElementById('agent-display-name');
+      const agentPathBadge = document.getElementById('agent-path-badge');
+      const installCodeContent = document.getElementById('install-code-content');
+      const installCopyBtn = document.getElementById('install-copy-btn');
+
+      const agentData = {
+        claude: {
+          name: 'Claude Code',
+          path: '.claude/skills/liquid-glass/SKILL.md',
+          code: `# Option A: npx skills (recommended)
+npx skills add jcm-developer/liquid-glass-components
+
+# Option B: Manual clone
+git clone https://github.com/jcm-developer/liquid-glass-components /tmp/lgc
+cp -r /tmp/lgc/skills/liquid-glass .claude/skills/
+rm -rf /tmp/lgc`
+        },
+        cursor: {
+          name: 'Cursor',
+          path: '.cursor/rules/liquid-glass.mdc',
+          code: `# Install Cursor AI rule
+mkdir -p .cursor/rules
+cp agents/cursor-rule.mdc .cursor/rules/liquid-glass.mdc
+
+# Or paste Universal Prompt into Cursor Composer`
+        },
+        copilot: {
+          name: 'GitHub Copilot',
+          path: '.github/instructions/liquid-glass.instructions.md',
+          code: `# Add Copilot instructions
+mkdir -p .github/instructions
+cp agents/copilot-instructions.md .github/instructions/liquid-glass.instructions.md`
+        },
+        codex: {
+          name: 'OpenAI Codex',
+          path: '.agents/skills/liquid-glass / AGENTS.md',
+          code: `# Configure Codex project skills
+cp agents/AGENTS.md ./AGENTS.md
+mkdir -p .agents/skills
+cp -r skills/liquid-glass .agents/skills/`
+        },
+        gemini: {
+          name: 'Gemini CLI / Antigravity',
+          path: '.gemini/skills/liquid-glass',
+          code: `# Option A: CLI install
+gemini skills install https://github.com/jcm-developer/liquid-glass-components
+
+# Option B: Manual copy
+mkdir -p .gemini/skills
+cp -r skills/liquid-glass .gemini/skills/
+
+# Option C: npx skills
+npx skills add jcm-developer/liquid-glass-components`
+        },
+        windsurf: {
+          name: 'Windsurf',
+          path: '.windsurf/rules/liquid-glass.md',
+          code: `# Install Windsurf Cascade rule
+mkdir -p .windsurf/rules
+cp agents/windsurf-rule.md .windsurf/rules/liquid-glass.md`
+        }
+      };
+
+      function renderAgentCode(agentKey) {
+        const item = agentData[agentKey];
+        if (!item) return;
+        agentDisplayName.textContent = item.name;
+        agentPathBadge.textContent = item.path;
+
+        // Syntax format highlighting
+        const formatted = item.code.split('\n').map(line => {
+          if (line.startsWith('#')) {
+            return `<span class="code-comment">${escapeHtml(line)}</span>`;
+          } else if (line.trim().length > 0) {
+            return `<span class="code-cmd">${escapeHtml(line)}</span>`;
+          }
+          return '';
+        }).join('\n');
+
+        installCodeContent.innerHTML = `<code>${formatted}</code>`;
+      }
+
+      function escapeHtml(str) {
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
+      installTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          installTabs.forEach(t => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          tab.classList.add('active');
+          tab.setAttribute('aria-selected', 'true');
+          const agentKey = tab.getAttribute('data-agent');
+          renderAgentCode(agentKey);
+        });
+      });
+
+      if (installCopyBtn) {
+        installCopyBtn.addEventListener('click', () => {
+          const activeTab = document.querySelector('.install-tab-btn.active');
+          const agentKey = activeTab ? activeTab.getAttribute('data-agent') : 'claude';
+          const codeToCopy = agentData[agentKey].code;
+
+          navigator.clipboard.writeText(codeToCopy).then(() => {
+            showToastNotification(`${agentData[agentKey].name} commands copied!`);
+            const btnSpan = installCopyBtn.querySelector('span');
+            btnSpan.textContent = 'Copied!';
+            setTimeout(() => {
+              btnSpan.textContent = 'Copy';
+            }, 2000);
+          });
+        });
+      }
+
+    });
+  </script>
+</body>
+</html>
