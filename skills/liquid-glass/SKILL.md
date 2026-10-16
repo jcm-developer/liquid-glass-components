@@ -258,6 +258,10 @@ See `snippets/` directory for production-ready CSS:
 | `glass-modal.css` | Bottom sheet / centered modal |
 | `glass-segmented.css` | Segmented control |
 | `glass-toggle.css` | Switch with glass thumb |
+| `glass-slider.css` | Range slider with glass track and thumb |
+| `glass-popover.css` | Contextual action menu / popover |
+| `glass-dock.css` | macOS/iPadOS dock with magnification |
+| `glass-sidebar.css` | Navigation sidebar with section links |
 | `glass-search.css` | Expandable search pill |
 | `glass-toast.css` | Floating notification |
 

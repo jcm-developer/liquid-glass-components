@@ -1,0 +1,202 @@
+/* ============================================
+   GLASS DOCK (macOS Tahoe / iPadOS) COMPONENT
+   Liquid Glass Components v1.0.0
+   ============================================ */
+
+/* --- HTML Structure ---
+<nav class="glass-dock" role="navigation" aria-label="Quick launch application dock">
+  <div class="glass-dock__inner">
+    <button class="glass-dock__item active" aria-label="Finder" data-tooltip="Finder">
+      <span class="glass-dock__icon-box">
+        <svg viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
+      </span>
+      <span class="glass-dock__dot" aria-hidden="true"></span>
+    </button>
+    <button class="glass-dock__item active" aria-label="Terminal" data-tooltip="Terminal">
+      <span class="glass-dock__icon-box">
+        <svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+      </span>
+      <span class="glass-dock__dot" aria-hidden="true"></span>
+    </button>
+    <button class="glass-dock__item" aria-label="Settings" data-tooltip="Settings">
+      <span class="glass-dock__icon-box">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </span>
+    </button>
+  </div>
+</nav>
+*/
+
+.glass-dock {
+  display: inline-flex;
+  position: relative;
+  padding: 8px 12px;
+  border-radius: 28px;
+  background: var(--glass-bg, rgba(255, 255, 255, 0.12));
+  backdrop-filter: blur(var(--glass-blur, 20px)) saturate(var(--glass-saturation, 180%)) contrast(var(--glass-contrast, 105%));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 20px)) saturate(var(--glass-saturation, 180%)) contrast(var(--glass-contrast, 105%));
+  box-shadow: var(--glass-shadow-elevated, 0 20px 40px rgba(0, 0, 0, 0.35)), var(--glass-shadow-inset, inset 0 1px 1px rgba(255, 255, 255, 0.3));
+  border: var(--glass-border-width, 1px) solid transparent;
+  isolation: isolate;
+  contain: layout paint;
+}
+
+/* Specular border */
+.glass-dock::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--glass-border-width, 1px);
+  background: linear-gradient(
+    135deg,
+    var(--glass-border-top, rgba(255, 255, 255, 0.6)) 0%,
+    rgba(255, 255, 255, 0.15) 40%,
+    transparent 60%,
+    var(--glass-border-bottom, rgba(255, 255, 255, 0.1)) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glass-dock__inner {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.glass-dock__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 16px;
+  transition: transform 0.25s var(--glass-easing-spring, cubic-bezier(0.34, 1.56, 0.64, 1)), filter 0.25s ease;
+  transform-origin: bottom center;
+}
+
+.glass-dock__icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--glass-text-primary, #ffffff);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  transition: all 0.25s var(--glass-easing-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+}
+
+.glass-dock__icon-box svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+}
+
+/* Hover Magnification Physics */
+.glass-dock__item:hover {
+  transform: scale(1.28) translateY(-6px);
+}
+
+.glass-dock__item:hover .glass-dock__icon-box {
+  background: rgba(255, 255, 255, 0.26);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.glass-dock__item:active {
+  transform: scale(1.1) translateY(-2px);
+}
+
+/* Active Running App Indicator Dot */
+.glass-dock__dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--glass-text-secondary, rgba(255, 255, 255, 0.7));
+  margin-top: 4px;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+}
+
+/* Accessible Tooltip */
+.glass-dock__item::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: -34px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.85);
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.glass-dock__item:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.glass-dock__item:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 2px #ffffff;
+}
+
+/* Accessibility Fallbacks */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-dock {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: #1e293b;
+    border-color: #475569;
+  }
+  .glass-dock::before { display: none; }
+  .glass-dock__icon-box {
+    background: #334155;
+    border-color: #64748b;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-dock__item {
+    transition: none !important;
+    transform: none !important;
+  }
+  .glass-dock__item:hover {
+    transform: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .glass-dock {
+    background: Canvas;
+    border: 2px solid CanvasText;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+  .glass-dock::before { display: none; }
+  .glass-dock__icon-box {
+    background: ButtonFace;
+    border: 2px solid ButtonText;
+  }
+}

@@ -1617,6 +1617,619 @@
       border-radius: var(--glass-border-radius-sm);
     }
 
+    /* Sub-component: Glass Slider */
+    .glass-slider-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 320px;
+    }
+    .glass-slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--glass-text-primary);
+    }
+    .glass-slider-val-badge {
+      font-size: 0.8rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      padding: 2px 10px;
+      border-radius: var(--glass-border-radius-pill);
+      background: rgba(var(--glass-surface-rgb), 0.15);
+      border: 1px solid var(--glass-border);
+      color: var(--glass-text-secondary);
+    }
+    html.light .glass-slider-val-badge {
+      background: #ffffff;
+      border-color: rgba(15, 23, 42, 0.14);
+      color: #0f172a;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+    }
+    .glass-slider-track-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 32px;
+    }
+    .glass-slider-input {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 10px;
+      border-radius: var(--glass-border-radius-pill);
+      background: rgba(var(--glass-surface-rgb), 0.12);
+      border: 1px solid var(--glass-border);
+      outline: none;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+      margin: 0;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    html.light .glass-slider-input {
+      background: rgba(15, 23, 42, 0.08);
+      border-color: rgba(15, 23, 42, 0.14);
+      box-shadow: inset 0 1px 3px rgba(15, 23, 42, 0.06);
+    }
+    .glass-slider-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+      cursor: grab;
+      transition: transform 0.25s var(--glass-easing-spring), box-shadow 0.25s ease;
+    }
+    html.light .glass-slider-input::-webkit-slider-thumb {
+      background: #ffffff;
+      border-color: rgba(15, 23, 42, 0.18);
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.18), inset 0 1px 1px #ffffff;
+    }
+    .glass-slider-input:active::-webkit-slider-thumb {
+      cursor: grabbing;
+      transform: scale(1.18);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 0 3px rgba(56, 189, 248, 0.35);
+    }
+    .glass-slider-input::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      cursor: grab;
+      transition: transform 0.25s var(--glass-easing-spring);
+    }
+    .glass-slider-progress {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 10px;
+      border-radius: var(--glass-border-radius-pill);
+      background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+      pointer-events: none;
+      z-index: 1;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.35);
+    }
+
+    /* Sub-component: Glass Popover / Menu */
+    .glass-popover-stage {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .glass-popover-box {
+      width: 250px;
+      padding: 6px;
+      border-radius: 18px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow-lg), var(--glass-shadow-inset);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: all 0.3s var(--glass-easing-spring);
+    }
+    html.light .glass-popover-box {
+      background: #ffffff;
+      border-color: rgba(15, 23, 42, 0.13);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08), inset 0 1px 0 #ffffff;
+    }
+    .glass-popover-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: transparent;
+      border: none;
+      color: var(--glass-text-primary);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.18s ease, transform 0.15s ease;
+      text-align: left;
+    }
+    .glass-popover-btn:hover {
+      background: rgba(var(--glass-surface-rgb), 0.14);
+    }
+    html.light .glass-popover-btn {
+      color: #0f172a;
+    }
+    html.light .glass-popover-btn:hover {
+      background: rgba(15, 23, 42, 0.06);
+    }
+    .glass-popover-btn svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      opacity: 0.85;
+      flex-shrink: 0;
+    }
+    .glass-popover-btn kbd {
+      font-size: 0.72rem;
+      font-family: inherit;
+      padding: 2px 6px;
+      border-radius: 6px;
+      margin-left: auto;
+      background: rgba(var(--glass-surface-rgb), 0.1);
+      border: 1px solid var(--glass-border);
+      color: var(--glass-text-secondary);
+    }
+    html.light .glass-popover-btn kbd {
+      background: #f1f5f9;
+      border-color: rgba(15, 23, 42, 0.12);
+      color: #475569;
+    }
+    .glass-popover-sep {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 4px 6px;
+    }
+    html.light .glass-popover-sep {
+      background: rgba(15, 23, 42, 0.08);
+    }
+    .glass-popover-btn--danger {
+      color: #f87171 !important;
+    }
+    .glass-popover-btn--danger:hover {
+      background: rgba(239, 68, 68, 0.15) !important;
+      color: #ef4444 !important;
+    }
+
+    /* Sub-component: Glass Floating Toolbar */
+    .glass-floating-toolbar-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 10px;
+      border-radius: var(--glass-border-radius-pill);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), var(--glass-shadow-inset);
+    }
+    html.light .glass-floating-toolbar-box {
+      background: #ffffff;
+      border-color: rgba(15, 23, 42, 0.13);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08), inset 0 1px 0 #ffffff;
+    }
+    .glass-ft-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--glass-text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: all 0.2s var(--glass-easing-spring);
+    }
+    .glass-ft-btn:hover {
+      background: rgba(var(--glass-surface-rgb), 0.14);
+      color: var(--glass-text-primary);
+      transform: scale(1.08);
+    }
+    html.light .glass-ft-btn {
+      color: #475569;
+    }
+    html.light .glass-ft-btn:hover {
+      background: rgba(15, 23, 42, 0.06);
+      color: #0f172a;
+    }
+    .glass-ft-btn.active {
+      background: rgba(var(--glass-surface-rgb), 0.25);
+      border-color: var(--glass-border);
+      color: var(--glass-text-primary);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+    }
+    html.light .glass-ft-btn.active {
+      background: #0f172a;
+      border-color: #0f172a;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
+    }
+    .glass-ft-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+    .glass-ft-sep {
+      width: 1px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.12);
+      margin: 0 4px;
+    }
+    html.light .glass-ft-sep {
+      background: rgba(15, 23, 42, 0.12);
+    }
+
+    /* Sub-component: Glass Modal */
+    .glass-modal-preview-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+    .glass-modal-mini-card {
+      width: 100%;
+      max-width: 320px;
+      padding: 16px;
+      border-radius: var(--glass-border-radius-md);
+      background: rgba(var(--glass-surface-rgb), 0.08);
+      border: 1px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    html.light .glass-modal-mini-card {
+      background: #ffffff;
+      border-color: rgba(15, 23, 42, 0.12);
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+    }
+    .glass-modal-mini-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .glass-modal-mini-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--glass-text-primary);
+    }
+    html.light .glass-modal-mini-title {
+      color: #0f172a;
+    }
+
+    /* Real Modal Dialog Overlay */
+    .glass-modal-dialog {
+      border: none;
+      padding: 0;
+      background: transparent;
+      max-width: 90vw;
+      width: 440px;
+      position: fixed;
+      inset: 0;
+      margin: auto;
+      z-index: 1000;
+    }
+    .glass-modal-dialog::backdrop {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .glass-modal-panel {
+      padding: 24px;
+      border-radius: var(--glass-border-radius-xl);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.45), var(--glass-shadow-inset);
+      color: var(--glass-text-primary);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      animation: modalSpringEnter 0.35s var(--glass-easing-spring);
+    }
+    html.light .glass-modal-panel {
+      background: #ffffff;
+      border-color: rgba(15, 23, 42, 0.14);
+      box-shadow: 0 25px 50px rgba(15, 23, 42, 0.16), inset 0 1px 0 #ffffff;
+      color: #0f172a;
+    }
+    @keyframes modalSpringEnter {
+      from { opacity: 0; transform: scale(0.92) translateY(12px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .glass-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .glass-modal-close-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(var(--glass-surface-rgb), 0.1);
+      border: 1px solid var(--glass-border);
+      color: var(--glass-text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .glass-modal-close-btn:hover {
+      background: rgba(var(--glass-surface-rgb), 0.2);
+      color: var(--glass-text-primary);
+    }
+    html.light .glass-modal-close-btn {
+      background: #f1f5f9;
+      border-color: rgba(15, 23, 42, 0.12);
+      color: #475569;
+    }
+    html.light .glass-modal-close-btn:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    .glass-modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding-top: 8px;
+    }
+
+    /* Sub-component: Glass Dock */
+    .glass-dock-container {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      padding: 10px 0;
+    }
+    .glass-dock-bar {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: 26px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow-lg), var(--glass-shadow-inset);
+    }
+    html.light .glass-dock-bar {
+      background: #ffffff;
+      border-color: rgba(15, 23, 42, 0.13);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08), inset 0 1px 0 #ffffff;
+    }
+    .glass-dock-app {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transform-origin: bottom center;
+      transition: transform 0.25s var(--glass-easing-spring);
+    }
+    .glass-dock-app:hover {
+      transform: scale(1.28) translateY(-6px);
+    }
+    .glass-dock-app:active {
+      transform: scale(1.1) translateY(-2px);
+    }
+    .glass-dock-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(var(--glass-surface-rgb), 0.14);
+      border: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--glass-text-primary);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+      transition: all 0.25s var(--glass-easing-spring);
+    }
+    html.light .glass-dock-icon {
+      background: #f8fafc;
+      border-color: rgba(15, 23, 42, 0.12);
+      color: #0f172a;
+      box-shadow: 0 3px 8px rgba(15, 23, 42, 0.06);
+    }
+    .glass-dock-app:hover .glass-dock-icon {
+      background: rgba(var(--glass-surface-rgb), 0.28);
+      border-color: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    }
+    html.light .glass-dock-app:hover .glass-dock-icon {
+      background: #ffffff;
+      border-color: rgba(15, 23, 42, 0.24);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+    }
+    .glass-dock-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+    }
+    .glass-dock-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--glass-text-secondary);
+      margin-top: 4px;
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+    }
+    html.light .glass-dock-dot {
+      background: #0f172a;
+      box-shadow: none;
+    }
+    .glass-dock-sep {
+      width: 1px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.14);
+      margin: 0 4px 6px;
+    }
+    html.light .glass-dock-sep {
+      background: rgba(15, 23, 42, 0.14);
+    }
+
+    /* Sub-component: Glass Sidebar */
+    .glass-sidebar-panel {
+      width: 100%;
+      padding: 14px;
+      border-radius: var(--glass-border-radius-lg);
+      background: rgba(var(--glass-surface-rgb), 0.08);
+      border: 1px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    html.light .glass-sidebar-panel {
+      background: #ffffff;
+      border-color: rgba(15, 23, 42, 0.12);
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+    }
+    .glass-sb-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    html.light .glass-sb-header {
+      border-bottom-color: rgba(15, 23, 42, 0.08);
+    }
+    .glass-sb-logo {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .glass-sb-logo svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+    .glass-sb-brand-name {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--glass-text-primary);
+    }
+    html.light .glass-sb-brand-name {
+      color: #0f172a;
+    }
+    .glass-sb-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .glass-sb-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: transparent;
+      border: none;
+      color: var(--glass-text-secondary);
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s var(--glass-easing-spring);
+      text-align: left;
+    }
+    .glass-sb-item:hover {
+      background: rgba(var(--glass-surface-rgb), 0.1);
+      color: var(--glass-text-primary);
+    }
+    html.light .glass-sb-item {
+      color: #475569;
+    }
+    html.light .glass-sb-item:hover {
+      background: rgba(15, 23, 42, 0.05);
+      color: #0f172a;
+    }
+    .glass-sb-item.active {
+      background: rgba(var(--glass-surface-rgb), 0.2);
+      color: var(--glass-text-primary);
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+    }
+    html.light .glass-sb-item.active {
+      background: rgba(15, 23, 42, 0.08);
+      color: #0f172a;
+      box-shadow: none;
+    }
+    .glass-sb-item svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+    .glass-sb-badge {
+      margin-left: auto;
+      font-size: 0.7rem;
+      padding: 1px 6px;
+      border-radius: 9999px;
+      background: rgba(var(--glass-surface-rgb), 0.12);
+      border: 1px solid var(--glass-border);
+      color: var(--glass-text-secondary);
+    }
+    html.light .glass-sb-badge {
+      background: #f1f5f9;
+      border-color: rgba(15, 23, 42, 0.12);
+      color: #475569;
+    }
+    .glass-sb-badge--accent {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+    }
+    html.light .glass-sb-badge--accent {
+      background: rgba(2, 132, 199, 0.12);
+      border-color: rgba(2, 132, 199, 0.25);
+      color: #0284c7;
+    }
+
     /* ==========================================================================
        11. INSTALL SECTION (TABBED INTERFACE FOR AGENTS)
        ========================================================================== */
@@ -2425,6 +3038,186 @@
             <span class="bento-tag">Floating Notification</span>
           </div>
         </div>
+
+        <!-- 9. Glass Slider (Span 6) -->
+        <div class="bento-item bento-col-6 glass-surface">
+          <div class="bento-demo-stage">
+            <div class="glass-slider-wrap">
+              <div class="glass-slider-header">
+                <label for="demo-bento-slider" class="glass-slider-label">Immersion Level</label>
+                <output id="demo-slider-output" for="demo-bento-slider" class="glass-slider-val-badge">75%</output>
+              </div>
+              <div class="glass-slider-track-box">
+                <input type="range" id="demo-bento-slider" class="glass-slider-input" min="0" max="100" value="75" aria-label="Immersion slider">
+                <div id="demo-slider-fill" class="glass-slider-progress" style="width: 75%;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="bento-meta">
+            <span class="bento-name">Glass Slider</span>
+            <span class="bento-tag">Tactile Range Input</span>
+          </div>
+        </div>
+
+        <!-- 10. Glass Popover / Menu (Span 6) -->
+        <div class="bento-item bento-col-6 glass-surface">
+          <div class="bento-demo-stage">
+            <div class="glass-popover-stage">
+              <div class="glass-popover-box" role="menu" aria-label="Document Actions">
+                <button class="glass-popover-btn" role="menuitem" onclick="showToastNotification('Editing layer...')">
+                  <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                  <span>Edit Layer</span>
+                  <kbd>⌘E</kbd>
+                </button>
+                <button class="glass-popover-btn" role="menuitem" onclick="showToastNotification('Layer duplicated!')">
+                  <svg viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                  <span>Duplicate</span>
+                  <kbd>⌘D</kbd>
+                </button>
+                <div class="glass-popover-sep" role="separator"></div>
+                <button class="glass-popover-btn glass-popover-btn--danger" role="menuitem" onclick="showToastNotification('Layer moved to trash!')">
+                  <svg viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                  <span>Delete</span>
+                  <kbd>⌫</kbd>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="bento-meta">
+            <span class="bento-name">Glass Popover</span>
+            <span class="bento-tag">Contextual Menu</span>
+          </div>
+        </div>
+
+        <!-- 11. Glass Floating Toolbar (Span 6) -->
+        <div class="bento-item bento-col-6 glass-surface">
+          <div class="bento-demo-stage">
+            <div class="glass-floating-toolbar-box" role="toolbar" aria-label="Rich text editor actions">
+              <button class="glass-ft-btn active" id="ft-btn-bold" title="Bold (⌘B)" aria-label="Bold">
+                <span>B</span>
+              </button>
+              <button class="glass-ft-btn" id="ft-btn-italic" title="Italic (⌘I)" aria-label="Italic">
+                <span style="font-style:italic; font-family:serif;">I</span>
+              </button>
+              <button class="glass-ft-btn" id="ft-btn-code" title="Code snippet" aria-label="Code">
+                <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              </button>
+              <div class="glass-ft-sep" role="separator"></div>
+              <button class="glass-ft-btn" id="ft-btn-link" title="Insert Link" aria-label="Link">
+                <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              </button>
+              <button class="glass-ft-btn" id="ft-btn-sparkle" title="Liquid AI Refactor" aria-label="AI Refactor">
+                <svg viewBox="0 0 24 24"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="bento-meta">
+            <span class="bento-name">Glass Toolbar</span>
+            <span class="bento-tag">Floating Pill Controls</span>
+          </div>
+        </div>
+
+        <!-- 12. Glass Modal / Sheet (Span 6) -->
+        <div class="bento-item bento-col-6 glass-surface">
+          <div class="bento-demo-stage">
+            <div class="glass-modal-preview-stage">
+              <div class="glass-modal-mini-card">
+                <div class="glass-modal-mini-header">
+                  <span class="glass-modal-mini-title">Spatial Audio Sheet</span>
+                  <span class="hero-mini-tag">Ready</span>
+                </div>
+                <p style="font-size:0.82rem; color:var(--glass-text-secondary); margin:0; line-height:1.4;">
+                  Translucent dialog sheet with isolated backdrop blur, keyboard trap, and specular highlights.
+                </p>
+              </div>
+              <button class="glass-btn glass-btn--primary" id="open-modal-demo-btn" style="font-size:0.84rem; padding:8px 18px;">
+                <span>Open Glass Modal</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="bento-meta">
+            <span class="bento-name">Glass Modal / Sheet</span>
+            <span class="bento-tag">Native &lt;dialog&gt; Overlay</span>
+          </div>
+        </div>
+
+        <!-- 13. Glass Dock (Span 8) -->
+        <div class="bento-item bento-col-8 glass-surface">
+          <div class="bento-demo-stage">
+            <div class="glass-dock-container">
+              <div class="glass-dock-bar" role="toolbar" aria-label="macOS Tahoe Application Dock">
+                <button class="glass-dock-app" data-name="Finder" title="Finder" onclick="showToastNotification('Finder opened')">
+                  <div class="glass-dock-icon">
+                    <svg viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
+                  </div>
+                  <div class="glass-dock-dot"></div>
+                </button>
+                <button class="glass-dock-app" data-name="Safari" title="Safari" onclick="showToastNotification('Safari launched')">
+                  <div class="glass-dock-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                  </div>
+                  <div class="glass-dock-dot"></div>
+                </button>
+                <button class="glass-dock-app" data-name="Terminal" title="Terminal" onclick="showToastNotification('Terminal active')">
+                  <div class="glass-dock-icon">
+                    <svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                  </div>
+                  <div class="glass-dock-dot"></div>
+                </button>
+                <button class="glass-dock-app" data-name="Music" title="Music" onclick="showToastNotification('Music playing: Liquid Wave')">
+                  <div class="glass-dock-icon">
+                    <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                  </div>
+                </button>
+                <div class="glass-dock-sep" role="separator"></div>
+                <button class="glass-dock-app" data-name="Settings" title="Settings" onclick="showToastNotification('Settings opened')">
+                  <div class="glass-dock-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="bento-meta">
+            <span class="bento-name">Glass Dock</span>
+            <span class="bento-tag">macOS Tahoe Physics</span>
+          </div>
+        </div>
+
+        <!-- 14. Glass Sidebar (Span 4) -->
+        <div class="bento-item bento-col-4 glass-surface">
+          <div class="bento-demo-stage">
+            <div class="glass-sidebar-panel">
+              <div class="glass-sb-header">
+                <div class="glass-sb-logo">
+                  <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                </div>
+                <span class="glass-sb-brand-name">Tahoe Studio</span>
+              </div>
+              <div class="glass-sb-nav">
+                <button class="glass-sb-item active" onclick="showToastNotification('Switched to Overview')">
+                  <svg viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                  <span>Overview</span>
+                  <span class="glass-sb-badge">14</span>
+                </button>
+                <button class="glass-sb-item" onclick="showToastNotification('Switched to Primitives')">
+                  <svg viewBox="0 0 24 24"><polygon points="12 2 19 21 12 17 5 21 12 2"/></svg>
+                  <span>Primitives</span>
+                </button>
+                <button class="glass-sb-item" onclick="showToastNotification('Switched to Tokens')">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/></svg>
+                  <span>Tokens</span>
+                  <span class="glass-sb-badge glass-sb-badge--accent">New</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="bento-meta">
+            <span class="bento-name">Glass Sidebar</span>
+            <span class="bento-tag">Lateral Chrome</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -2697,14 +3490,6 @@ Always respect: WCAG AA contrast (≥4.5:1), prefers-reduced-transparency fallba
         syncSlidersToTheme(isLight);
       }
 
-      // Check saved theme or preference
-      const savedTheme = localStorage.getItem('lgc-theme');
-      if (savedTheme === 'light') {
-        setTheme(true, false);
-      } else {
-        setTheme(false, false);
-      }
-
       if (themeToggleBtn) {
         themeToggleBtn.addEventListener('click', () => {
           const isCurrentlyLight = htmlEl.classList.contains('light');
@@ -2915,6 +3700,14 @@ Always respect: WCAG AA contrast (≥4.5:1), prefers-reduced-transparency fallba
           syncSlidersToTheme(isLight);
           showToastNotification('Tokens reset to defaults');
         });
+      }
+
+      // Check saved theme or preference
+      const savedTheme = localStorage.getItem('lgc-theme');
+      if (savedTheme === 'light') {
+        setTheme(true, false);
+      } else {
+        setTheme(false, false);
       }
 
       /* ----------------------------------------------------------------------
@@ -3158,7 +3951,89 @@ cp agents/windsurf-rule.md .windsurf/rules/liquid-glass.md`
         });
       }
 
+      // Bento Slider interactivity
+      const bentoSlider = document.getElementById('demo-bento-slider');
+      const bentoSliderOut = document.getElementById('demo-slider-output');
+      const bentoSliderFill = document.getElementById('demo-slider-fill');
+      if (bentoSlider && bentoSliderOut && bentoSliderFill) {
+        bentoSlider.addEventListener('input', () => {
+          const val = bentoSlider.value;
+          bentoSliderOut.textContent = `${val}%`;
+          bentoSliderFill.style.width = `${val}%`;
+        });
+      }
+
+      // Bento Floating Toolbar
+      const ftBtns = document.querySelectorAll('.glass-ft-btn');
+      ftBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.classList.toggle('active');
+          const tool = btn.getAttribute('aria-label') || 'tool';
+          const isActive = btn.classList.contains('active');
+          showToastNotification(`${tool} ${isActive ? 'activated' : 'deactivated'}`);
+        });
+      });
+
+      // Bento Glass Modal Dialog
+      const modalDialog = document.getElementById('demo-glass-modal');
+      const openModalBtn = document.getElementById('open-modal-demo-btn');
+      const closeModalBtn = document.getElementById('close-modal-demo-btn');
+      const cancelModalBtn = document.getElementById('modal-cancel-btn');
+      const confirmModalBtn = document.getElementById('modal-confirm-btn');
+
+      window.openGlassModalDemo = () => {
+        if (modalDialog) modalDialog.showModal();
+      };
+
+      if (openModalBtn && modalDialog) {
+        openModalBtn.addEventListener('click', () => {
+          modalDialog.showModal();
+        });
+      }
+      [closeModalBtn, cancelModalBtn].forEach(b => {
+        if (b && modalDialog) {
+          b.addEventListener('click', () => {
+            modalDialog.close();
+            showToastNotification('Modal dismissed');
+          });
+        }
+      });
+      if (confirmModalBtn && modalDialog) {
+        confirmModalBtn.addEventListener('click', () => {
+          modalDialog.close();
+          showToastNotification('Action confirmed in Liquid Glass modal!');
+        });
+      }
+      if (modalDialog) {
+        modalDialog.addEventListener('click', (e) => {
+          if (e.target === modalDialog) {
+            modalDialog.close();
+          }
+        });
+      }
+
     });
   </script>
+
+  <!-- ==========================================================================
+       INTERACTIVE GLASS MODAL DIALOG
+       ========================================================================== -->
+  <dialog id="demo-glass-modal" class="glass-modal-dialog" aria-labelledby="modal-demo-title">
+    <div class="glass-modal-panel">
+      <div class="glass-modal-header">
+        <h3 id="modal-demo-title" style="margin:0; font-size:1.15rem; font-weight:700;">Spatial Optics Sheet</h3>
+        <button id="close-modal-demo-btn" class="glass-modal-close-btn" aria-label="Close dialog">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="glass-modal-body" style="font-size:0.9rem; line-height:1.6; color:var(--glass-text-secondary);">
+        This modal is rendered with an isolated backdrop filter overlay, dual ambient shadows, and Apple-grade specular perimeter borders. It features native accessibility with focus trapping and ESC key dismissal.
+      </div>
+      <div class="glass-modal-footer">
+        <button class="glass-btn" id="modal-cancel-btn" style="padding:8px 16px; font-size:0.86rem;">Cancel</button>
+        <button class="glass-btn glass-btn--primary" id="modal-confirm-btn" style="padding:8px 18px; font-size:0.86rem;">Confirm</button>
+      </div>
+    </div>
+  </dialog>
 </body>
 </html>

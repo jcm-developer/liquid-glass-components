@@ -40,10 +40,10 @@
 | Search Field | ✅ Ready | Expandable search pill |
 | Modal / Sheet | ✅ Ready | Centered modal and bottom sheet variants |
 | Toast | ✅ Ready | Floating notification pill |
-| Slider | 📋 Planned | Range input with glass thumb |
-| Popover / Menu | 📋 Planned | Contextual glass panel |
-| Sidebar | 📋 Planned | Collapsible glass lateral panel |
-| Dock | 📋 Planned | macOS-style magnifying dock |
+| Slider | ✅ Ready | Fluid range slider with glass track and spring thumb |
+| Popover / Menu | ✅ Ready | Floating contextual menu with shortcuts and dividers |
+| Sidebar | ✅ Ready | Translucent navigation panel with badges and user card |
+| Dock | ✅ Ready | macOS Tahoe / iPadOS floating dock with magnification |
 
 ## 🚀 Quick Start
 
