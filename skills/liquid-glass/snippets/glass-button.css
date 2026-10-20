@@ -1,167 +1,168 @@
-/* ============================================
-   GLASS BUTTON COMPONENT
-   Liquid Glass Components v1.0.0
-   ============================================ */
+/**
+ * Glass button with regular, prominent, icon, small and plain variants.
+ *
+ * Liquid Glass Components v2.0.0. Requires tokens.css. Optional: liquid-glass.js (refraction, press highlight).
+ *
+ * Usage:
+ *   <button class="glass-btn" type="button" data-refract>Continue</button>
+ *
+ *   <button class="glass-btn glass-btn--prominent" type="button" data-refract>Buy now</button>
+ *
+ *   <button class="glass-btn glass-btn--icon glass-sheen" type="button" aria-label="Share" data-refract>
+ *     <svg viewBox="0 0 24 24" aria-hidden="true">…</svg>
+ *   </button>
+ *
+ *   <!-- Inside another glass container use the plain variant (never glass on glass) -->
+ *   <button class="glass-btn glass-btn--plain" type="button">Not now</button>
+ */
 
-/* --- HTML Structure ---
-<button class="glass-btn" type="button">
-  <span class="glass-btn__label">Action</span>
-</button>
-
-<button class="glass-btn glass-btn--icon" type="button" aria-label="Settings">
-  <svg>...</svg>
-</button>
-
-<button class="glass-btn glass-btn--prominent" type="button">
-  <span class="glass-btn__label">Primary Action</span>
-</button>
-*/
+/* ── Base ── */
 
 .glass-btn {
   position: relative;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--glass-gap);
-  min-height: 44px;
-  min-width: 44px;
-  padding: var(--glass-padding-md) var(--glass-padding-lg);
-  border-radius: var(--glass-border-radius-pill);
+  min-width: var(--glass-target);
+  min-height: var(--glass-target);
+  padding: 0 22px;
+  border: 0;
+  border-radius: var(--glass-radius-pill);
   background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-  box-shadow: var(--glass-shadow), var(--glass-shadow-inset);
-  border: var(--glass-border-width) solid transparent;
+  -webkit-backdrop-filter: blur(var(--glass-blur-fallback)) saturate(var(--glass-saturation));
+  backdrop-filter: blur(var(--glass-blur-fallback)) saturate(var(--glass-saturation));
+  box-shadow: var(--glass-shadow-rim), var(--glass-shadow);
+  outline: 1px solid transparent;
+  outline-offset: -1px;
   color: var(--glass-text-primary);
+  text-shadow: var(--glass-text-shadow);
   font-family: var(--glass-font-sans);
   font-weight: var(--glass-font-weight-heading);
   font-size: 0.9375rem;
-  letter-spacing: 0.015em;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  white-space: nowrap;
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-  transition: transform var(--glass-duration-fast) var(--glass-easing-spring),
-              background var(--glass-duration-fast) var(--glass-easing-smooth);
-  transform: translateZ(0);
+  transition:
+    scale var(--glass-duration-spring) var(--glass-easing-spring),
+    background var(--glass-duration-fast) var(--glass-easing-smooth);
 }
 
-/* Specular border */
-.glass-btn::before {
+/* Light that blooms from the press point (liquid-glass.js feeds --glass-mx/--glass-my) */
+.glass-btn::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(
-    135deg,
-    var(--glass-border-top) 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    transparent 100%
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
   pointer-events: none;
+  background: radial-gradient(120px circle at var(--glass-mx, 50%) var(--glass-my, 50%), rgb(255 255 255 / 0.32), transparent 70%);
+  opacity: 0;
+  transition: opacity var(--glass-duration-fast);
 }
 
-/* States */
-.glass-btn:hover {
-  background: var(--glass-bg-hover);
-}
+.glass-btn:hover { background: var(--glass-bg-hover); }
+.glass-btn:hover::after { opacity: 0.45; }
 
-.glass-btn:active {
-  transform: scale(0.96);
-  background: var(--glass-bg-active);
-}
+/* Liquid Glass controls swell when pressed instead of shrinking */
+.glass-btn:active { scale: var(--glass-press-scale); }
+.glass-btn:active::after { opacity: 1; }
 
 .glass-btn:focus-visible {
   outline: 2px solid #000000;
   outline-offset: var(--glass-focus-offset);
-  box-shadow: var(--glass-focus-ring);
+  box-shadow: var(--glass-shadow-rim), var(--glass-focus-ring);
 }
 
 .glass-btn:disabled,
 .glass-btn[aria-disabled="true"] {
   opacity: 0.4;
   pointer-events: none;
-  cursor: not-allowed;
 }
 
-/* --- Variants --- */
+.glass-btn svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
 
-/* Icon-only button (circle) */
+/* ── Variants ── */
 .glass-btn--icon {
-  width: 44px;
-  height: 44px;
+  width: var(--glass-target);
+  height: var(--glass-target);
   padding: 0;
   border-radius: 50%;
 }
 
-.glass-btn--icon svg {
-  width: 20px;
-  height: 20px;
-  stroke: currentColor;
-  stroke-width: 2;
-  fill: none;
-}
-
-/* Prominent (Primary CTA) */
 .glass-btn--prominent {
-  --glass-bg: var(--glass-bg-prominent);
-  --glass-bg-hover: rgba(59, 130, 246, 0.45);
-  --glass-bg-active: rgba(59, 130, 246, 0.55);
+  --glass-tint-rgb: var(--glass-accent-rgb);
+  --glass-tint: var(--glass-tint-prominent);
+  --glass-text-primary: #ffffff;
 }
 
-/* Small */
 .glass-btn--sm {
-  min-height: 36px;
   min-width: 36px;
-  padding: var(--glass-padding-sm) var(--glass-padding-md);
+  min-height: 36px;
+  padding: 0 14px;
   font-size: 0.8125rem;
 }
+.glass-btn--sm.glass-btn--icon { width: 36px; height: 36px; padding: 0; }
 
-.glass-btn--sm.glass-btn--icon {
-  width: 36px;
-  height: 36px;
+/* Flat fill for buttons that sit inside a glass container */
+.glass-btn--plain {
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
 }
+.glass-btn--plain:hover { background: var(--glass-fill-hover); }
+.glass-btn--plain.glass-btn--prominent { background: var(--glass-accent); }
 
-/* --- Accessibility Fallbacks --- */
-@supports not (backdrop-filter: blur(1px)) {
-  .glass-btn {
-    background: var(--glass-solid-bg);
-    border-color: var(--glass-solid-border);
-  }
-  .glass-btn::before { display: none; }
-}
-
+/* ── Accessibility ── */
 @media (prefers-reduced-transparency: reduce) {
   .glass-btn {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     background: var(--glass-solid-bg);
-    border: 1px solid var(--glass-solid-border);
+    color: var(--glass-solid-text);
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    outline-color: var(--glass-solid-border);
+    text-shadow: none;
   }
-  .glass-btn::before { display: none; }
+  .glass-btn--prominent { background: var(--glass-accent); color: #ffffff; }
+}
+
+@media (prefers-contrast: more) {
+  .glass-btn {
+    background: var(--glass-solid-bg);
+    color: var(--glass-solid-text);
+    outline: 2px solid currentColor;
+    box-shadow: none;
+    text-shadow: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .glass-btn {
-    transition: none !important;
-  }
+  .glass-btn, .glass-btn::after { transition: none; }
 }
 
 @media (forced-colors: active) {
   .glass-btn {
     background: ButtonFace;
-    border: 2px solid ButtonText;
     color: ButtonText;
-    backdrop-filter: none;
-    box-shadow: none;
-    forced-color-adjust: auto;
-  }
-  .glass-btn::before { display: none; }
-  .glass-btn:focus-visible {
-    outline: 3px solid Highlight;
+    outline: 1px solid ButtonText;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
     box-shadow: none;
   }
+  .glass-btn::after { display: none; }
+  .glass-btn:focus-visible { outline: 3px solid Highlight; }
 }

@@ -1,47 +1,67 @@
-/* ============================================
-   GLASS TOGGLE / SWITCH COMPONENT
-   Liquid Glass Components v1.0.0
-   ============================================ */
+/**
+ * Switch whose thumb swells into a clear lens while pressed.
+ *
+ * Liquid Glass Components v2.0.0. Requires tokens.css. Optional: liquid-glass.js (toggles aria-checked).
+ *
+ * Usage:
+ *   <span id="wifi-label">Wi-Fi</span>
+ *   <button class="glass-toggle" type="button" role="switch" aria-checked="true" aria-labelledby="wifi-label">
+ *     <span class="glass-toggle__thumb"></span>
+ *   </button>
+ *
+ *   Without liquid-glass.js, flip aria-checked yourself on click.
+ *   While pressed, the thumb swells into a clear lens (pure CSS, :active).
+ */
 
-/* --- HTML Structure ---
-<button class="glass-toggle" role="switch" aria-checked="false" aria-label="Dark mode">
-  <span class="glass-toggle__thumb"></span>
-</button>
-*/
+/* ── Base ── */
 
 .glass-toggle {
   position: relative;
-  width: 52px;
-  height: 32px;
-  padding: 2px;
-  border-radius: var(--glass-border-radius-pill);
-  background: rgba(255, 255, 255, 0.15);
-  border: var(--glass-border-width) solid var(--glass-border);
+  flex: none;
+  width: 62px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--glass-radius-pill);
+  background: var(--glass-track);
+  outline: 1px solid transparent;
   cursor: pointer;
-  transition: background var(--glass-duration-normal) var(--glass-easing-smooth);
   -webkit-tap-highlight-color: transparent;
-}
-
-.glass-toggle__thumb {
-  display: block;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: var(--glass-text-primary);
-  backdrop-filter: blur(8px) saturate(150%);
-  -webkit-backdrop-filter: blur(8px) saturate(150%);
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.2),
-    inset 0 1px 1px rgba(255, 255, 255, 0.8);
-  transition: transform var(--glass-duration-normal) var(--glass-easing-spring);
+  transition: background var(--glass-duration-normal) var(--glass-easing-smooth);
 }
 
 .glass-toggle[aria-checked="true"] {
-  background: var(--glass-bg-prominent);
+  background: var(--glass-switch-on);
+}
+
+.glass-toggle__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 38px;
+  height: 24px;
+  border-radius: var(--glass-radius-pill);
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.22), 0 0 0 0.5px rgb(0 0 0 / 0.04);
+  transition:
+    translate var(--glass-duration-spring) var(--glass-easing-spring),
+    scale var(--glass-duration-normal) var(--glass-easing-spring),
+    background var(--glass-duration-fast),
+    box-shadow var(--glass-duration-fast);
 }
 
 .glass-toggle[aria-checked="true"] .glass-toggle__thumb {
-  transform: translateX(20px);
+  translate: 20px 0;
+}
+
+/* Pressed: the thumb becomes a lens you can see the track through */
+.glass-toggle:active .glass-toggle__thumb {
+  scale: 1.3 1.4;
+  background: rgb(255 255 255 / 0.16);
+  box-shadow:
+    inset 1px 1px 0 -0.3px rgb(255 255 255 / 0.95),
+    inset -1px -1px 0 -0.3px rgb(255 255 255 / 0.55),
+    0 4px 14px rgb(0 0 0 / 0.25);
 }
 
 .glass-toggle:focus-visible {
@@ -50,28 +70,28 @@
   box-shadow: var(--glass-focus-ring);
 }
 
-.glass-toggle:disabled {
+.glass-toggle:disabled,
+.glass-toggle[aria-disabled="true"] {
   opacity: 0.4;
   pointer-events: none;
 }
 
+/* ── Accessibility ── */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-toggle:active .glass-toggle__thumb { background: #ffffff; }
+}
+
+@media (prefers-contrast: more) {
+  .glass-toggle { outline: 2px solid currentColor; }
+  .glass-toggle:active .glass-toggle__thumb { background: #ffffff; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .glass-toggle__thumb {
-    transition: none;
-  }
+  .glass-toggle, .glass-toggle__thumb { transition: none; }
 }
 
 @media (forced-colors: active) {
-  .glass-toggle {
-    background: Canvas;
-    border: 2px solid ButtonText;
-  }
-  .glass-toggle[aria-checked="true"] {
-    background: Highlight;
-  }
-  .glass-toggle__thumb {
-    background: ButtonText;
-    backdrop-filter: none;
-    box-shadow: none;
-  }
+  .glass-toggle { background: Canvas; outline: 2px solid ButtonText; }
+  .glass-toggle[aria-checked="true"] { background: Highlight; }
+  .glass-toggle__thumb { background: ButtonText; box-shadow: none; }
 }

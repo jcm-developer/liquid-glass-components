@@ -1,94 +1,119 @@
-/* ============================================
-   GLASS SEARCH FIELD COMPONENT
-   Liquid Glass Components v1.0.0
-   ============================================ */
+/**
+ * Search pill that springs wider on focus.
+ *
+ * Liquid Glass Components v2.0.0. Requires tokens.css. Optional: liquid-glass.js (refraction).
+ *
+ * Usage:
+ *   <div class="glass-search" role="search" data-refract>
+ *     <svg class="glass-search__icon" viewBox="0 0 24 24" aria-hidden="true">…</svg>
+ *     <input class="glass-search__input" type="search" placeholder="Search" aria-label="Search">
+ *     <kbd class="glass-search__kbd">⌘K</kbd>
+ *   </div>
+ *
+ *   The pill springs wider on focus. Tune with --glass-search-width / --glass-search-width-focus.
+ */
 
-/* --- HTML Structure ---
-<div class="glass-search" role="search">
-  <svg class="glass-search__icon" aria-hidden="true">...</svg>
-  <input class="glass-search__input" type="search" placeholder="Search..." aria-label="Search">
-</div>
-*/
+/* ── Base ── */
 
 .glass-search {
+  --glass-search-width: 230px;
+  --glass-search-width-focus: 300px;
   position: relative;
+  isolation: isolate;
   display: flex;
   align-items: center;
-  gap: var(--glass-gap);
-  min-height: 44px;
-  padding: var(--glass-padding-sm) var(--glass-padding-lg);
-  border-radius: var(--glass-border-radius-pill);
+  gap: 10px;
+  width: var(--glass-search-width);
+  max-width: 100%;
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: var(--glass-radius-pill);
   background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-  box-shadow: var(--glass-shadow), var(--glass-shadow-inset);
-  border: var(--glass-border-width) solid transparent;
-  isolation: isolate;
-  transform: translateZ(0);
-  transition: width var(--glass-duration-morph) var(--glass-easing-spring);
+  -webkit-backdrop-filter: blur(var(--glass-blur-fallback)) saturate(var(--glass-saturation));
+  backdrop-filter: blur(var(--glass-blur-fallback)) saturate(var(--glass-saturation));
+  box-shadow: var(--glass-shadow-rim), var(--glass-shadow);
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  color: var(--glass-text-primary);
+  text-shadow: var(--glass-text-shadow);
+  font-family: var(--glass-font-sans);
+  cursor: text;
+  transition: width var(--glass-duration-spring) var(--glass-easing-spring), background var(--glass-duration-fast);
 }
 
-.glass-search::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: var(--glass-border-width);
-  background: linear-gradient(135deg, var(--glass-border-top) 0%, transparent 60%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  pointer-events: none;
+.glass-search:focus-within {
+  width: var(--glass-search-width-focus);
+  background: var(--glass-bg-hover);
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+  box-shadow: var(--glass-shadow-rim), var(--glass-focus-ring);
 }
 
 .glass-search__icon {
   width: 18px;
   height: 18px;
-  stroke: var(--glass-text-secondary);
+  flex: none;
+  stroke: currentColor;
   stroke-width: 2;
+  stroke-linecap: round;
   fill: none;
-  flex-shrink: 0;
+  opacity: 0.85;
 }
 
 .glass-search__input {
   flex: 1;
-  background: none;
-  border: none;
+  min-width: 0;
+  border: 0;
   outline: none;
-  color: var(--glass-text-primary);
-  font-family: var(--glass-font-sans);
-  font-weight: var(--glass-font-weight-body);
-  font-size: 0.9375rem;
+  background: none;
+  color: inherit;
+  font: var(--glass-font-weight-body) 0.9375rem var(--glass-font-sans);
 }
+.glass-search__input::placeholder { color: var(--glass-text-secondary); }
+.glass-search__input::-webkit-search-cancel-button { filter: grayscale(1); }
 
-.glass-search__input::placeholder {
+.glass-search__kbd {
+  flex: none;
+  padding: 1px 6px;
+  border: 1px solid var(--glass-separator);
+  border-radius: 6px;
   color: var(--glass-text-secondary);
+  font: 0.72rem var(--glass-font-mono);
 }
 
-.glass-search:focus-within {
-  background: var(--glass-bg-hover);
-  box-shadow: var(--glass-shadow-elevated), var(--glass-shadow-inset), var(--glass-focus-ring);
-}
-
+/* ── Accessibility ── */
 @media (prefers-reduced-transparency: reduce) {
   .glass-search {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     background: var(--glass-solid-bg);
-    border-color: var(--glass-solid-border);
+    color: var(--glass-solid-text);
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    text-shadow: none;
   }
-  .glass-search::before { display: none; }
+}
+
+@media (prefers-contrast: more) {
+  .glass-search {
+    background: var(--glass-solid-bg);
+    color: var(--glass-solid-text);
+    outline: 2px solid currentColor;
+    box-shadow: none;
+    text-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-search { transition: none; }
 }
 
 @media (forced-colors: active) {
   .glass-search {
-    background: Canvas;
-    border: 2px solid CanvasText;
-    backdrop-filter: none;
+    background: Field;
+    color: FieldText;
+    outline: 1px solid FieldText;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
     box-shadow: none;
   }
-  .glass-search::before { display: none; }
-  .glass-search__input {
-    color: CanvasText;
-  }
+  .glass-search:focus-within { outline: 3px solid Highlight; }
 }

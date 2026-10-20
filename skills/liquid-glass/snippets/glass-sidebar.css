@@ -1,267 +1,205 @@
-/* ============================================
-   GLASS SIDEBAR / NAVIGATION PANEL COMPONENT
-   Liquid Glass Components v1.0.0
-   ============================================ */
+/**
+ * Navigation sidebar with a sliding current-page indicator.
+ *
+ * Liquid Glass Components v2.0.0. Requires tokens.css. Optional: liquid-glass.js (sliding indicator, refraction).
+ *
+ * Usage:
+ *   <aside class="glass-sidebar" aria-label="Library" data-refract data-refract-bezel="18">
+ *     <header class="glass-sidebar__header">
+ *       <span class="glass-sidebar__brand-name">Studio</span>
+ *     </header>
+ *     <nav class="glass-sidebar__nav" aria-label="Library">
+ *       <div class="glass-sidebar__section-title">Library</div>
+ *       <a href="#recents" class="glass-sidebar__link" aria-current="page">
+ *         <svg class="glass-sidebar__link-icon" viewBox="0 0 24 24" aria-hidden="true">…</svg>
+ *         <span class="glass-sidebar__link-text">Recents</span>
+ *         <span class="glass-sidebar__badge">12</span>
+ *       </a>
+ *       <a href="#favorites" class="glass-sidebar__link">
+ *         <svg class="glass-sidebar__link-icon" viewBox="0 0 24 24" aria-hidden="true">…</svg>
+ *         <span class="glass-sidebar__link-text">Favorites</span>
+ *       </a>
+ *     </nav>
+ *     <footer class="glass-sidebar__footer">…</footer>
+ *   </aside>
+ *
+ *   The current link is marked with aria-current="page" (the v1 .active class still works).
+ */
 
-/* --- HTML Structure ---
-<aside class="glass-sidebar" aria-label="Application navigation">
-  <header class="glass-sidebar__header">
-    <div class="glass-sidebar__brand">
-      <div class="glass-sidebar__logo">
-        <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-      </div>
-      <span class="glass-sidebar__brand-name">Tahoe Studio</span>
-    </div>
-  </header>
-  
-  <nav class="glass-sidebar__nav">
-    <div class="glass-sidebar__section-title">Navigation</div>
-    <a href="#overview" class="glass-sidebar__link active" aria-current="page">
-      <svg class="glass-sidebar__link-icon" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
-      <span class="glass-sidebar__link-text">Overview</span>
-      <span class="glass-sidebar__badge">14</span>
-    </a>
-    <a href="#components" class="glass-sidebar__link">
-      <svg class="glass-sidebar__link-icon" viewBox="0 0 24 24"><polygon points="12 2 19 21 12 17 5 21 12 2"/></svg>
-      <span class="glass-sidebar__link-text">Primitives</span>
-    </a>
-    <a href="#tokens" class="glass-sidebar__link">
-      <svg class="glass-sidebar__link-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
-      <span class="glass-sidebar__link-text">Tokens</span>
-      <span class="glass-sidebar__badge glass-sidebar__badge--accent">New</span>
-    </a>
-  </nav>
-
-  <footer class="glass-sidebar__footer">
-    <div class="glass-sidebar__profile">
-      <div class="glass-sidebar__avatar">J</div>
-      <div class="glass-sidebar__profile-info">
-        <div class="glass-sidebar__profile-name">jcm-developer</div>
-        <div class="glass-sidebar__profile-role">Pro Architect</div>
-      </div>
-    </div>
-  </footer>
-</aside>
-*/
+/* ── Base ── */
 
 .glass-sidebar {
   position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
-  width: 260px;
-  height: 100%;
-  min-height: 440px;
-  padding: 16px;
-  border-radius: var(--glass-border-radius-xl, 24px);
-  background: var(--glass-bg, rgba(255, 255, 255, 0.12));
-  backdrop-filter: blur(var(--glass-blur, 20px)) saturate(var(--glass-saturation, 180%)) contrast(var(--glass-contrast, 105%));
-  -webkit-backdrop-filter: blur(var(--glass-blur, 20px)) saturate(var(--glass-saturation, 180%)) contrast(var(--glass-contrast, 105%));
-  box-shadow: var(--glass-shadow-elevated, 0 20px 40px rgba(0, 0, 0, 0.35)), var(--glass-shadow-inset, inset 0 1px 1px rgba(255, 255, 255, 0.3));
-  border: var(--glass-border-width, 1px) solid transparent;
-  color: var(--glass-text-primary, #ffffff);
-  font-family: var(--glass-font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
-  isolation: isolate;
-  contain: layout paint;
-}
-
-/* Specular border */
-.glass-sidebar::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: var(--glass-border-width, 1px);
-  background: linear-gradient(
-    135deg,
-    var(--glass-border-top, rgba(255, 255, 255, 0.6)) 0%,
-    rgba(255, 255, 255, 0.15) 40%,
-    transparent 60%,
-    var(--glass-border-bottom, rgba(255, 255, 255, 0.1)) 100%
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  pointer-events: none;
+  width: 240px;
+  padding: 12px 8px;
+  border-radius: var(--glass-radius-lg);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur-fallback)) saturate(var(--glass-saturation));
+  backdrop-filter: blur(var(--glass-blur-fallback)) saturate(var(--glass-saturation));
+  box-shadow: var(--glass-shadow-rim), var(--glass-shadow);
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  color: var(--glass-text-primary);
+  text-shadow: var(--glass-text-shadow);
+  font-family: var(--glass-font-sans);
+  font-weight: var(--glass-font-weight-body);
 }
 
 .glass-sidebar__header {
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 14px;
+  padding: 4px 10px 12px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--glass-separator);
 }
-
-.glass-sidebar__brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.glass-sidebar__logo {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.4), rgba(59, 130, 246, 0.2));
-  border: 1px solid rgba(56, 189, 248, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #38bdf8;
-}
-
-.glass-sidebar__logo svg {
-  width: 18px;
-  height: 18px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-}
-
-.glass-sidebar__brand-name {
-  font-weight: 700;
-  font-size: 0.96rem;
-  letter-spacing: 0.01em;
-}
+.glass-sidebar__brand-name { font-weight: var(--glass-font-weight-heading); }
 
 .glass-sidebar__nav {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   flex: 1;
 }
 
 .glass-sidebar__section-title {
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
+  padding: 6px 10px;
+  color: var(--glass-text-secondary);
+  font-size: 0.6875rem;
+  font-weight: var(--glass-font-weight-heading);
   letter-spacing: 0.08em;
-  color: var(--glass-text-secondary, rgba(255, 255, 255, 0.6));
-  padding: 8px 10px 4px;
+  text-transform: uppercase;
 }
 
 .glass-sidebar__link {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 12px;
-  border-radius: var(--glass-border-radius-sm, 10px);
-  color: var(--glass-text-secondary, rgba(255, 255, 255, 0.75));
+  min-height: 36px;
+  padding: 0 10px;
+  border-radius: var(--glass-radius-xs);
+  color: inherit;
+  font-size: 0.875rem;
   text-decoration: none;
-  font-size: 0.88rem;
-  font-weight: 500;
-  transition: all 0.2s var(--glass-easing-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+  transition: background var(--glass-duration-fast);
 }
+.glass-sidebar__link:hover { background: var(--glass-fill-hover); }
+.glass-sidebar__nav.is-enhanced .glass-sidebar__link:hover { background: none; }
 
-.glass-sidebar__link:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--glass-text-primary, #ffffff);
-  transform: translateX(2px);
+/* Static selection when liquid-glass.js is not loaded */
+.glass-sidebar__nav:not(.is-enhanced) .glass-sidebar__link[aria-current="page"],
+.glass-sidebar__nav:not(.is-enhanced) .glass-sidebar__link.active {
+  background: var(--glass-fill);
 }
-
+.glass-sidebar__link[aria-current="page"],
 .glass-sidebar__link.active {
-  background: rgba(255, 255, 255, 0.22);
-  color: var(--glass-text-primary, #ffffff);
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  font-weight: var(--glass-font-weight-heading);
 }
+
+/* Sliding indicator (inserted by liquid-glass.js) */
+.glass-sidebar__nav > .glass-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: var(--glass-ind-w, 0);
+  height: var(--glass-ind-h, 0);
+  translate: var(--glass-ind-x, 0) var(--glass-ind-y, 0);
+  border-radius: var(--glass-radius-xs);
+  background: var(--glass-fill);
+  box-shadow:
+    inset 1px 1px 0 -0.5px rgb(255 255 255 / 0.6),
+    inset -1px -1px 0 -0.5px rgb(255 255 255 / 0.25);
+  pointer-events: none;
+  transition:
+    translate var(--glass-duration-spring) var(--glass-easing-spring),
+    width var(--glass-duration-spring) var(--glass-easing-spring),
+    height var(--glass-duration-spring) var(--glass-easing-spring),
+    scale 250ms var(--glass-easing-smooth);
+}
+.glass-sidebar__nav > .glass-indicator.is-stretching { scale: 0.94 1.1; }
+.glass-sidebar__nav > .glass-indicator.is-instant { transition: none; }
 
 .glass-sidebar__link-icon {
   width: 17px;
   height: 17px;
+  flex: none;
   stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   fill: none;
-  stroke-width: 2;
-  flex-shrink: 0;
 }
-
-.glass-sidebar__link-text {
-  flex: 1;
-}
+.glass-sidebar__link-text { flex: 1; }
 
 .glass-sidebar__badge {
+  padding: 1px 7px;
+  border-radius: var(--glass-radius-pill);
+  background: var(--glass-fill);
+  color: var(--glass-text-secondary);
   font-size: 0.72rem;
-  font-weight: 600;
-  padding: 2px 7px;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--glass-text-secondary, rgba(255, 255, 255, 0.8));
+  font-variant-numeric: tabular-nums;
 }
-
-.glass-sidebar__badge--accent {
-  background: rgba(56, 189, 248, 0.25);
-  border-color: rgba(56, 189, 248, 0.5);
-  color: #38bdf8;
-}
+.glass-sidebar__badge--accent { background: var(--glass-accent); color: #ffffff; }
 
 .glass-sidebar__footer {
-  padding-top: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: auto;
+  margin-top: 10px;
+  padding: 10px 10px 2px;
+  border-top: 1px solid var(--glass-separator);
+  color: var(--glass-text-secondary);
+  font-size: 0.8rem;
 }
 
-.glass-sidebar__profile {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px;
-  border-radius: var(--glass-border-radius-sm, 10px);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+.glass-sidebar__link:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 1px;
+  box-shadow: var(--glass-focus-ring);
 }
 
-.glass-sidebar__avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #6366f1, #a855f7);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 0.85rem;
-}
-
-.glass-sidebar__profile-name {
-  font-size: 0.84rem;
-  font-weight: 600;
-}
-
-.glass-sidebar__profile-role {
-  font-size: 0.72rem;
-  color: var(--glass-text-secondary, rgba(255, 255, 255, 0.6));
-}
-
-/* Accessibility Fallbacks */
+/* ── Accessibility ── */
 @media (prefers-reduced-transparency: reduce) {
   .glass-sidebar {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    background: #0f172a;
-    border-color: #334155;
+    background: var(--glass-solid-bg);
+    color: var(--glass-solid-text);
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    outline-color: var(--glass-solid-border);
+    text-shadow: none;
   }
-  .glass-sidebar::before { display: none; }
-  .glass-sidebar__link.active {
-    background: #1e293b;
+}
+
+@media (prefers-contrast: more) {
+  .glass-sidebar {
+    background: var(--glass-solid-bg);
+    color: var(--glass-solid-text);
+    outline: 2px solid currentColor;
+    box-shadow: none;
+    text-shadow: none;
   }
+  .glass-sidebar__nav > .glass-indicator { outline: 2px solid currentColor; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .glass-sidebar__link {
-    transition: none !important;
-    transform: none !important;
-  }
+  .glass-sidebar__nav > .glass-indicator,
+  .glass-sidebar__link { transition: none; }
 }
 
 @media (forced-colors: active) {
   .glass-sidebar {
     background: Canvas;
-    border: 2px solid CanvasText;
-    backdrop-filter: none;
+    color: CanvasText;
+    outline: 1px solid CanvasText;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: none;
   }
-  .glass-sidebar::before { display: none; }
-  .glass-sidebar__link.active {
+  .glass-sidebar__nav > .glass-indicator,
+  .glass-sidebar__nav:not(.is-enhanced) .glass-sidebar__link[aria-current="page"] {
     background: Highlight;
-    color: HighlightText;
+    forced-color-adjust: none;
   }
+  .glass-sidebar__link[aria-current="page"] { color: HighlightText; forced-color-adjust: none; }
 }

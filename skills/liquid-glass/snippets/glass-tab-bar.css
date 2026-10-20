@@ -1,122 +1,176 @@
-/* ============================================
-   GLASS TAB BAR COMPONENT
-   Liquid Glass Components v1.0.0
-   ============================================ */
+/**
+ * Tab bar with stacked icon and label tabs and a sliding indicator.
+ *
+ * Liquid Glass Components v2.0.0. Requires tokens.css. Optional: liquid-glass.js (sliding indicator, arrow keys).
+ *
+ * Usage:
+ *   <nav class="glass-tabs" role="tablist" aria-label="Main" data-refract>
+ *     <button class="glass-tabs__tab" type="button" role="tab" aria-selected="true">
+ *       <svg class="glass-tabs__icon" viewBox="0 0 24 24" aria-hidden="true">…</svg>
+ *       <span class="glass-tabs__label">Home</span>
+ *     </button>
+ *     <button class="glass-tabs__tab" type="button" role="tab" aria-selected="false">
+ *       <svg class="glass-tabs__icon" viewBox="0 0 24 24" aria-hidden="true">…</svg>
+ *       <span class="glass-tabs__label">Search</span>
+ *     </button>
+ *   </nav>
+ *
+ *   <!-- Text-only, horizontal tabs -->
+ *   <nav class="glass-tabs glass-tabs--inline" role="tablist" aria-label="Sections">…</nav>
+ */
 
-/* --- HTML Structure ---
-<nav class="glass-tabs" role="tablist" aria-label="Main navigation">
-  <button class="glass-tabs__tab glass-tabs__tab--active" role="tab" aria-selected="true">Home</button>
-  <button class="glass-tabs__tab" role="tab" aria-selected="false">Search</button>
-  <button class="glass-tabs__tab" role="tab" aria-selected="false">Profile</button>
-</nav>
-*/
+/* ── Base ── */
 
 .glass-tabs {
   position: relative;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
-  gap: 2px;
-  padding: 4px;
-  border-radius: var(--glass-border-radius-pill);
+  padding: 5px;
+  border-radius: var(--glass-radius-pill);
   background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-  box-shadow: var(--glass-shadow), var(--glass-shadow-inset);
-  border: var(--glass-border-width) solid transparent;
-  isolation: isolate;
-  contain: layout paint;
-  transform: translateZ(0);
-}
-
-/* Specular border */
-.glass-tabs::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: var(--glass-border-width);
-  background: linear-gradient(
-    135deg,
-    var(--glass-border-top) 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    transparent 100%
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  pointer-events: none;
+  -webkit-backdrop-filter: blur(var(--glass-blur-fallback)) saturate(var(--glass-saturation));
+  backdrop-filter: blur(var(--glass-blur-fallback)) saturate(var(--glass-saturation));
+  box-shadow: var(--glass-shadow-rim), var(--glass-shadow);
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  color: var(--glass-text-primary);
+  text-shadow: var(--glass-text-shadow);
+  font-family: var(--glass-font-sans);
 }
 
 .glass-tabs__tab {
   position: relative;
+  z-index: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--glass-gap);
-  min-height: 36px;
-  padding: var(--glass-padding-sm) var(--glass-padding-lg);
-  border-radius: calc(var(--glass-border-radius-pill) - 4px); /* Concentric radius */
-  background: transparent;
-  border: none;
-  color: var(--glass-text-secondary);
-  font-family: var(--glass-font-sans);
-  font-weight: var(--glass-font-weight-body);
-  font-size: 0.875rem;
+  gap: 2px;
+  min-width: 72px;
+  min-height: 54px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--glass-radius-pill);
+  background: none;
+  color: var(--glass-text-primary);
+  font: var(--glass-font-weight-body) 0.6875rem/1.1 var(--glass-font-sans);
   cursor: pointer;
-  user-select: none;
-  transition: color var(--glass-duration-fast) var(--glass-easing-smooth),
-              background var(--glass-duration-normal) var(--glass-easing-spring);
+  -webkit-tap-highlight-color: transparent;
+  transition: color var(--glass-duration-fast);
 }
 
-.glass-tabs__tab:hover {
-  color: var(--glass-text-primary);
-}
-
-.glass-tabs__tab--active {
-  background: var(--glass-bg-hover);
-  color: var(--glass-text-primary);
-  font-weight: var(--glass-font-weight-heading);
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-.glass-tabs__tab:focus-visible {
-  outline: 2px solid #000000;
-  outline-offset: 2px;
-  box-shadow: var(--glass-focus-ring);
-}
-
-.glass-tabs__tab svg {
-  width: 18px;
-  height: 18px;
+.glass-tabs__icon {
+  width: 22px;
+  height: 22px;
   stroke: currentColor;
-  stroke-width: 2;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   fill: none;
 }
 
-/* --- Accessibility Fallbacks --- */
+.glass-tabs__tab[aria-selected="true"],
+.glass-tabs__tab--active {
+  color: var(--glass-text-selected);
+}
+
+/* Inline variant: text-only horizontal tabs */
+.glass-tabs--inline { padding: 4px; }
+.glass-tabs--inline .glass-tabs__tab {
+  flex-direction: row;
+  gap: var(--glass-gap);
+  min-width: 0;
+  min-height: 36px;
+  padding: 0 16px;
+  font-size: 0.875rem;
+}
+.glass-tabs--inline .glass-tabs__tab[aria-selected="true"],
+.glass-tabs--inline .glass-tabs__tab--active {
+  color: var(--glass-text-primary);
+  font-weight: var(--glass-font-weight-heading);
+}
+
+/* Static selection when liquid-glass.js is not loaded */
+.glass-tabs:not(.is-enhanced) .glass-tabs__tab[aria-selected="true"],
+.glass-tabs:not(.is-enhanced) .glass-tabs__tab--active {
+  background: var(--glass-fill);
+}
+
+/* Sliding indicator (inserted by liquid-glass.js) */
+.glass-tabs > .glass-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: var(--glass-ind-w, 0);
+  height: var(--glass-ind-h, 0);
+  translate: var(--glass-ind-x, 0) var(--glass-ind-y, 0);
+  border-radius: var(--glass-radius-pill);
+  background: var(--glass-fill);
+  box-shadow:
+    inset 1px 1px 0 -0.5px rgb(255 255 255 / 0.75),
+    inset -1px -1px 0 -0.5px rgb(255 255 255 / 0.35),
+    0 2px 10px rgb(var(--glass-shadow-color) / 0.15);
+  pointer-events: none;
+  transition:
+    translate var(--glass-duration-spring) var(--glass-easing-spring),
+    width var(--glass-duration-spring) var(--glass-easing-spring),
+    height var(--glass-duration-spring) var(--glass-easing-spring),
+    scale 250ms var(--glass-easing-smooth);
+}
+.glass-tabs > .glass-indicator.is-stretching { scale: 1.12 0.88; }
+.glass-tabs > .glass-indicator.is-instant { transition: none; }
+
+.glass-tabs__tab:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 1px;
+  box-shadow: var(--glass-focus-ring);
+}
+
+/* ── Accessibility ── */
 @media (prefers-reduced-transparency: reduce) {
   .glass-tabs {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     background: var(--glass-solid-bg);
-    border-color: var(--glass-solid-border);
+    color: var(--glass-solid-text);
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    outline-color: var(--glass-solid-border);
+    text-shadow: none;
   }
-  .glass-tabs::before { display: none; }
-  .glass-tabs__tab--active {
-    background: rgba(0, 0, 0, 0.1);
+  .glass-tabs__tab { color: var(--glass-solid-text); }
+  .glass-tabs__tab[aria-selected="true"] { color: var(--glass-accent); }
+}
+
+@media (prefers-contrast: more) {
+  .glass-tabs {
+    background: var(--glass-solid-bg);
+    color: var(--glass-solid-text);
+    outline: 2px solid currentColor;
+    box-shadow: none;
+    text-shadow: none;
   }
+  .glass-tabs > .glass-indicator { outline: 2px solid currentColor; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-tabs > .glass-indicator,
+  .glass-tabs__tab { transition: none; }
 }
 
 @media (forced-colors: active) {
   .glass-tabs {
     background: Canvas;
-    border: 2px solid CanvasText;
-    backdrop-filter: none;
+    color: CanvasText;
+    outline: 1px solid CanvasText;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
     box-shadow: none;
   }
-  .glass-tabs::before { display: none; }
-  .glass-tabs__tab--active {
+  .glass-tabs > .glass-indicator,
+  .glass-tabs:not(.is-enhanced) .glass-tabs__tab[aria-selected="true"] {
     background: Highlight;
-    color: HighlightText;
+    forced-color-adjust: none;
   }
+  .glass-tabs__tab[aria-selected="true"] { color: HighlightText; forced-color-adjust: none; }
 }

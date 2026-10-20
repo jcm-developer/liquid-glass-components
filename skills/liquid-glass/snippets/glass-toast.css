@@ -1,88 +1,143 @@
-/* ============================================
-   GLASS TOAST / NOTIFICATION COMPONENT
-   Liquid Glass Components v1.0.0
-   ============================================ */
+/**
+ * Floating notification that springs in from the bottom or top edge.
+ *
+ * Liquid Glass Components v2.0.0. Requires tokens.css. Optional: liquid-glass.js (refraction).
+ *
+ * Usage:
+ *   <div class="glass-toast" role="status" aria-live="polite" data-state="visible" data-refract data-refract-bezel="16">
+ *     <span class="glass-toast__icon" aria-hidden="true"><svg viewBox="0 0 24 24">…</svg></span>
+ *     <div class="glass-toast__content">
+ *       <strong class="glass-toast__title">Build ready</strong>
+ *       <span class="glass-toast__message">Your preview deployed in 12s.</span>
+ *     </div>
+ *     <button class="glass-toast__dismiss" type="button" aria-label="Dismiss">×</button>
+ *   </div>
+ *
+ *   Toggle data-state="visible|hidden" to spring it in and out.
+ *   Add .glass-toast--top to anchor it to the top edge instead of the bottom.
+ */
 
-/* --- HTML Structure ---
-<div class="glass-toast" role="status" aria-live="polite">
-  <span class="glass-toast__message">Changes saved successfully.</span>
-  <button class="glass-toast__dismiss" aria-label="Dismiss">×</button>
-</div>
-*/
+/* ── Base ── */
 
 .glass-toast {
+  --glass-toast-offset: var(--glass-padding-xl);
   position: fixed;
-  bottom: var(--glass-padding-xl);
+  bottom: var(--glass-toast-offset);
   left: 50%;
-  transform: translateX(-50%) translateY(0) translateZ(0);
   z-index: 200;
+  isolation: isolate;
   display: flex;
   align-items: center;
-  gap: var(--glass-padding-md);
-  padding: var(--glass-padding-md) var(--glass-padding-xl);
-  border-radius: var(--glass-border-radius-pill);
+  gap: 12px;
+  width: max-content;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 10px 12px 10px 10px;
+  border-radius: var(--glass-radius-md);
   background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-  box-shadow: var(--glass-shadow-elevated), var(--glass-shadow-inset);
-  border: var(--glass-border-width) solid transparent;
+  -webkit-backdrop-filter: blur(var(--glass-blur-fallback)) saturate(var(--glass-saturation));
+  backdrop-filter: blur(var(--glass-blur-fallback)) saturate(var(--glass-saturation));
+  box-shadow: var(--glass-shadow-rim), var(--glass-shadow-elevated);
+  outline: 1px solid transparent;
+  outline-offset: -1px;
   color: var(--glass-text-primary);
+  text-shadow: var(--glass-text-shadow);
   font-family: var(--glass-font-sans);
   font-weight: var(--glass-font-weight-body);
-  font-size: 0.875rem;
-  isolation: isolate;
+  translate: -50% 0;
+  transition: translate var(--glass-duration-spring) var(--glass-easing-spring), opacity var(--glass-duration-fast);
 }
 
-.glass-toast::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: var(--glass-border-width);
-  background: linear-gradient(135deg, var(--glass-border-top) 0%, transparent 60%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
+.glass-toast[data-state="hidden"] {
+  translate: -50% calc(100% + var(--glass-toast-offset) + 24px);
+  opacity: 0;
   pointer-events: none;
 }
 
+.glass-toast--top { top: var(--glass-toast-offset); bottom: auto; }
+.glass-toast--top[data-state="hidden"] { translate: -50% calc(-100% - var(--glass-toast-offset) - 24px); }
+
+.glass-toast__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--glass-accent);
+  color: #ffffff;
+}
+.glass-toast__icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.glass-toast__content { display: flex; flex-direction: column; min-width: 0; }
+.glass-toast__title { font-size: 0.875rem; font-weight: var(--glass-font-weight-heading); }
+.glass-toast__message { color: var(--glass-text-secondary); font-size: 0.8125rem; }
+
 .glass-toast__dismiss {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  margin-left: 4px;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: var(--glass-text-secondary);
+  background: var(--glass-fill);
+  color: inherit;
   font-size: 1rem;
+  line-height: 1;
   cursor: pointer;
   transition: background var(--glass-duration-fast);
 }
-
-.glass-toast__dismiss:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: var(--glass-text-primary);
+.glass-toast__dismiss:hover { background: var(--glass-fill-hover); }
+.glass-toast__dismiss:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+  box-shadow: var(--glass-focus-ring);
 }
 
+/* ── Accessibility ── */
 @media (prefers-reduced-transparency: reduce) {
   .glass-toast {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     background: var(--glass-solid-bg);
-    border-color: var(--glass-solid-border);
+    color: var(--glass-solid-text);
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    outline-color: var(--glass-solid-border);
+    text-shadow: none;
   }
-  .glass-toast::before { display: none; }
+}
+
+@media (prefers-contrast: more) {
+  .glass-toast {
+    background: var(--glass-solid-bg);
+    color: var(--glass-solid-text);
+    outline: 2px solid currentColor;
+    box-shadow: none;
+    text-shadow: none;
+  }
+  .glass-toast__message { color: inherit; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-toast { transition: none; }
 }
 
 @media (forced-colors: active) {
   .glass-toast {
     background: Canvas;
-    border: 2px solid CanvasText;
     color: CanvasText;
-    backdrop-filter: none;
+    outline: 1px solid CanvasText;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
     box-shadow: none;
   }
-  .glass-toast::before { display: none; }
 }
