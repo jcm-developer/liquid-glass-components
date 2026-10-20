@@ -4,7 +4,7 @@ globs: "**/*.css, **/*.html, **/*.tsx, **/*.jsx, **/*.vue, **/*.svelte, **/*.ast
 alwaysApply: false
 ---
 
-# Liquid Glass design rules (v2.0.0)
+# Liquid Glass design rules (v2.1.0)
 
 ## Core principles
 - Glass belongs ONLY to the navigation/chrome layer; NEVER on content (articles, feeds, table cells)

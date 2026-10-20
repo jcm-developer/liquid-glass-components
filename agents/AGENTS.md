@@ -1,6 +1,6 @@
 # Liquid Glass Components: agent instructions
 
-This project uses Liquid Glass Components (v2.0.0), a design system that implements Apple's
+This project uses Liquid Glass Components (v2.1.0), a design system that implements Apple's
 Liquid Glass material on the web. Full rules: `.agents/skills/liquid-glass/SKILL.md`.
 
 ## Key rules

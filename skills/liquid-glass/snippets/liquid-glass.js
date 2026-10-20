@@ -1,7 +1,7 @@
 /**
  * Refraction engine and interaction behaviours for Liquid Glass Components.
  *
- * Liquid Glass Components v2.0.0. Zero dependencies. MIT.
+ * Liquid Glass Components v2.1.0. Zero dependencies. MIT.
  * https://github.com/jcm-developer/liquid-glass-components
  *
  * Usage:
@@ -22,6 +22,7 @@
  *   .glass-toggle      aria-checked switching
  *   .glass-slider      fill percentage and linked <output>
  *   .glass-dock        proximity magnification
+ *   .glass-nav-bar     scroll edge and collapsing title (is-scrolled, is-collapsed)
  *   .glass-sheen       pointer-reactive highlight
  *
  * Options on <html>:
@@ -37,7 +38,7 @@
   if (typeof document === 'undefined') return;
 
   /** Library version, kept in step with the snippet headers. */
-  const VERSION = '2.0.0';
+  const VERSION = '2.1.0';
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const html = document.documentElement;
   const mq = (query) => global.matchMedia(query);
@@ -576,7 +577,7 @@
     el.__glassIndicator = { select, sync, items, current };
   }
 
-  /* ── Toggle, slider, dock, sheen ── */
+  /* ── Toggle, slider, dock, nav bar, sheen ── */
 
   /**
    * Makes a button switch flip its aria-checked state on click.
@@ -643,6 +644,52 @@
     });
   }
 
+  /**
+   * Finds the element that scrolls a navigation bar: its nearest ancestor with a scrollable
+   * overflow, or null when the window scrolls it.
+   *
+   * @param {HTMLElement} el - The .glass-nav-bar.
+   * @return {?HTMLElement} The scroll container, or null for the window.
+   */
+  function scrollParent(el) {
+    for (let node = el.parentElement; node && node !== document.body && node !== html; node = node.parentElement) {
+      const overflow = global.getComputedStyle(node).overflowY;
+      if (overflow === 'auto' || overflow === 'scroll') return node;
+    }
+    return null;
+  }
+
+  /**
+   * Shows the scroll edge once content moves under a navigation bar, and moves the title
+   * into the bar once the large title has scrolled beneath it.
+   *
+   * @param {HTMLElement} el - The .glass-nav-bar.
+   */
+  function initNavBar(el) {
+    if (el.__glassNavBar) return;
+    el.__glassNavBar = true;
+    el.classList.add('is-enhanced');
+    const scroller = scrollParent(el);
+    const target = scroller || global;
+    const largeTitle = (scroller || document).querySelector('.glass-nav-bar__large-title');
+    let frame = 0;
+
+    /** Recomputes both states from the current scroll position. */
+    function sync() {
+      frame = 0;
+      const top = scroller ? scroller.scrollTop : global.scrollY;
+      el.classList.toggle('is-scrolled', top > 0);
+      const collapsed = largeTitle
+        ? largeTitle.getBoundingClientRect().bottom <= el.getBoundingClientRect().bottom
+        : top > 0;
+      el.classList.toggle('is-collapsed', collapsed);
+    }
+    target.addEventListener('scroll', () => {
+      if (!frame) frame = global.requestAnimationFrame(sync);
+    }, { passive: true });
+    sync();
+  }
+
   let pointerBound = false;
 
   /**
@@ -676,6 +723,7 @@
     all('.glass-toggle').forEach(initToggle);
     all('input.glass-slider').forEach(initSlider);
     all('.glass-dock').forEach(initDock);
+    all('.glass-nav-bar').forEach(initNavBar);
     all('[data-refract]').forEach((el) => refract(el));
     bindPointer();
   }

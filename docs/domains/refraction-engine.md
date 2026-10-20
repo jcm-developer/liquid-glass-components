@@ -4,7 +4,8 @@
 
 `skills/liquid-glass/snippets/liquid-glass.js` gives glass elements real refraction and adds
 the behaviours CSS cannot do alone: sliding selection indicators, switch toggling, slider
-fill, dock magnification and the pointer sheen. It is optional; every snippet works without
+fill, dock magnification, the navigation bar's scroll edge and collapsing title, and the
+pointer sheen. It is optional; every snippet works without
 it.
 
 ## Key files
@@ -38,8 +39,11 @@ it.
    property change. A preference change calls `reevaluate`, which applies or removes every
    filter.
 
-Behaviours (`initIndicator`, `initToggle`, `initSlider`, `initDock`, `bindPointer`) are wired
+Behaviours (`initIndicator`, `initToggle`, `initSlider`, `initDock`, `initNavBar`,
+`bindPointer`) are wired
 by the same `init`, are idempotent, and announce changes with a bubbling `glass:change` event.
+`initNavBar` marks the bar `is-enhanced`, then on each scroll frame sets `is-scrolled` (any
+scroll) and `is-collapsed` (the large title has passed under the bar) on it; it fires no event.
 
 ## Public API
 

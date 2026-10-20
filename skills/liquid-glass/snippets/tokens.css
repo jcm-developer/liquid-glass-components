@@ -1,7 +1,7 @@
 /**
  * Liquid Glass design tokens.
  *
- * Liquid Glass Components v2.0.0. Load before any component snippet.
+ * Liquid Glass Components v2.1.0. Load before any component snippet.
  *
  * The material has three layers:
  *   1. Refraction: an SVG displacement map that bends the backdrop at the bezel
@@ -35,7 +35,7 @@
   /* Content on glass */
   --glass-text-primary: #ffffff;
   --glass-text-secondary: rgb(255 255 255 / 0.78);
-  --glass-text-selected: #8cc8ff;
+  --glass-text-selected: #ffffff;
   --glass-text-shadow: 0 1px 2px rgb(0 0 0 / 0.18);
   --glass-fill: rgb(255 255 255 / 0.2);          /* selected item inside glass */
   --glass-fill-hover: rgb(255 255 255 / 0.14);   /* hovered item inside glass */
@@ -133,7 +133,7 @@
   --glass-rim: 0.6;
   --glass-text-primary: #ffffff;
   --glass-text-secondary: rgb(255 255 255 / 0.78);
-  --glass-text-selected: #8cc8ff;
+  --glass-text-selected: #ffffff;
   --glass-text-shadow: 0 1px 2px rgb(0 0 0 / 0.18);
   --glass-fill: rgb(255 255 255 / 0.2);
   --glass-fill-hover: rgb(255 255 255 / 0.14);
@@ -176,7 +176,7 @@
   .glass-surface, .glass-btn, .glass-card, .glass-tabs, .glass-toolbar,
   .glass-segmented, .glass-search, .glass-sidebar, .glass-dock,
   .glass-popover, .glass-toast, .glass-modal__panel, .glass-slider-wrap,
-  .glass-toggle
+  .glass-toggle, .glass-nav-bar__group
 ) {
   --glass-bg: rgb(var(--glass-tint-rgb) / var(--glass-tint));
   --glass-bg-hover: rgb(var(--glass-tint-rgb) / calc(var(--glass-tint) + 0.06));

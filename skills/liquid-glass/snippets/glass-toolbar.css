@@ -1,7 +1,7 @@
 /**
  * Floating tool pill and fixed navbar with flat buttons inside.
  *
- * Liquid Glass Components v2.0.0. Requires tokens.css. Optional: liquid-glass.js (refraction).
+ * Liquid Glass Components v2.1.0. Requires tokens.css. Optional: liquid-glass.js (refraction).
  *
  * Usage:
  *   <!-- Floating tool pill -->
@@ -23,6 +23,7 @@
  *   </header>
  *
  *   Buttons inside the toolbar are flat fills, never glass (no glass on glass).
+ *   For an app screen header with a collapsing large title, use glass-nav-bar instead.
  */
 
 /* ── Base ── */

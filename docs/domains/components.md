@@ -18,6 +18,7 @@ All under `skills/liquid-glass/snippets/`.
 | `glass-button.css` | Button: regular, prominent, icon, small, plain |
 | `glass-card.css` | Floating panel |
 | `glass-dock.css` | Dock with proximity magnification |
+| `glass-nav-bar.css` | Screen navigation bar with glass groups, collapsing title and scroll edge |
 | `glass-modal.css` | Modal and bottom sheet on `<dialog>` |
 | `glass-popover.css` | Contextual menu |
 | `glass-search.css` | Search pill that widens on focus |
@@ -27,7 +28,7 @@ All under `skills/liquid-glass/snippets/`.
 | `glass-tab-bar.css` | Tab bar with sliding indicator |
 | `glass-toast.css` | Notification |
 | `glass-toggle.css` | Switch with lens thumb |
-| `glass-toolbar.css` | Tool pill and fixed navbar |
+| `glass-toolbar.css` | Tool pill and fixed website header |
 
 ## Anatomy of a snippet
 
@@ -49,6 +50,9 @@ All under `skills/liquid-glass/snippets/`.
    ```
 
    Then the elements, states (hover, active, focus-visible, disabled) and selection.
+
+   Exception: in `glass-nav-bar.css` the root bar is clear and each `.glass-nav-bar__group`
+   carries the material block, so the groups are what the `:where()` list names.
 3. **Variants**, if any, written as token overrides (`--glass-tint`, `--glass-tint-rgb`)
    rather than new declarations.
 4. **Accessibility**, all four, in this order:
@@ -105,6 +109,10 @@ Selection inside a glass surface uses `--glass-fill`; separators use `--glass-se
   inside a fading or masked container only refracts that container's content.
 - **`<dialog>` display.** `.glass-modal` sets `display: flex` only on `[open]`; setting it on
   the closed dialog would show it.
+- **Navigation bar scroll container.** The engine watches the nearest ancestor whose
+  `overflow-y` is `auto` or `scroll`, else the window, and looks for
+  `.glass-nav-bar__large-title` inside it. A bar inside a custom scroller that is not its
+  ancestor never updates. The scroll edge is a fade, not glass ([../decisions.md](../decisions.md), D11).
 - **Popover anchor.** `.glass-popover` is absolutely positioned; its anchor must be
   `.glass-popover-anchor` (or any positioned ancestor).
 

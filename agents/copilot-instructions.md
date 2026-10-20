@@ -3,7 +3,7 @@ description: "Liquid Glass design system for refractive, accessible glass UI com
 applyTo: "**/*.css, **/*.html, **/*.tsx, **/*.jsx, **/*.vue, **/*.svelte"
 ---
 
-# Liquid Glass component guidelines (v2.0.0)
+# Liquid Glass component guidelines (v2.1.0)
 
 When generating UI components with a glass aesthetic:
 

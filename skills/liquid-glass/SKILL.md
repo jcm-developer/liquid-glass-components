@@ -11,7 +11,7 @@ description: >-
   motion and forced colors fallbacks.
 license: MIT
 metadata:
-  version: "2.0.0"
+  version: "2.1.0"
   author: "jcm-developer"
   repo: "https://github.com/jcm-developer/liquid-glass-components"
 ---
@@ -226,6 +226,7 @@ Use the dual ring (black outline plus white ring) so focus is visible on any bac
 | `glass-button.css` | Button: regular, prominent, icon, small, plain |
 | `glass-card.css` | Floating panel |
 | `glass-dock.css` | Dock with proximity magnification |
+| `glass-nav-bar.css` | Screen navigation bar: glass button groups, collapsing large title, scroll edge |
 | `glass-modal.css` | Modal and bottom sheet on `<dialog>` |
 | `glass-popover.css` | Contextual menu |
 | `glass-search.css` | Search pill that widens on focus |
@@ -235,7 +236,7 @@ Use the dual ring (black outline plus white ring) so focus is visible on any bac
 | `glass-tab-bar.css` | Tab bar with sliding indicator |
 | `glass-toast.css` | Notification |
 | `glass-toggle.css` | Switch with lens thumb |
-| `glass-toolbar.css` | Tool pill and fixed navbar |
+| `glass-toolbar.css` | Tool pill and fixed website header (brand and links) |
 
 Each snippet includes its usage markup, hover, active, focus-visible and disabled states, and
 all four accessibility fallbacks.

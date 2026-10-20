@@ -103,3 +103,13 @@ Decision: a short root `AGENTS.md` (rules, doc map, maintenance contract), on-de
 CI.
 Consequences: every fact has one home; a change updates its home in the same commit; CI
 catches em dashes, broken links, stale inventories and version drift.
+
+## D11. The navigation bar's scroll edge is a tinted fade, not glass (2026-10-21)
+Status: accepted
+Context: iOS draws a blurred scroll edge under the navigation bar's glass groups. A
+`backdrop-filter` layer there would put glass under glass and become a backdrop root that
+limits what the groups can refract.
+Decision: `glass-nav-bar.css` keeps the bar clear, makes only the button groups glass, and
+draws the scroll edge as a `--glass-solid-bg` gradient without `backdrop-filter`.
+Consequences: the "no glass on glass" rule holds without an exception; content under the bar
+fades instead of blurring.

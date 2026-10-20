@@ -1,7 +1,7 @@
 /**
  * Tab bar with stacked icon and label tabs and a sliding indicator.
  *
- * Liquid Glass Components v2.0.0. Requires tokens.css. Optional: liquid-glass.js (sliding indicator, arrow keys).
+ * Liquid Glass Components v2.1.0. Requires tokens.css. Optional: liquid-glass.js (sliding indicator, arrow keys).
  *
  * Usage:
  *   <nav class="glass-tabs" role="tablist" aria-label="Main" data-refract>
@@ -70,9 +70,11 @@
   fill: none;
 }
 
+/* Selection reads through weight as well as colour, so it survives a bright backdrop. */
 .glass-tabs__tab[aria-selected="true"],
 .glass-tabs__tab--active {
   color: var(--glass-text-selected);
+  font-weight: var(--glass-font-weight-heading);
 }
 
 /* Inline variant: text-only horizontal tabs */

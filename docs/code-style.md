@@ -41,7 +41,7 @@ markup is the contract: the landing and the README use it verbatim.
 /**
  * Switch whose thumb swells into a clear lens while pressed.
  *
- * Liquid Glass Components v2.0.0. Requires tokens.css. Optional: liquid-glass.js (toggles aria-checked).
+ * Liquid Glass Components v2.1.0. Requires tokens.css. Optional: liquid-glass.js (toggles aria-checked).
  *
  * Usage:
  *   <button class="glass-toggle" type="button" role="switch" aria-checked="true" aria-labelledby="wifi-label">

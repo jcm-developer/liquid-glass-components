@@ -1,7 +1,7 @@
 /**
  * Segmented control with a sliding, stretching selection indicator.
  *
- * Liquid Glass Components v2.0.0. Requires tokens.css. Optional: liquid-glass.js (sliding indicator, arrow keys).
+ * Liquid Glass Components v2.1.0. Requires tokens.css. Optional: liquid-glass.js (sliding indicator, arrow keys).
  *
  * Usage:
  *   <div class="glass-segmented" role="radiogroup" aria-label="View range" data-refract>

@@ -3,7 +3,7 @@ trigger: model-decision
 description: Liquid Glass design system rules for refractive, accessible glass UI components with low frost, specular rims and CSS springs.
 ---
 
-# Liquid Glass design rules (v2.0.0)
+# Liquid Glass design rules (v2.1.0)
 
 ## When to apply
 Apply when creating navigation bars, tab bars, toolbars, sidebars, docks, modals, popovers,

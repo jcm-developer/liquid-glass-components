@@ -1,0 +1,198 @@
+/**
+ * Screen navigation bar: glass button groups over a clear bar, a large title that collapses
+ * into the bar on scroll, and a scroll-edge fade that keeps the groups legible.
+ *
+ * Liquid Glass Components v2.1.0. Requires tokens.css. Optional: liquid-glass.js (collapsing title, scroll edge).
+ *
+ * Usage:
+ *   <header class="glass-nav-bar">
+ *     <div class="glass-nav-bar__group" data-refract>
+ *       <button class="glass-nav-bar__btn" type="button" aria-label="Back"><svg viewBox="0 0 24 24" aria-hidden="true">…</svg></button>
+ *     </div>
+ *     <span class="glass-nav-bar__title" aria-hidden="true">Library</span>
+ *     <div class="glass-nav-bar__group" data-refract>
+ *       <button class="glass-nav-bar__btn" type="button" aria-label="Share"><svg viewBox="0 0 24 24" aria-hidden="true">…</svg></button>
+ *       <button class="glass-nav-bar__btn glass-nav-bar__btn--text" type="button">Edit</button>
+ *     </div>
+ *   </header>
+ *   <h1 class="glass-nav-bar__large-title">Library</h1>
+ *   …scrolling content…
+ *
+ *   <!-- Compact: no large title, the title always shows in the bar -->
+ *   <header class="glass-nav-bar glass-nav-bar--compact">…</header>
+ *
+ *   The bar itself is clear; only the groups are glass, and the buttons inside them are flat
+ *   (no glass on glass). Put the large title first in the content that scrolls under the bar.
+ *   liquid-glass.js watches the nearest scrollable ancestor (or the window) and sets
+ *   is-scrolled (scroll edge on) and is-collapsed (title moves into the bar). Without it the
+ *   scroll edge stays on and the title stays in the content; use --compact to show the title
+ *   in the bar as well.
+ *   For a website header with a brand and links, use glass-toolbar--fixed instead.
+ */
+
+/* ── Base ── */
+
+.glass-nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--glass-gap);
+  min-height: 60px;
+  padding: 8px var(--glass-padding-md);
+  color: var(--glass-text-primary);
+  font-family: var(--glass-font-sans);
+}
+
+/* Scroll edge: a tinted fade, not a second glass layer, so the groups stay the only glass. */
+.glass-nav-bar::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 -24px;
+  z-index: -1;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--glass-solid-bg) 96%, transparent) calc(100% - 24px),
+    transparent
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--glass-duration-normal) var(--glass-easing-smooth);
+}
+.glass-nav-bar.is-scrolled::before { opacity: 1; }
+
+/* Without liquid-glass.js nothing reports the scroll, so the edge stays on like a classic bar. */
+.glass-nav-bar:not(.is-enhanced)::before { opacity: 1; }
+
+.glass-nav-bar__group {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border-radius: var(--glass-radius-pill);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur-fallback)) saturate(var(--glass-saturation));
+  backdrop-filter: blur(var(--glass-blur-fallback)) saturate(var(--glass-saturation));
+  box-shadow: var(--glass-shadow-rim), var(--glass-shadow);
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  color: var(--glass-text-primary);
+  text-shadow: var(--glass-text-shadow);
+  grid-row: 1;
+}
+.glass-nav-bar > .glass-nav-bar__group:first-child { grid-column: 1; justify-self: start; }
+.glass-nav-bar > .glass-nav-bar__group:last-child { grid-column: 3; justify-self: end; }
+
+.glass-nav-bar__btn {
+  display: grid;
+  place-items: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--glass-radius-pill);
+  background: none;
+  color: inherit;
+  font: var(--glass-font-weight-heading) 0.9375rem/1 var(--glass-font-sans);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background var(--glass-duration-fast), scale var(--glass-duration-spring) var(--glass-easing-spring);
+}
+.glass-nav-bar__btn:hover { background: var(--glass-fill-hover); }
+.glass-nav-bar__btn:active { scale: var(--glass-press-scale); }
+.glass-nav-bar__btn:disabled { opacity: 0.4; cursor: default; }
+.glass-nav-bar__btn--text { padding: 0 12px; }
+
+.glass-nav-bar__btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.glass-nav-bar__btn:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 1px;
+  box-shadow: var(--glass-focus-ring);
+}
+
+.glass-nav-bar__title {
+  grid-row: 1;
+  grid-column: 2;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1.0625rem;
+  font-weight: var(--glass-font-weight-heading);
+  text-shadow: var(--glass-text-shadow);
+  opacity: 0;
+  translate: 0 6px;
+  transition:
+    opacity var(--glass-duration-normal) var(--glass-easing-smooth),
+    translate var(--glass-duration-spring) var(--glass-easing-spring);
+}
+.glass-nav-bar.is-collapsed .glass-nav-bar__title { opacity: 1; translate: 0 0; }
+
+/* Content layer: the large title scrolls with the page, it is not glass. */
+.glass-nav-bar__large-title {
+  margin: 4px 0 12px;
+  padding: 0 var(--glass-padding-md);
+  font: 700 2.125rem/1.15 var(--glass-font-sans);
+  letter-spacing: -0.02em;
+}
+
+/* ── Variants ── */
+
+.glass-nav-bar--compact .glass-nav-bar__title { opacity: 1; translate: 0 0; }
+
+/* ── Accessibility ── */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-nav-bar__group {
+    background: var(--glass-solid-bg);
+    color: var(--glass-solid-text);
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    outline-color: var(--glass-solid-border);
+    text-shadow: none;
+  }
+  .glass-nav-bar::before { inset: 0; background: var(--glass-solid-bg); }
+}
+
+@media (prefers-contrast: more) {
+  .glass-nav-bar__group {
+    background: var(--glass-solid-bg);
+    color: var(--glass-solid-text);
+    outline: 2px solid currentColor;
+    box-shadow: none;
+    text-shadow: none;
+  }
+  .glass-nav-bar::before { inset: 0; background: var(--glass-solid-bg); }
+  .glass-nav-bar__title { text-shadow: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-nav-bar::before,
+  .glass-nav-bar__btn,
+  .glass-nav-bar__title { transition: none; }
+}
+
+@media (forced-colors: active) {
+  .glass-nav-bar__group {
+    background: Canvas;
+    color: CanvasText;
+    outline: 1px solid CanvasText;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: none;
+  }
+  .glass-nav-bar::before { inset: 0; background: Canvas; }
+}

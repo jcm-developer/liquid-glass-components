@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../skills/liquid-glass/snippets/glass-card.css">
   <link rel="stylesheet" href="../skills/liquid-glass/snippets/glass-dock.css">
   <link rel="stylesheet" href="../skills/liquid-glass/snippets/glass-modal.css">
+  <link rel="stylesheet" href="../skills/liquid-glass/snippets/glass-nav-bar.css">
   <link rel="stylesheet" href="../skills/liquid-glass/snippets/glass-popover.css">
   <link rel="stylesheet" href="../skills/liquid-glass/snippets/glass-search.css">
   <link rel="stylesheet" href="../skills/liquid-glass/snippets/glass-segmented.css">
@@ -37,6 +38,7 @@
       if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
       document.documentElement.dataset.theme = t;
       document.documentElement.dataset.glassScheme = t;
+      document.querySelector('meta[name="theme-color"]').content = t === 'light' ? '#fafafa' : '#08080a';
     })();
   </script>
   <style>
@@ -56,6 +58,8 @@
       --focus: #4da3ff;
       --glow: rgba(110, 90, 255, 0.35);
       --logo-edge: rgba(255, 255, 255, 0.12);
+      --scroll-thumb: rgba(255, 255, 255, 0.18);
+      color-scheme: dark;
 
       --font: 'Geist', -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', sans-serif;
       --mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
@@ -80,6 +84,8 @@
       --focus: #0a6cff;
       --glow: rgba(110, 90, 255, 0.22);
       --logo-edge: rgba(0, 0, 0, 0.18);
+      --scroll-thumb: rgba(0, 0, 0, 0.2);
+      color-scheme: light;
     }
 
     /* Wallpaper palettes shared by every demo stage */
@@ -90,7 +96,12 @@
 
     /* ── Base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; }
+    /* Thin scrollbars in the page palette. Setting scrollbar-color turns off ::-webkit-scrollbar
+       in Chromium 121+, so the standard properties are the only styling used. */
+    html, .drawer pre, .term pre, .play-code { scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) transparent; }
+    /* A modal owns the scroll, so the page behind it stops showing a second scrollbar. */
+    html:has(dialog[open]) { overflow: hidden; }
     body {
       background: var(--bg);
       color: var(--text);
@@ -130,13 +141,19 @@
     .btn-ghost:hover { border-color: var(--dim); }
     .btn-sm { height: 36px; padding: 0 14px; font-size: 0.85rem; }
     .btn-white { background: #fff; color: #0a0a0a; }
+    /* Icon-only secondary action: no outline at rest, so it never competes in shape with
+       the labelled pills next to it. It sits outside a pill group, never between pills. */
     .icon-btn {
-      width: 36px; height: 36px; border-radius: 10px;
+      width: 36px; height: 36px; flex: none; border-radius: 50%;
       display: grid; place-items: center;
-      background: transparent; border: 1px solid var(--line-2);
-      color: var(--text); cursor: pointer; transition: background 0.2s;
+      background: transparent; border: 0;
+      color: var(--muted); cursor: pointer;
+      transition: transform 0.5s var(--spring), background 0.2s, color 0.2s;
     }
-    .icon-btn:hover { background: var(--bg-2); }
+    .icon-btn:hover { background: var(--bg-2); color: var(--text); }
+    .icon-btn:active { transform: scale(0.92); }
+    .icon-btn-sm { width: 32px; height: 32px; }
+    .icon-btn-sm .i { width: 16px; height: 16px; }
 
     /* ── Wallpapers ── */
     .wall { position: absolute; inset: 0; overflow: hidden; background: var(--w0); transition: background 0.8s; }
@@ -222,6 +239,22 @@
     .nav-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
     .gh-btn .i { width: 16px; height: 16px; }
     .gh-stars:empty { display: none; }
+    .menu-btn { display: none; }
+    /* Mobile menu: a native popover, so Escape, light dismiss and the top layer come free. */
+    .nav-menu {
+      inset: 72px 16px auto auto; margin: 0;
+      width: min(260px, calc(100vw - 32px)); padding: 8px;
+      border: 1px solid var(--line); border-radius: 20px;
+      background: var(--nav-glass); color: var(--text);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      backdrop-filter: blur(18px) saturate(180%);
+      box-shadow: 0 20px 40px -16px rgba(0, 0, 0, 0.5);
+    }
+    .nav-menu:popover-open { display: flex; flex-direction: column; animation: menuIn 0.35s var(--ease); }
+    @keyframes menuIn { from { opacity: 0; transform: translateY(-8px) scale(0.98); } }
+    .nav-menu a:not(.btn) { display: flex; align-items: center; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; color: var(--muted); }
+    .nav-menu a:not(.btn):hover { background: var(--bg-2); color: var(--text); }
+    .nav-menu .btn { margin-top: 6px; }
     .theme-btn .i-sun { display: none; }
     [data-theme="light"] .theme-btn .i-sun { display: block; }
     [data-theme="light"] .theme-btn .i-moon { display: none; }
@@ -384,6 +417,21 @@
     .g-card { display: flex; flex-direction: column; }
     .g-card[hidden] { display: none; }
     .g-card.wide { grid-column: span 2; }
+    .g-card.tall { grid-row: span 2; }
+    .g-card.tall .g-stage { flex: 1; height: auto; min-height: 260px; }
+    /* A phone screen that scrolls under the navigation bar demo. */
+    .nb-phone {
+      position: relative; width: 290px; height: calc(100% - 44px); max-height: 520px; min-height: 380px;
+      overflow-y: auto; scrollbar-width: none; overscroll-behavior: contain;
+      border-radius: 36px; background: #0b0b14; color: #fff;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14), 0 30px 60px -24px rgba(0, 0, 0, 0.6);
+    }
+    .nb-phone::-webkit-scrollbar { display: none; }
+    .nb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 0 4px 4px; }
+    .nb-grid i { aspect-ratio: 1; border-radius: 6px; background: linear-gradient(140deg, var(--w1), var(--w2)); }
+    .nb-grid i:nth-child(3n+2) { background: linear-gradient(200deg, var(--w3), var(--w1)); }
+    .nb-grid i:nth-child(4n+3) { background: linear-gradient(30deg, var(--w4), var(--w2)); }
+    .nb-grid i:nth-child(5n+1) { background: linear-gradient(90deg, var(--w2), var(--w3)); }
     .g-stage { height: 260px; display: grid; place-items: center; }
     .g-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px 16px; }
     .g-meta h3 { font-size: 0.96rem; font-weight: 600; }
@@ -500,7 +548,7 @@
     @keyframes drawerIn { from { transform: translateX(40px); opacity: 0; } }
     .drawer-head { display: flex; align-items: center; gap: 10px; padding: 16px 18px; border-bottom: 1px solid var(--line); }
     .drawer-head h3 { flex: 1; min-width: 0; font: 500 0.92rem var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .drawer pre { flex: 1; margin: 0; padding: 20px; overflow: auto; font: 0.8rem/1.7 var(--mono); color: var(--muted); white-space: pre; }
+    .drawer pre { flex: 1; margin: 0; padding: 20px; overflow: auto; font: 0.8rem/1.7 var(--mono); color: var(--muted); white-space: pre-wrap; overflow-wrap: anywhere; }
 
     /* ── Scroll reveals (progressive: content is visible without support) ── */
     @supports (animation-timeline: view()) {
@@ -523,8 +571,12 @@
       .feed-set { grid-template-columns: repeat(3, 1fr); }
     }
     @media (max-width: 760px) {
-      .nav-links, .gh-label, .nav-cta { display: none; }
+      .nav-links, .gh-label, .gh-stars, .nav-cta { display: none; }
+      .menu-btn { display: grid; }
       .nav-in { gap: 12px; }
+      /* Without its label, GitHub becomes an icon action like the theme button beside it. */
+      .gh-btn { width: 36px; padding: 0; border-color: transparent; background: transparent; color: var(--muted); }
+      .gh-btn:hover { border-color: transparent; background: var(--bg-2); color: var(--text); }
     }
     @media (max-width: 640px) {
       .wrap { padding: 0 16px; }
@@ -541,6 +593,11 @@
       .bento .card, .bento .card.full-md { grid-column: span 12; }
       .gallery { grid-template-columns: 1fr; }
       .g-card.wide { grid-column: auto; }
+      .g-card.tall { grid-row: auto; }
+      .g-card.tall .g-stage { min-height: 460px; }
+      /* The four filters fit a 360px screen; narrower ones scroll instead of overflowing. */
+      .sec-head .filters { overflow-x: auto; scrollbar-width: none; }
+      .sec-head .filters button { padding: 0 12px; font-size: 0.82rem; }
       .g-stage--side .glass-sidebar { width: 160px; }
       .play-stage { min-height: 440px; }
       .cta { height: 460px; margin-top: 110px; border-radius: 24px; }
@@ -611,6 +668,8 @@
     <symbol id="i-prev" viewBox="0 0 24 24"><path d="M19 5v14l-9-7zM6 5v14"/></symbol>
     <symbol id="i-next" viewBox="0 0 24 24"><path d="M5 5v14l9-7zM18 5v14"/></symbol>
     <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></symbol>
     <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
     <symbol id="i-hand" viewBox="0 0 24 24"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V11M11 10.5V4a1.5 1.5 0 0 1 3 0v6.5M14 10.5V5.5a1.5 1.5 0 0 1 3 0V13M17 9.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1.5a6 6 0 0 1-4.7-2.3L4.4 14.6a1.5 1.5 0 0 1 2.3-1.9L8 14"/></symbol>
     <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 21h4"/></symbol>
@@ -639,19 +698,26 @@
         <a href="#install">Install</a>
       </nav>
       <div class="nav-actions">
+        <button class="icon-btn theme-btn" id="theme-btn" type="button" aria-label="Toggle light and dark theme">
+          <svg class="i i-moon"><use href="#i-moon"/></svg>
+          <svg class="i i-sun"><use href="#i-sun"/></svg>
+        </button>
         <a class="btn btn-ghost btn-sm gh-btn" href="https://github.com/jcm-developer/liquid-glass-components" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository">
           <svg class="i"><use href="#i-github"/></svg>
           <span class="gh-label">GitHub</span>
           <span class="gh-stars" id="gh-stars-nav"></span>
         </a>
-        <button class="icon-btn theme-btn" id="theme-btn" type="button" aria-label="Toggle light and dark theme">
-          <svg class="i i-moon"><use href="#i-moon"/></svg>
-          <svg class="i i-sun"><use href="#i-sun"/></svg>
-        </button>
         <a class="btn btn-primary btn-sm nav-cta" href="#install">Get started</a>
+        <button class="icon-btn menu-btn" type="button" popovertarget="nav-menu" aria-label="Menu"><svg class="i"><use href="#i-menu"/></svg></button>
       </div>
     </div>
   </header>
+  <nav class="nav-menu" id="nav-menu" popover aria-label="Mobile">
+    <a href="#components">Components</a>
+    <a href="#playground">Playground</a>
+    <a href="#install">Install</a>
+    <a class="btn btn-primary btn-sm" href="#install">Get started</a>
+  </nav>
 
   <main>
     <!-- ── Hero ── -->
@@ -666,7 +732,7 @@
             </h1>
           </div>
           <div class="hero-side">
-            <p><strong>14 accessible components and an AI skill</strong> that teach your coding agent real refraction, specular light and spring motion. Pure CSS and vanilla JS, no build step.</p>
+            <p><strong>15 accessible components and an AI skill</strong> that teach your coding agent real refraction, specular light and spring motion. Pure CSS and vanilla JS, no build step.</p>
           </div>
         </div>
 
@@ -733,7 +799,7 @@
         </div>
 
         <div class="stats" aria-label="Project facts">
-          <div class="stat"><b>14</b><span>Components</span></div>
+          <div class="stat"><b>15</b><span>Components</span></div>
           <div class="stat"><b>6</b><span>AI agents</span></div>
           <div class="stat"><b>0</b><span>Dependencies</span></div>
           <div class="stat" id="stat-stars" hidden><b id="gh-stars"></b><span>GitHub stars</span></div>
@@ -756,15 +822,15 @@
         <article class="card spot reveal" style="--s:5">
           <div class="b-vis marquee" aria-hidden="true">
             <div class="mq">
-              <span class="chip">Button</span><span class="chip">Tab Bar</span><span class="chip">Toggle</span><span class="chip">Slider</span><span class="chip">Toolbar</span><span class="chip">Dock</span><span class="chip">Popover</span>
-              <span class="chip">Button</span><span class="chip">Tab Bar</span><span class="chip">Toggle</span><span class="chip">Slider</span><span class="chip">Toolbar</span><span class="chip">Dock</span><span class="chip">Popover</span>
+              <span class="chip">Button</span><span class="chip">Tab Bar</span><span class="chip">Toggle</span><span class="chip">Slider</span><span class="chip">Toolbar</span><span class="chip">Dock</span><span class="chip">Popover</span><span class="chip">Nav Bar</span>
+              <span class="chip">Button</span><span class="chip">Tab Bar</span><span class="chip">Toggle</span><span class="chip">Slider</span><span class="chip">Toolbar</span><span class="chip">Dock</span><span class="chip">Popover</span><span class="chip">Nav Bar</span>
             </div>
             <div class="mq rev">
               <span class="chip">Sheet</span><span class="chip">Search</span><span class="chip">Segmented</span><span class="chip">Sidebar</span><span class="chip">Toast</span><span class="chip">Card</span><span class="chip">Icon Button</span>
               <span class="chip">Sheet</span><span class="chip">Search</span><span class="chip">Segmented</span><span class="chip">Sidebar</span><span class="chip">Toast</span><span class="chip">Card</span><span class="chip">Icon Button</span>
             </div>
           </div>
-          <div class="b-txt"><h3>14 chrome-layer components</h3><p>Bars, controls and overlays. The parts of an interface that float above content, which is the only place glass belongs.</p></div>
+          <div class="b-txt"><h3>15 chrome-layer components</h3><p>Bars, controls and overlays. The parts of an interface that float above content, which is the only place glass belongs.</p></div>
         </article>
 
         <article class="card spot reveal" style="--s:3">
@@ -906,7 +972,7 @@
           <footer class="g-meta"><div><h3>Icon Button</h3><p>44 × 44 touch targets</p></div><button class="code-btn" type="button" data-file="glass-button.css"><svg class="i"><use href="#i-code"/></svg>Code</button></footer>
         </article>
 
-        <article class="card spot g-card" data-cat="navigation">
+        <article class="card spot g-card wide" data-cat="navigation">
           <div class="g-stage wall-mini glass-demo" data-wall="ocean" data-glass-scheme="dark" data-word="Dock">
             <nav class="glass-dock" aria-label="Example dock" data-refract data-refract-bezel="20">
               <button class="glass-dock__item" type="button" aria-label="Files" data-tooltip="Files"><span class="glass-dock__icon-box" style="--glass-dock-icon: linear-gradient(160deg, #6ab0ff, #1d6bff)"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-folder"/></svg></span><span class="glass-dock__dot" aria-hidden="true"></span></button>
@@ -958,6 +1024,26 @@
             <div class="side-content" aria-hidden="true"><b>Recents</b><span style="width:90%"></span><span style="width:70%"></span><span style="width:80%"></span></div>
           </div>
           <footer class="g-meta"><div><h3>Sidebar</h3><p>Lateral chrome</p></div><button class="code-btn" type="button" data-file="glass-sidebar.css"><svg class="i"><use href="#i-code"/></svg>Code</button></footer>
+        </article>
+
+        <article class="card spot g-card tall" data-cat="navigation">
+          <div class="g-stage wall-mini glass-demo" data-wall="aurora" data-glass-scheme="dark" data-word="Nav">
+            <div class="nb-phone" tabindex="0" role="region" aria-label="Navigation bar demo, scroll to collapse the title">
+              <header class="glass-nav-bar">
+                <div class="glass-nav-bar__group" data-refract data-refract-bezel="14">
+                  <button class="glass-nav-bar__btn" type="button" aria-label="Back"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-back"/></svg></button>
+                </div>
+                <span class="glass-nav-bar__title" aria-hidden="true">Library</span>
+                <div class="glass-nav-bar__group" data-refract data-refract-bezel="14">
+                  <button class="glass-nav-bar__btn" type="button" aria-label="Share"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-share"/></svg></button>
+                  <button class="glass-nav-bar__btn glass-nav-bar__btn--text" type="button">Edit</button>
+                </div>
+              </header>
+              <h4 class="glass-nav-bar__large-title">Library</h4>
+              <div class="nb-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+          <footer class="g-meta"><div><h3>Navigation Bar</h3><p>Scroll the screen: the title collapses</p></div><button class="code-btn" type="button" data-file="glass-nav-bar.css"><svg class="i"><use href="#i-code"/></svg>Code</button></footer>
         </article>
 
         <article class="card spot g-card" data-cat="surfaces">
@@ -1152,7 +1238,7 @@
       <h3 id="drawer-title">glass-button.css</h3>
       <button class="code-btn" type="button" id="drawer-copy"><svg class="i ic-copy"><use href="#i-copy"/></svg><svg class="i ic-check"><use href="#i-check"/></svg>Copy</button>
       <a class="code-btn" id="drawer-gh" href="#" target="_blank" rel="noopener noreferrer"><svg class="i"><use href="#i-github"/></svg>GitHub</a>
-      <button class="icon-btn" type="button" id="drawer-close" aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button>
+      <button class="icon-btn icon-btn-sm" type="button" id="drawer-close" aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button>
     </div>
     <pre id="drawer-code"></pre>
   </dialog>
@@ -1636,8 +1722,26 @@ cp agents/windsurf-rule.md .windsurf/rules/liquid-glass.md`
       root.dataset.theme = theme;
       // Page-level glass (toast, sheet) follows the page; the stages pin their own scheme.
       root.dataset.glassScheme = theme;
+      $('meta[name="theme-color"]').content = theme === 'light' ? '#fafafa' : '#08080a';
       try { localStorage.setItem('lg-theme', theme); } catch (err) {}
     });
+
+    const navMenu = $('#nav-menu');
+    $$('a', navMenu).forEach(a => a.addEventListener('click', () => navMenu.hidePopover()));
+
+    /**
+     * Tells whether the visitor is on an Apple platform, where shortcuts use the Command key.
+     *
+     * @return {boolean} True on macOS, iOS and iPadOS.
+     */
+    function isApplePlatform() {
+      const platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+      return /mac|iphone|ipad/i.test(platform);
+    }
+    // Demo shortcuts are written for macOS; everyone else reads Ctrl.
+    if (!isApplePlatform()) {
+      $$('.glass-search__kbd, .glass-popover__kbd').forEach(k => { k.textContent = k.textContent.replace('⌘', 'Ctrl '); });
+    }
 
     fetch('https://api.github.com/repos/' + REPO)
       .then(r => (r.ok ? r.json() : null))

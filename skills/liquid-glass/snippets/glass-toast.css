@@ -1,7 +1,7 @@
 /**
  * Floating notification that springs in from the bottom or top edge.
  *
- * Liquid Glass Components v2.0.0. Requires tokens.css. Optional: liquid-glass.js (refraction).
+ * Liquid Glass Components v2.1.0. Requires tokens.css. Optional: liquid-glass.js (refraction).
  *
  * Usage:
  *   <div class="glass-toast" role="status" aria-live="polite" data-state="visible" data-refract data-refract-bezel="16">
