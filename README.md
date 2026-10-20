@@ -4,7 +4,7 @@
   <img src=".github/assets/banner.png" alt="Liquid Glass Components: a glass lens refracting a striped wallpaper next to a glass segmented control, settings card and tab bar" width="100%">
 </a>
 
-<h3>Apple's Liquid Glass material for the web.</h3>
+<h3>Liquid Glass for the web, inspired by Apple's design language.</h3>
 
 <p>Real refraction, specular light and spring motion in copy-paste CSS components,<br>plus an AI skill that teaches your coding agent to use them right.</p>
 
