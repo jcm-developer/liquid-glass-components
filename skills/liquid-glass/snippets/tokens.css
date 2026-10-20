@@ -1,163 +1,223 @@
-/* ============================================
-   LIQUID GLASS DESIGN TOKENS v1.0.0
-   https://github.com/jcm-developer/liquid-glass-components
-   ============================================ */
+/**
+ * Liquid Glass design tokens.
+ *
+ * Liquid Glass Components v2.0.0. Load before any component snippet.
+ *
+ * The material has three layers:
+ *   1. Refraction: an SVG displacement map that bends the backdrop at the bezel
+ *      (liquid-glass.js, Chromium). Progressive enhancement.
+ *   2. Frost: a light blur. Low while refraction is active, higher when it is not,
+ *      so text stays legible everywhere.
+ *   3. Light: a faint tint, two specular rims (top-left and bottom-right) and a
+ *      pointer-reactive sheen.
+ *
+ * Primitive tokens (tint, rim, blur...) can be overridden on any element. Derived tokens
+ * are recomputed on every glass component (see Derived tokens), so a local override only
+ * changes that element.
+ */
+
+/* ── Primitives ── */
 
 :root {
-  /* --- Blur & Filters --- */
-  --glass-blur: 20px;
-  --glass-blur-clear: 8px;
-  --glass-blur-prominent: 24px;
+  /* Material */
+  --glass-tint: 0.08;                 /* surface fill opacity */
+  --glass-tint-rgb: 255 255 255;      /* surface fill colour */
+  --glass-rim: 0.6;                   /* specular rim intensity, 0–1 */
+  --glass-blur: 2px;                  /* frost while refraction is active */
+  --glass-blur-fallback: 8px;         /* frost when refraction is unavailable */
   --glass-saturation: 180%;
-  --glass-contrast: 108%;
-  --glass-brightness: 1.05;
 
-  /* --- Surface & Tint --- */
-  --glass-bg: rgba(255, 255, 255, 0.12);
-  --glass-bg-hover: rgba(255, 255, 255, 0.18);
-  --glass-bg-active: rgba(255, 255, 255, 0.24);
-  --glass-bg-prominent: rgba(59, 130, 246, 0.35);
-  --glass-bg-clear: rgba(255, 255, 255, 0.06);
-  --glass-dimming: rgba(0, 0, 0, 0.35);
+  /* Refraction (read by liquid-glass.js) */
+  --glass-refraction: 48;             /* displacement strength, in px */
+  --glass-bezel: 22px;                /* width of the curved lens edge */
+  --glass-chroma: 0.5;                /* chromatic dispersion at the edge, 0–1 */
 
-  /* --- Borders & Specular --- */
-  --glass-border: rgba(255, 255, 255, 0.25);
-  --glass-border-top: rgba(255, 255, 255, 0.7);
-  --glass-border-bottom: rgba(255, 255, 255, 0.1);
-  --glass-border-width: 1px;
-  --glass-border-radius-xs: 8px;
-  --glass-border-radius-sm: 12px;
-  --glass-border-radius-md: 16px;
-  --glass-border-radius-lg: 24px;
-  --glass-border-radius-xl: 32px;
-  --glass-border-radius-pill: 9999px;
-
-  /* --- Shadows --- */
-  --glass-shadow:
-    0 8px 32px -4px rgba(0, 0, 0, 0.12),
-    0 2px 8px -2px rgba(0, 0, 0, 0.08);
-  --glass-shadow-inset:
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.6),
-    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.1);
-  --glass-shadow-elevated:
-    0 16px 48px -8px rgba(0, 0, 0, 0.2),
-    0 4px 16px -4px rgba(0, 0, 0, 0.12);
-
-  /* --- Typography --- */
-  --glass-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --glass-font-mono: 'Geist Mono', 'SF Mono', Menlo, Monaco, Consolas, monospace;
-  --glass-font-weight-body: 500;
-  --glass-font-weight-heading: 600;
+  /* Content on glass */
   --glass-text-primary: #ffffff;
-  --glass-text-secondary: rgba(255, 255, 255, 0.7);
-  --glass-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --glass-text-secondary: rgb(255 255 255 / 0.78);
+  --glass-text-selected: #8cc8ff;
+  --glass-text-shadow: 0 1px 2px rgb(0 0 0 / 0.18);
+  --glass-fill: rgb(255 255 255 / 0.2);          /* selected item inside glass */
+  --glass-fill-hover: rgb(255 255 255 / 0.14);   /* hovered item inside glass */
+  --glass-separator: rgb(255 255 255 / 0.18);
+  --glass-track: rgb(255 255 255 / 0.25);        /* slider track, switch off */
+  --glass-track-fill: #ffffff;                   /* slider fill */
+  --glass-shadow-color: 0 0 0;
 
-  /* --- Spacing --- */
+  /* Accent */
+  --glass-accent-rgb: 10 132 255;
+  --glass-accent: rgb(var(--glass-accent-rgb));
+  --glass-tint-prominent: 0.55;
+  --glass-switch-on: #30d158;
+  --glass-danger: #ffb4b4;
+
+  /* Geometry */
+  --glass-radius-xs: 10px;
+  --glass-radius-sm: 14px;
+  --glass-radius-md: 20px;
+  --glass-radius-lg: 26px;
+  --glass-radius-xl: 34px;
+  --glass-radius-pill: 9999px;
   --glass-padding-xs: 4px;
   --glass-padding-sm: 8px;
   --glass-padding-md: 12px;
   --glass-padding-lg: 16px;
   --glass-padding-xl: 24px;
   --glass-gap: 8px;
+  --glass-target: 44px;               /* minimum touch target */
 
-  /* --- Animation --- */
-  --glass-duration-fast: 150ms;
-  --glass-duration-normal: 300ms;
-  --glass-duration-morph: 500ms;
-  --glass-easing-spring: linear(
-    0, 0.009, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, 0.938 16.7%,
-    1.017 20.2%, 1.049 23.6%, 1.046 27.3%, 1.012 34.6%,
-    0.994 42.4%, 1.001 58.5%, 1
-  );
+  /* Typography (system font first: SF Pro on Apple devices) */
+  --glass-font-sans: -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --glass-font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --glass-font-weight-body: 500;
+  --glass-font-weight-heading: 600;
+
+  /* Motion */
+  --glass-duration-fast: 200ms;
+  --glass-duration-normal: 400ms;
+  --glass-duration-spring: 600ms;     /* springs need time to visibly settle */
+  --glass-easing-spring: linear(0, 0.06 2%, 0.23 4.5%, 0.5 7.5%, 0.73 10.5%, 0.9 13.5%, 1.02 17%, 1.08 20.5%, 1.09 23.5%, 1.07 27%, 1.03 31.5%, 1 37%, 0.99 43%, 0.995 53%, 1);
   --glass-easing-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --glass-press-scale: 1.08;          /* Liquid Glass controls grow when pressed */
 
-  /* --- Focus --- */
+  /* Focus */
   --glass-focus-ring: 0 0 0 2px #ffffff, 0 0 0 4px #000000;
   --glass-focus-offset: 3px;
 
-  /* --- Solid Fallbacks --- */
+  /* Solid fallbacks (reduced transparency) */
+  --glass-solid-bg: #1c1c1e;
+  --glass-solid-text: #ffffff;
+  --glass-solid-border: #3a3a3c;
+
+  /* Deprecated v1 aliases (kept so existing code keeps working) */
+  --glass-border-radius-xs: var(--glass-radius-xs);
+  --glass-border-radius-sm: var(--glass-radius-sm);
+  --glass-border-radius-md: var(--glass-radius-md);
+  --glass-border-radius-lg: var(--glass-radius-lg);
+  --glass-border-radius-xl: var(--glass-radius-xl);
+  --glass-border-radius-pill: var(--glass-radius-pill);
+  --glass-duration-morph: var(--glass-duration-spring);
+}
+
+/* ── Schemes ── */
+
+/*
+   Glass adapts to what is BEHIND it, not to the page theme alone.
+   Default: glass over dark or colourful content (photos, wallpapers).
+   Light:   glass over light content.
+   Force a scheme on any container with data-glass-scheme="dark|light".
+ */
+@media (prefers-color-scheme: light) {
+  :root:not([data-glass-scheme="dark"]) {
+    --glass-tint: 0.42;
+    --glass-rim: 0.9;
+    --glass-text-primary: #1d1d1f;
+    --glass-text-secondary: rgb(0 0 0 / 0.6);
+    --glass-text-selected: #0a6cff;
+    --glass-text-shadow: none;
+    --glass-fill: rgb(0 0 0 / 0.08);
+    --glass-fill-hover: rgb(0 0 0 / 0.05);
+    --glass-separator: rgb(0 0 0 / 0.1);
+    --glass-track: rgb(0 0 0 / 0.14);
+    --glass-track-fill: var(--glass-accent);
+    --glass-shadow-color: 15 23 42;
+    --glass-danger: #d70015;
+    --glass-solid-bg: #f2f2f7;
+    --glass-solid-text: #000000;
+    --glass-solid-border: #d1d1d6;
+  }
+}
+
+[data-glass-scheme="dark"] {
+  --glass-tint: 0.08;
+  --glass-rim: 0.6;
+  --glass-text-primary: #ffffff;
+  --glass-text-secondary: rgb(255 255 255 / 0.78);
+  --glass-text-selected: #8cc8ff;
+  --glass-text-shadow: 0 1px 2px rgb(0 0 0 / 0.18);
+  --glass-fill: rgb(255 255 255 / 0.2);
+  --glass-fill-hover: rgb(255 255 255 / 0.14);
+  --glass-separator: rgb(255 255 255 / 0.18);
+  --glass-track: rgb(255 255 255 / 0.25);
+  --glass-track-fill: #ffffff;
+  --glass-shadow-color: 0 0 0;
+  --glass-danger: #ffb4b4;
+  --glass-solid-bg: #1c1c1e;
+  --glass-solid-text: #ffffff;
+  --glass-solid-border: #3a3a3c;
+}
+
+[data-glass-scheme="light"] {
+  --glass-tint: 0.42;
+  --glass-rim: 0.9;
+  --glass-text-primary: #1d1d1f;
+  --glass-text-secondary: rgb(0 0 0 / 0.6);
+  --glass-text-selected: #0a6cff;
+  --glass-text-shadow: none;
+  --glass-fill: rgb(0 0 0 / 0.08);
+  --glass-fill-hover: rgb(0 0 0 / 0.05);
+  --glass-separator: rgb(0 0 0 / 0.1);
+  --glass-track: rgb(0 0 0 / 0.14);
+  --glass-track-fill: var(--glass-accent);
+  --glass-shadow-color: 15 23 42;
+  --glass-danger: #d70015;
   --glass-solid-bg: #f2f2f7;
+  --glass-solid-text: #000000;
   --glass-solid-border: #d1d1d6;
 }
 
-/* === DARK MODE === */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --glass-bg: rgba(20, 20, 24, 0.55);
-    --glass-bg-hover: rgba(30, 30, 34, 0.65);
-    --glass-bg-active: rgba(40, 40, 44, 0.75);
-    --glass-bg-clear: rgba(20, 20, 24, 0.25);
-    --glass-blur: 24px;
-    --glass-saturation: 210%;
-    --glass-contrast: 115%;
-    --glass-border: rgba(255, 255, 255, 0.12);
-    --glass-border-top: rgba(255, 255, 255, 0.3);
-    --glass-border-bottom: rgba(0, 0, 0, 0.4);
-    --glass-shadow:
-      0 12px 40px -6px rgba(0, 0, 0, 0.5),
-      0 4px 12px -2px rgba(0, 0, 0, 0.3);
-    --glass-shadow-inset:
-      inset 0 1px 1px 0 rgba(255, 255, 255, 0.25),
-      inset 0 -1px 1px 0 rgba(0, 0, 0, 0.4);
-    --glass-text-primary: #f2f2f7;
-    --glass-solid-bg: #1c1c1e;
-    --glass-solid-border: #3a3a3c;
-  }
+/* ── Derived tokens ── */
+
+/*
+   Recomputed on each glass element so that overriding a primitive
+   (e.g. style="--glass-tint: .2") changes that element only.
+ */
+:where(
+  .glass-surface, .glass-btn, .glass-card, .glass-tabs, .glass-toolbar,
+  .glass-segmented, .glass-search, .glass-sidebar, .glass-dock,
+  .glass-popover, .glass-toast, .glass-modal__panel, .glass-slider-wrap,
+  .glass-toggle
+) {
+  --glass-bg: rgb(var(--glass-tint-rgb) / var(--glass-tint));
+  --glass-bg-hover: rgb(var(--glass-tint-rgb) / calc(var(--glass-tint) + 0.06));
+  --glass-bg-prominent: rgb(var(--glass-accent-rgb) / var(--glass-tint-prominent));
+  --glass-shadow-rim:
+    inset 1.5px 1.5px 0 -0.5px rgb(255 255 255 / var(--glass-rim)),
+    inset -1px -1px 0 -0.5px rgb(255 255 255 / calc(var(--glass-rim) * 0.65)),
+    inset 0 0 0 1px rgb(255 255 255 / calc(var(--glass-rim) * 0.16)),
+    inset 0 0 20px rgb(255 255 255 / 0.05);
+  --glass-shadow:
+    0 10px 28px -10px rgb(var(--glass-shadow-color) / 0.45),
+    0 2px 6px -2px rgb(var(--glass-shadow-color) / 0.2);
+  --glass-shadow-elevated:
+    0 24px 60px -20px rgb(var(--glass-shadow-color) / 0.55),
+    0 6px 16px -6px rgb(var(--glass-shadow-color) / 0.3);
 }
 
-/* === REDUCED TRANSPARENCY === */
+/* ── Accessibility ── */
 @media (prefers-reduced-transparency: reduce) {
   :root {
-    --glass-bg: var(--glass-solid-bg);
-    --glass-bg-hover: var(--glass-solid-bg);
-    --glass-bg-active: var(--glass-solid-bg);
     --glass-blur: 0px;
+    --glass-blur-fallback: 0px;
     --glass-saturation: 100%;
-    --glass-contrast: 100%;
-    --glass-border: var(--glass-solid-border);
-    --glass-border-top: var(--glass-solid-border);
-    --glass-border-bottom: var(--glass-solid-border);
+    --glass-refraction: 0;
   }
 }
 
-/* === HIGH CONTRAST === */
 @media (prefers-contrast: more) {
   :root {
-    --glass-bg: #000000;
-    --glass-border: #ffffff;
-    --glass-border-width: 2px;
-    --glass-shadow: none;
-    --glass-shadow-inset: none;
-    --glass-shadow-elevated: none;
-    --glass-text-primary: #ffffff;
-  }
-}
-@media (prefers-contrast: more) and (prefers-color-scheme: light) {
-  :root {
-    --glass-bg: #ffffff;
-    --glass-border: #000000;
-    --glass-text-primary: #000000;
+    --glass-rim: 1;
+    --glass-text-shadow: none;
+    --glass-refraction: 0;
   }
 }
 
-/* === FORCED COLORS === */
-@media (forced-colors: active) {
-  :root {
-    --glass-bg: Canvas;
-    --glass-border: CanvasText;
-    --glass-text-primary: CanvasText;
-    --glass-shadow: none;
-    --glass-shadow-inset: none;
-    --glass-shadow-elevated: none;
-  }
-}
-
-/* === REDUCED MOTION === */
 @media (prefers-reduced-motion: reduce) {
   :root {
     --glass-duration-fast: 0ms;
     --glass-duration-normal: 0ms;
-    --glass-duration-morph: 0ms;
+    --glass-duration-spring: 0ms;
     --glass-easing-spring: linear;
+    --glass-press-scale: 1;
   }
 }

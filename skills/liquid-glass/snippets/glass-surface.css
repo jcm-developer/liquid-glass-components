@@ -1,0 +1,97 @@
+/**
+ * Base Liquid Glass material: tint, frost, specular rims and an optional pointer sheen.
+ *
+ * Liquid Glass Components v2.0.0. Requires tokens.css.
+ *
+ * Usage:
+ *   <div class="glass-surface" data-refract>
+ *     Any chrome-layer content
+ *   </div>
+ *
+ *   <!-- Optional pointer-reactive highlight -->
+ *   <div class="glass-surface glass-sheen" data-refract>…</div>
+ *
+ *   <!-- Variants -->
+ *   <div class="glass-surface glass-surface--clear">…</div>
+ *   <div class="glass-surface glass-surface--prominent">…</div>
+ */
+
+/* ── Base ── */
+
+.glass-surface {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--glass-radius-lg);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur-fallback)) saturate(var(--glass-saturation));
+  backdrop-filter: blur(var(--glass-blur-fallback)) saturate(var(--glass-saturation));
+  box-shadow: var(--glass-shadow-rim), var(--glass-shadow);
+  outline: 1px solid transparent;   /* becomes visible in forced-colors mode */
+  outline-offset: -1px;
+  color: var(--glass-text-primary);
+  text-shadow: var(--glass-text-shadow);
+  font-family: var(--glass-font-sans);
+  font-weight: var(--glass-font-weight-body);
+}
+
+/* Clear: for controls over photos and video. Pair with a 35% dim on bright media. */
+.glass-surface--clear {
+  --glass-tint: 0.02;
+  --glass-rim: 0.75;
+}
+
+/* Prominent: accent-tinted, for the single primary action. */
+.glass-surface--prominent {
+  --glass-tint-rgb: var(--glass-accent-rgb);
+  --glass-tint: var(--glass-tint-prominent);
+  --glass-text-primary: #ffffff;
+}
+
+/* Pointer-reactive specular sheen. liquid-glass.js feeds --glass-mx / --glass-my. */
+.glass-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(160px circle at var(--glass-mx, 30%) var(--glass-my, 0%), rgb(255 255 255 / 0.2), transparent 65%);
+  opacity: 0;
+  transition: opacity var(--glass-duration-normal);
+}
+.glass-sheen:hover::after { opacity: 1; }
+
+/* ── Accessibility ── */
+@media (prefers-reduced-transparency: reduce) {
+  .glass-surface {
+    background: var(--glass-solid-bg);
+    color: var(--glass-solid-text);
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    outline-color: var(--glass-solid-border);
+    text-shadow: none;
+  }
+  .glass-sheen::after { display: none; }
+}
+
+@media (prefers-contrast: more) {
+  .glass-surface {
+    background: var(--glass-solid-bg);
+    color: var(--glass-solid-text);
+    outline: 2px solid currentColor;
+    box-shadow: none;
+    text-shadow: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .glass-surface {
+    background: Canvas;
+    color: CanvasText;
+    outline: 1px solid CanvasText;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: none;
+  }
+  .glass-sheen::after { display: none; }
+}
