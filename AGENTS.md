@@ -46,7 +46,7 @@ liquid-glass-components/
 ├── agents/                    # Adapters end users copy into their own projects
 ├── site/                      # Landing page (GitHub Pages)
 ├── scripts/                   # Repo scripts (check-docs.mjs)
-└── .github/                   # Workflows and the repo-level Copilot instructions
+└── .github/                   # Workflows, issue and PR templates, README images, Copilot instructions
 ```
 
 ## 3. Documentation map

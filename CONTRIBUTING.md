@@ -30,7 +30,7 @@ Thank you for your interest in contributing.
 
 ## Reporting issues
 
-Please include the browser and version, the OS and any accessibility settings enabled, a
+Use the bug report or component request template when you open an issue. Please include the browser and version, the OS and any accessibility settings enabled, a
 screenshot or recording for visual bugs, and minimal reproduction code.
 
 ## License

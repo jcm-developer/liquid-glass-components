@@ -1,0 +1,29 @@
+name: Component request
+description: Propose a new chrome-layer component or variant.
+labels: [component request]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Glass belongs on the chrome layer only (bars, controls, overlays) and never on top of
+        other glass. Requests for content-layer glass (article cards, list rows, feeds) are
+        out of scope.
+  - type: input
+    id: name
+    attributes:
+      label: Component
+      placeholder: Stepper
+    validations:
+      required: true
+  - type: textarea
+    id: use
+    attributes:
+      label: Use case
+      description: Where it appears in an interface and why the existing snippets do not cover it.
+    validations:
+      required: true
+  - type: textarea
+    id: reference
+    attributes:
+      label: Reference
+      description: A screenshot or link to the native Liquid Glass control, if there is one.

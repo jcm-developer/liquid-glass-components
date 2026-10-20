@@ -1,0 +1,40 @@
+name: Bug report
+description: A component looks or behaves wrong.
+labels: [bug]
+body:
+  - type: input
+    id: component
+    attributes:
+      label: Component
+      description: The snippet involved, for example glass-toggle.css or liquid-glass.js.
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happens
+      description: What you expected, what you saw, and a screenshot or recording for visual bugs.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: The smallest HTML that shows the problem, or a link to one.
+      render: html
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and OS
+      placeholder: Chrome 131 on macOS 15
+    validations:
+      required: true
+  - type: checkboxes
+    id: prefs
+    attributes:
+      label: Accessibility settings enabled
+      options:
+        - label: Reduce transparency
+        - label: Increase contrast
+        - label: Reduce motion
+        - label: Forced colours (Windows high contrast)

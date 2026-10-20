@@ -53,6 +53,25 @@ Semantic versioning for the whole library: every snippet header, `VERSION` in
 `liquid-glass.js` and `metadata.version` in `SKILL.md` carry the same number. A visual change
 to a component is at least a minor bump; a removed class or token is a major bump.
 
+## README images
+
+`.github/assets/banner.png` (README header) and `.github/assets/social-preview.png` (the
+repository's social preview, under 1 MB) are screenshots of `.github/assets/banner.html`,
+which loads the shipped snippets so the glass is the real material. Regenerate both after a
+visual change to the components in the banner, with Chrome:
+
+```bash
+chrome --headless=new --hide-scrollbars --window-size=1280,640 --virtual-time-budget=6000 \
+  --force-device-scale-factor=2 --default-background-color=00000000 \
+  --screenshot=.github/assets/banner.png "file://$PWD/.github/assets/banner.html"
+chrome --headless=new --hide-scrollbars --window-size=1280,640 --virtual-time-budget=6000 \
+  --force-device-scale-factor=1 --default-background-color=08080aff \
+  --screenshot=.github/assets/social-preview.png "file://$PWD/.github/assets/banner.html"
+```
+
+Headless Chrome reports the Chromium brand, so refraction renders. The social preview is
+uploaded by hand: repository Settings, General, Social preview.
+
 ## Release checks
 
 `check-docs.mjs` does not look at pixels. Before merging anything that changes how a component

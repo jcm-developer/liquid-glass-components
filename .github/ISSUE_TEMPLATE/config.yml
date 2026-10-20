@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Live demo and playground
+    url: https://jcm-developer.github.io/liquid-glass-components/
+    about: Try every component and tune the tokens before opening an issue.

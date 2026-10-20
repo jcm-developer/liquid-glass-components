@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!--
+  Source of the README header (banner.png) and the social preview.
+  It loads the shipped snippets, so the glass in the image is the real material.
+  Regenerate with the command in docs/operations.md ("README images").
+-->
+<html lang="en" data-glass-scheme="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>Liquid Glass Components banner</title>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../skills/liquid-glass/snippets/tokens.css">
+  <link rel="stylesheet" href="../../skills/liquid-glass/snippets/glass-surface.css">
+  <link rel="stylesheet" href="../../skills/liquid-glass/snippets/glass-card.css">
+  <link rel="stylesheet" href="../../skills/liquid-glass/snippets/glass-toggle.css">
+  <link rel="stylesheet" href="../../skills/liquid-glass/snippets/glass-segmented.css">
+  <link rel="stylesheet" href="../../skills/liquid-glass/snippets/glass-tab-bar.css">
+  <link rel="stylesheet" href="../../skills/liquid-glass/snippets/glass-slider.css">
+  <script src="../../skills/liquid-glass/snippets/liquid-glass.js" defer></script>
+  <style>
+    :root { --glass-font-sans: 'Geist', system-ui, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 1280px; height: 640px; background: transparent; overflow: hidden; }
+    body { font-family: 'Geist', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+
+    .banner { position: relative; width: 1280px; height: 640px; border-radius: 28px; overflow: hidden; background: #0a0f2e; color: #fff; }
+
+    /* Wallpaper: the aurora palette from the landing, frozen. */
+    .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.9; }
+    .b1 { width: 620px; height: 520px; left: -160px; top: -200px; background: #4f7cff; }
+    .b2 { width: 560px; height: 520px; right: -120px; top: -80px; background: #b45cff; }
+    .b3 { width: 560px; height: 380px; left: 300px; bottom: -280px; background: #19c6e6; }
+    .b4 { width: 360px; height: 300px; left: 120px; bottom: -160px; background: #ff6fae; }
+    .dots { position: absolute; inset: 0; background: radial-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1.6px) 0 0 / 18px 18px; }
+
+    /* Content behind the glass, so the refraction has edges to bend. */
+    .tile { position: absolute; border-radius: 22px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16); }
+    .tile::after { content: ""; position: absolute; left: 16px; bottom: 22px; width: 46%; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.85); box-shadow: 0 14px 0 -1px rgba(255, 255, 255, 0.5); }
+    .t1 { left: 712px; top: 168px; width: 196px; height: 200px; background: linear-gradient(140deg, #4f7cff, #b45cff); }
+    .t2 { left: 1060px; top: 352px; width: 186px; height: 228px; background: linear-gradient(30deg, #ff6fae, #b45cff); }
+    .t1::after { display: none; }
+    .stripes { position: absolute; left: 945px; top: 52px; width: 236px; height: 236px; border-radius: 28px; background: repeating-linear-gradient(90deg, #4f7cff 0 16px, #0a0f2e 16px 22px, #ff6fae 22px 38px, #0a0f2e 38px 44px, #19c6e6 44px 60px, #0a0f2e 60px 66px); opacity: 0.95; }
+
+    /* Copy, on the content layer. */
+    .copy { position: absolute; left: 72px; top: 0; bottom: 0; width: 560px; display: flex; flex-direction: column; justify-content: center; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 20px; letter-spacing: -0.02em; margin-bottom: 30px; }
+    .brand svg { width: 40px; height: 40px; }
+    h1 { font-size: 76px; font-weight: 600; letter-spacing: -0.05em; line-height: 0.95; text-shadow: 0 2px 24px rgba(0, 0, 0, 0.25); }
+    p { margin-top: 22px; font-size: 22px; line-height: 1.4; color: rgba(255, 255, 255, 0.86); max-width: 470px; }
+    .meta { display: flex; gap: 10px; margin-top: 30px; }
+    .meta span { padding: 7px 14px; border-radius: 999px; background: rgba(0, 0, 0, 0.28); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18); font: 500 14px 'Geist Mono', monospace; color: rgba(255, 255, 255, 0.9); }
+
+    /* Glass, on the chrome layer. */
+    .lens { position: absolute; left: 990px; top: 96px; width: 196px; height: 196px; border-radius: 50%; --glass-tint: 0.02; }
+    .list { position: absolute; left: 690px; top: 304px; width: 312px; padding: 4px 18px; }
+    .li { display: flex; align-items: center; justify-content: space-between; height: 54px; font-weight: 500; font-size: 16px; }
+    .li + .li { border-top: 1px solid var(--glass-separator); }
+    .seg { position: absolute; left: 690px; top: 76px; }
+    .tabs { position: absolute; left: 846px; bottom: 40px; }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
+    <div class="dots"></div>
+    <div class="tile t1"></div><div class="tile t2"></div>
+    <div class="stripes"></div>
+
+    <div class="copy">
+      <div class="brand">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <defs>
+            <linearGradient id="o" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7aa7ff"/><stop offset=".55" stop-color="#b37bff"/><stop offset="1" stop-color="#ff86c1"/></linearGradient>
+            <clipPath id="p"><rect x="10.5" y="10.5" width="18" height="18" rx="6"/></clipPath>
+            <filter id="f" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation=".8"/></filter>
+          </defs>
+          <circle cx="12.5" cy="12.5" r="9.5" fill="url(#o)"/>
+          <g clip-path="url(#p)"><circle cx="13.8" cy="13.8" r="11" fill="url(#o)" filter="url(#f)"/></g>
+          <rect x="10.5" y="10.5" width="18" height="18" rx="6" fill="#fff" fill-opacity=".2" stroke="#fff" stroke-opacity=".85" stroke-width="1.1"/>
+        </svg>
+        Liquid Glass Components
+      </div>
+      <h1>Liquid Glass<br>for the web.</h1>
+      <p>Real refraction, specular light and spring motion. Accessible components and an AI skill for your coding agent.</p>
+      <div class="meta"><span>Pure CSS</span><span>Vanilla JS</span><span>0 deps</span><span>MIT</span></div>
+    </div>
+
+    <div class="glass-surface glass-sheen lens" data-refract data-refract-bezel="44" data-refract-strength="58"></div>
+
+    <div class="glass-segmented seg" role="radiogroup" aria-label="Range" data-refract>
+      <button class="glass-segmented__option" type="button" role="radio" aria-checked="true">Day</button>
+      <button class="glass-segmented__option" type="button" role="radio" aria-checked="false">Week</button>
+      <button class="glass-segmented__option" type="button" role="radio" aria-checked="false">Month</button>
+    </div>
+
+    <div class="glass-card list" data-refract data-refract-bezel="18">
+      <div class="li"><span>Refraction</span><button class="glass-toggle" type="button" role="switch" aria-checked="true" aria-label="Refraction"><span class="glass-toggle__thumb"></span></button></div>
+      <div class="li"><span>Reduce motion</span><button class="glass-toggle" type="button" role="switch" aria-checked="false" aria-label="Reduce motion"><span class="glass-toggle__thumb"></span></button></div>
+    </div>
+
+    <nav class="glass-tabs tabs" role="tablist" aria-label="Tabs" data-refract>
+      <button class="glass-tabs__tab" type="button" role="tab" aria-selected="true"><svg class="glass-tabs__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1Z"/></svg><span class="glass-tabs__label">Home</span></button>
+      <button class="glass-tabs__tab" type="button" role="tab" aria-selected="false"><svg class="glass-tabs__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="glass-tabs__label">Search</span></button>
+      <button class="glass-tabs__tab" type="button" role="tab" aria-selected="false"><svg class="glass-tabs__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-9.3-9.2C1.5 7.6 3.6 4.5 7 4.5c2 0 3.4 1.1 5 3 1.6-1.9 3-3 5-3 3.4 0 5.5 3.1 4.3 6.3C19.5 15.4 12 20 12 20Z"/></svg><span class="glass-tabs__label">Saved</span></button>
+    </nav>
+  </div>
+</body>
+</html>

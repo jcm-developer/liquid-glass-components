@@ -1,29 +1,78 @@
 <div align="center">
 
-# Liquid Glass Components
+<a href="https://jcm-developer.github.io/liquid-glass-components/">
+  <img src=".github/assets/banner.png" alt="Liquid Glass Components: a glass lens refracting a striped wallpaper next to a glass segmented control, settings card and tab bar" width="100%">
+</a>
 
-**Open-source components and an AI skill that bring Apple's Liquid Glass material to the web: real refraction, specular light and spring motion. Accessible, framework-agnostic, no build step.**
+<h3>Apple's Liquid Glass material for the web.</h3>
 
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Components](https://img.shields.io/badge/components-14-green.svg)](#components)
-[![Version](https://img.shields.io/badge/version-2.0.0-purple.svg)](docs/decisions.md)
+<p>Real refraction, specular light and spring motion in copy-paste CSS components,<br>plus an AI skill that teaches your coding agent to use them right.</p>
 
-[Live demo](https://jcm-developer.github.io/liquid-glass-components/) · [Install as AI skill](#install-as-an-ai-skill) · [Universal prompt](#universal-prompt)
+[![Live demo](https://img.shields.io/badge/live_demo-open-7c5cff?style=flat-square)](https://jcm-developer.github.io/liquid-glass-components/)
+[![MIT License](https://img.shields.io/badge/license-MIT-2ea44f?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/badge/version-2.1.0-4f7cff?style=flat-square)](docs/operations.md#versioning)
+[![Components](https://img.shields.io/badge/components-15-19c6e6?style=flat-square)](#components)
+[![Dependencies](https://img.shields.io/badge/dependencies-0-ff6fae?style=flat-square)](#quick-start)
+[![CI](https://img.shields.io/github/actions/workflow/status/jcm-developer/liquid-glass-components/ci.yml?branch=main&label=docs%20check&style=flat-square)](.github/workflows/ci.yml)
+
+**[Live demo](https://jcm-developer.github.io/liquid-glass-components/)** ·
+[Components](#components) ·
+[Quick start](#quick-start) ·
+[AI skill](#install-as-an-ai-skill) ·
+[Playground](https://jcm-developer.github.io/liquid-glass-components/#playground)
 
 </div>
 
----
+<br>
 
-## Features
+## Why Liquid Glass Components
 
-- **Real refraction.** An SVG displacement map bends the backdrop at the bezel like a lens, with a faint chromatic fringe (Chromium). Every other browser gets a clean blur fallback.
-- **The actual material.** Low frost, two specular rims and a pointer-reactive sheen instead of a heavy frosted blur.
-- **Fluid interaction.** Pressed controls swell, switch and slider thumbs turn into lenses, selections slide and stretch on native CSS springs.
-- **Accessible by default.** Reduced transparency, increased contrast, reduced motion and forced colours fallbacks in every component, plus WCAG AA text.
-- **Zero dependencies.** Plain CSS and one optional vanilla JS file. Copy, paste, ship.
-- **AI-ready.** Installs as a skill for Claude Code, Cursor, Copilot, Codex, Gemini CLI and Windsurf.
+Most "glassmorphism" on the web is a blurred, semi-transparent box. Liquid Glass is a
+different material: it **bends** what is behind it at the edges, catches light on both sides
+of the bezel and reacts to touch. This project reproduces that material with web standards
+only, and keeps every component usable when the effect is not available.
+
+<table>
+  <tr>
+    <td width="33%" valign="top">
+      <h4>Real refraction</h4>
+      An SVG displacement map generated from each element's own shape bends the backdrop at
+      the bezel like a lens, with a faint chromatic fringe.
+    </td>
+    <td width="33%" valign="top">
+      <h4>The actual material</h4>
+      Low frost, two specular rims and a pointer-reactive sheen, instead of a heavy frosted
+      blur that hides the content.
+    </td>
+    <td width="33%" valign="top">
+      <h4>Fluid interaction</h4>
+      Pressed controls swell, switch and slider thumbs turn into lenses, selections slide and
+      stretch on native CSS <code>linear()</code> springs.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <h4>Accessible by default</h4>
+      Reduced transparency, increased contrast, reduced motion and forced colours fallbacks
+      in every component, plus WCAG AA text.
+    </td>
+    <td valign="top">
+      <h4>Zero dependencies</h4>
+      Plain CSS and one optional vanilla JavaScript file. No framework, no bundler, no build
+      step. Copy, paste, ship.
+    </td>
+    <td valign="top">
+      <h4>AI-ready</h4>
+      Installs as a skill for Claude Code, Cursor, Copilot, Codex, Gemini CLI and Windsurf,
+      so your agent writes glass that follows the rules.
+    </td>
+  </tr>
+</table>
 
 ## Components
+
+Every component lives on the chrome layer: the bars, controls and overlays that float above
+content. Try them all on the [live demo](https://jcm-developer.github.io/liquid-glass-components/#components).
 
 | Component | File | Highlights |
 |---|---|---|
@@ -31,11 +80,12 @@
 | Button | `glass-button.css` | Regular, prominent, icon, small and plain variants |
 | Card | `glass-card.css` | Floating panel for players, widgets and inspectors |
 | Tab Bar | `glass-tab-bar.css` | Icon and label tabs with a sliding indicator |
-| Toolbar | `glass-toolbar.css` | Floating tool pill and fixed navbar |
+| Toolbar | `glass-toolbar.css` | Floating tool pill and fixed website header |
 | Segmented Control | `glass-segmented.css` | Selection that slides and stretches |
 | Toggle | `glass-toggle.css` | Thumb that becomes a lens while pressed |
 | Slider | `glass-slider.css` | Capsule thumb that becomes a lens while dragged |
 | Search Field | `glass-search.css` | Pill that springs wider on focus |
+| Navigation Bar | `glass-nav-bar.css` | Glass button groups, a large title that collapses on scroll |
 | Modal / Sheet | `glass-modal.css` | Native `<dialog>`, centred or bottom sheet |
 | Toast | `glass-toast.css` | Springs in from the bottom or top edge |
 | Popover | `glass-popover.css` | Contextual menu with shortcuts and dividers |
@@ -65,6 +115,10 @@
 
 `data-refract` opts an element into refraction. Glass needs something to look through: place
 it over photos, video, wallpapers or scrolling content.
+
+> [!TIP]
+> Glass belongs on the chrome layer only, and never on top of other glass. Controls inside a
+> glass surface are flat fills. The skill enforces both rules for your agent.
 
 ## Install as an AI skill
 
@@ -178,7 +232,26 @@ Every optical parameter is a CSS custom property. Override them globally or on o
 }
 ```
 
-The playground on the [live demo](https://jcm-developer.github.io/liquid-glass-components/#playground) exports these values. See [`tokens.css`](skills/liquid-glass/snippets/tokens.css) for the full set, including the light and dark schemes (`data-glass-scheme`) and every accessibility override.
+The [playground](https://jcm-developer.github.io/liquid-glass-components/#playground) on the
+live demo exports these values. See [`tokens.css`](skills/liquid-glass/snippets/tokens.css)
+for the full set, including the light and dark schemes (`data-glass-scheme`) and every
+accessibility override.
+
+## Accessibility
+
+Accessibility is part of each component, not an add-on:
+
+| User preference | What the components do |
+|---|---|
+| `prefers-reduced-transparency` | Solid, opaque surfaces; refraction off |
+| `prefers-contrast: more` | Full-strength rims, no text shadow; refraction off |
+| `prefers-reduced-motion` | Springs and animations become instant |
+| `forced-colors: active` | System colours; outlines become visible |
+
+Text on glass meets WCAG AA (4.5:1) over typical backdrops; over bright photos and video the
+skill adds a dimming layer behind the control to keep it there. Controls default to 44 pixel touch targets
+(`--glass-target`), and every
+interactive component ships with the ARIA roles and keyboard support from its docblock.
 
 ## Browser support
 
@@ -207,10 +280,13 @@ liquid-glass-components/
 
 ## Contributing
 
-Start with [CONTRIBUTING.md](CONTRIBUTING.md). Contributor docs live in [`docs/`](docs/):
+Contributions are welcome, from bug reports to new components. Start with
+[CONTRIBUTING.md](CONTRIBUTING.md); contributor docs live in [`docs/`](docs/):
 [code style](docs/code-style.md), [component contract](docs/domains/components.md),
 [refraction engine](docs/domains/refraction-engine.md), [operations](docs/operations.md) and
 the [decision log](docs/decisions.md).
+
+If this project helps you, a star on GitHub helps other people find it.
 
 ## License
 
