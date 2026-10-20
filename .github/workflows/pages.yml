@@ -36,6 +36,7 @@ jobs:
           mkdir -p _site
           cp site/index.html _site/index.html
           cp -r skills _site/skills
+          cp .github/assets/social-preview.png _site/og.png
           sed -i 's#\.\./skills/#./skills/#g' _site/index.html
           touch _site/.nojekyll
 

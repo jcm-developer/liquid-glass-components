@@ -22,7 +22,8 @@ GitHub (`loadSnippet` in `site/index.html`), which shows the last pushed version
 GitHub Pages, built by `.github/workflows/pages.yml` on every push to `main` (and on manual
 dispatch). The job:
 
-1. copies `site/index.html` and `skills/` into `_site/`;
+1. copies `site/index.html` and `skills/` into `_site/`, and
+   `.github/assets/social-preview.png` as `_site/og.png` (the landing's `og:image`);
 2. rewrites `../skills/` to `./skills/` in `_site/index.html`, so the page works at the site
    root;
 3. adds `.nojekyll` and publishes `_site/` with `actions/deploy-pages`.
@@ -69,8 +70,9 @@ chrome --headless=new --hide-scrollbars --window-size=1280,640 --virtual-time-bu
   --screenshot=.github/assets/social-preview.png "file://$PWD/.github/assets/banner.html"
 ```
 
-Headless Chrome reports the Chromium brand, so refraction renders. The social preview is
-uploaded by hand: repository Settings, General, Social preview.
+Headless Chrome reports the Chromium brand, so refraction renders. The deploy publishes the
+social preview as the landing's `og:image`; for the repository card it is uploaded by hand:
+repository Settings, General, Social preview.
 
 ## Release checks
 
