@@ -1,0 +1,22 @@
+# Blocking checks for every push and pull request. See docs/operations.md (CI).
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Check docs
+        run: node scripts/check-docs.mjs
