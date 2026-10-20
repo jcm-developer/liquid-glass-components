@@ -1,44 +1,53 @@
 ---
-description: "Liquid Glass design system — translucent, accessible glass UI components using backdrop-filter, mask-composite borders, and CSS springs. Use when creating navigation bars, tab bars, toolbars, modals, popovers, buttons, or any chrome/control layer with glass aesthetic."
+description: "Liquid Glass design system: refractive, accessible glass UI components with low frost, specular rims and CSS springs. Use when creating navigation bars, tab bars, toolbars, sidebars, docks, modals, popovers, toasts, buttons, switches or sliders with a glass aesthetic."
 globs: "**/*.css, **/*.html, **/*.tsx, **/*.jsx, **/*.vue, **/*.svelte, **/*.astro"
 alwaysApply: false
 ---
 
-# Liquid Glass Design Rules
+# Liquid Glass design rules (v2.0.0)
 
-## Core Principles
-- Glass belongs ONLY to navigation/chrome layer (tab bars, toolbars, sidebars, modals, popovers, FABs)
-- NEVER apply glass to content (articles, feeds, table cells, list items)
-- NEVER stack glass on glass — use flat fills for subdivisions
-- Concentric radii: inner radius = outer radius − padding
+## Core principles
+- Glass belongs ONLY to the navigation/chrome layer; NEVER on content (articles, feeds, table cells)
+- NEVER stack glass on glass; controls inside glass use flat fills (`.glass-btn--plain`, `var(--glass-fill)`)
+- Glass needs a backdrop worth seeing through (photos, video, wallpapers, scrolling content)
+- Concentric radii: inner radius = outer radius minus padding
 
-## Base Glass Surface CSS
+## Base glass surface CSS
 ```css
 .glass-surface {
   position: relative;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(20px) saturate(180%) contrast(108%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%) contrast(108%);
-  box-shadow: 0 8px 32px -4px rgba(0,0,0,0.12), inset 0 1px 1px rgba(255,255,255,0.6);
-  border: 1px solid transparent;
-  border-radius: 24px;
   isolation: isolate;
-  contain: layout paint;
-  transform: translateZ(0);
+  border-radius: 26px;
+  background: rgb(255 255 255 / 0.08);
+  -webkit-backdrop-filter: blur(8px) saturate(180%);
+  backdrop-filter: blur(8px) saturate(180%);
+  box-shadow:
+    inset 1.5px 1.5px 0 -0.5px rgb(255 255 255 / 0.6),
+    inset -1px -1px 0 -0.5px rgb(255 255 255 / 0.4),
+    inset 0 0 0 1px rgb(255 255 255 / 0.1),
+    0 10px 28px -10px rgb(0 0 0 / 0.45);
+  outline: 1px solid transparent;
+  color: #fff;
 }
 ```
+Prefer the tokens in `tokens.css` (`var(--glass-bg)`, `var(--glass-shadow-rim)`) over these literals.
 
-## Specular Border (::before)
-Use `mask-composite: exclude` technique. NEVER use `border-image` with `border-radius`.
+## Refraction
+- Add `data-refract` and load `liquid-glass.js` for real refraction (Chromium desktop only)
+- Every component must look complete without it; never use a 20px+ blur to compensate
 
-## Mandatory Fallbacks (include ALL):
-- `@media (prefers-reduced-transparency: reduce)` → solid bg, no backdrop-filter
-- `@media (prefers-reduced-motion: reduce)` → no transitions
-- `@media (prefers-contrast: more)` → 2px solid borders, no shadows
-- `@media (forced-colors: active)` → Canvas/CanvasText system colors
+## Interaction
+- Pressed controls grow (`scale: var(--glass-press-scale)`), never shrink
+- Switch and slider thumbs become a clear lens while held (`:active`)
+- Selections slide between items; springs use `linear()` over 600ms
 
-## Typography: min font-weight 500, min 16px body. No mix-blend-mode on text.
-## Performance: max 1 backdrop-filter on mobile. No will-change: backdrop-filter.
-## Animation: use CSS linear() spring curves. No JS animation libraries needed.
+## Mandatory fallbacks (include ALL)
+- `prefers-reduced-transparency: reduce`: solid bg, `backdrop-filter: none !important`
+- `prefers-contrast: more`: solid bg, 2px outline, no shadows
+- `prefers-reduced-motion: reduce`: no transitions
+- `forced-colors: active`: Canvas/CanvasText system colours
 
-See `skills/liquid-glass/snippets/tokens.css` for full design token system.
+## Typography: weight 500+, 16px body. No mix-blend-mode on text.
+## Performance: at most 3 glass surfaces on mobile. No will-change: backdrop-filter.
+
+See `skills/liquid-glass/SKILL.md` and `snippets/tokens.css` for the full system.

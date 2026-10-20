@@ -1,51 +1,59 @@
-# Liquid Glass Design Principles Reference
+# Liquid Glass design principles
 
-> Reference document for AI agents. Read when generating Liquid Glass components.
+> Reference for AI agents. Read when generating Liquid Glass components. The rules themselves
+> are in `../SKILL.md`; this file explains the optics behind them.
 
-## Apple's Liquid Glass (WWDC 2025)
+## What Liquid Glass is
 
-Liquid Glass is a dynamic interface material combining optical physics (refraction, lensing, specular highlights) with fluid digital behavior (morphing, spring animations, adaptive tinting).
+Liquid Glass is the interface material Apple introduced at WWDC 2025. It behaves like a thin,
+curved piece of glass floating above content: it bends what is behind it at its edges, catches
+light on its rims, and reacts to touch as if it were fluid.
 
-## Layer Hierarchy
+## Layer hierarchy
 
 | Layer | Material | Examples |
-|-------|----------|----------|
-| **Navigation/Chrome** (top) | Liquid Glass | Tab bars, toolbars, sidebars, popovers, sheets, modals, FABs |
-| **Content** (bottom) | Standard/Solid | Articles, cards, lists, feeds, tables |
-| **Exception** | Glass (transitional only) | Slider thumbs, toggle knobs while being dragged |
+|---|---|---|
+| Navigation and controls (top) | Liquid Glass | Tab bars, toolbars, sidebars, docks, popovers, sheets, modals, toasts, floating buttons |
+| Content (bottom) | Opaque or plain | Articles, cards in a feed, lists, tables |
+| Transitional | Glass while interacting | Switch and slider thumbs while held |
 
-## Optical Properties
+## Optical properties and their web equivalents
 
-1. **Refraction** — Content behind bends slightly toward center (n ≈ 1.45–1.52)
-2. **Lensing** — Convex distortion at edges magnifies adjacent pixels
-3. **Specular highlights** — Bright rim on top edge, reactive to tilt/cursor
-4. **Adaptive tinting** — Surface absorbs dominant hues from background
-5. **Chromatic dispersion** — Subtle spectral halo at extreme edges
-6. **Substantiality** — Small elements = thin glass; large panels = thick glass
+| Property | What happens | On the web |
+|---|---|---|
+| Refraction | The backdrop bends toward the centre near the bezel | SVG `feDisplacementMap` in `backdrop-filter: url()` (`liquid-glass.js`) |
+| Chromatic dispersion | A faint colour fringe at the very edge | Three displacement passes, one per colour channel |
+| Clarity | The backdrop stays readable through the surface | Low frost: 2px with refraction, 8px without |
+| Specular highlights | Bright rims where light enters and exits the glass | Two inset shadows (`--glass-shadow-rim`) plus a pointer sheen |
+| Adaptive tint | The surface takes on what is behind it | `saturate(180%)` on the backdrop and a faint tint |
+| Fluidity | Controls swell, stretch and settle | `linear()` springs, growing press, stretching indicators |
 
 ## Variants
 
-| Variant | Blur | Opacity | Use Case |
-|---------|------|---------|----------|
-| `regular` | 20–28px | Medium | Bars, sidebars, modals, any text-heavy surface |
-| `clear` | 8px | Low | Controls over rich media (photos, video, maps) |
-| `prominent` | 24px | Medium + accent tint | Primary CTA (Save, Buy, Call) |
-| `identity` | 0 | Transparent | Base state for transitions/fallback |
+| Variant | Tint | Frost | Use |
+|---|---|---|---|
+| Regular | `0.08` (dark scheme), `0.42` (light scheme) | 2px refracted, 8px fallback | Bars, sidebars, popovers, sheets |
+| Clear | `0.02` | Same | Controls over photos, video and maps |
+| Prominent | Accent at `0.55` | Same | The single primary action |
 
-## The 35% Rule
+## The 35% rule
 
-For `clear` variant on bright backgrounds: add `rgba(0, 0, 0, 0.35)` dimming layer behind the control.
+For the clear variant over bright media, add a `rgba(0, 0, 0, 0.35)` dimming layer behind
+the control so its content keeps WCAG AA contrast.
 
-## Concentric Geometry
+## Concentric geometry
 
 ```
-Inner Radius = Outer Radius − Padding
+Inner radius = Outer radius - Padding
 ```
 
-## Mode Behavior
+## Schemes
 
-- **Light mode:** White reflectance, elevated luminance
-- **Dark mode:** Smoky deep glass, sharper specular rims, enhanced color spill sensitivity
+- **Dark scheme** (default): glass over dark or colourful content. White text, low tint.
+- **Light scheme**: glass over light content. Dark text, denser white tint, stronger rims.
+
+Choose the scheme by what is behind the glass, not only by the page theme
+(`data-glass-scheme`).
 
 ## Sources
 
