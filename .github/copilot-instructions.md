@@ -1,11 +1,12 @@
 # Liquid Glass Components
 
-See `agents/copilot-instructions.md` and `skills/liquid-glass/SKILL.md` for complete design system rules.
+Read `AGENTS.md` at the repository root before working here: it holds the rules, the
+documentation map and the maintenance contract. Code style is in `docs/code-style.md`.
 
 Key rules:
-- Glass ONLY on navigation layer (bars, modals, popovers) — never on content
-- Never stack glass on glass
-- Include `prefers-reduced-transparency`, `prefers-reduced-motion`, `forced-colors` fallbacks
-- Use `backdrop-filter: blur(20px) saturate(180%)` with `-webkit-` prefix
-- Min font-weight 500 on glass, min 16px body text
-- Max 1 backdrop-filter layer on mobile
+- No build step and no dependencies: plain CSS snippets and one vanilla JS file
+- Glass ONLY on the navigation layer, never on content; never glass on glass
+- Every component includes the reduced transparency, increased contrast, reduced motion and forced colours fallbacks
+- Refraction (`liquid-glass.js`) is an enhancement; components must look right without it
+- English everywhere, no em dash (U+2014), Google-style JSDoc on every function
+- Run `node scripts/check-docs.mjs` before calling a task done

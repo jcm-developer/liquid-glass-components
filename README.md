@@ -1,70 +1,76 @@
 <div align="center">
 
-# 🫧 Liquid Glass Components
+# Liquid Glass Components
 
-**An open-source design system and AI skill for building web interfaces with Apple's Liquid Glass aesthetic — accessible, performant, and framework-agnostic.**
+**Open-source components and an AI skill that bring Apple's Liquid Glass material to the web: real refraction, specular light and spring motion. Accessible, framework-agnostic, no build step.**
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Components](https://img.shields.io/badge/components-14-green.svg)](#-components)
-[![Browser Support](https://img.shields.io/badge/browsers-98%25-brightgreen.svg)](#-browser-support)
+[![Components](https://img.shields.io/badge/components-14-green.svg)](#components)
+[![Version](https://img.shields.io/badge/version-2.0.0-purple.svg)](docs/decisions.md)
 
-[Live Demo →](https://liquid-glass-components.pages.dev) · [Install as AI Skill →](#-install-as-ai-skill) · [Copy Prompt →](#-universal-prompt)
+[Live demo](https://jcm-developer.github.io/liquid-glass-components/) · [Install as AI skill](#install-as-an-ai-skill) · [Universal prompt](#universal-prompt)
 
 </div>
 
 ---
 
-> Translucent, refractive, and fluid UI components for the web — inspired by the visual language Apple introduced at WWDC 2025.
+## Features
 
-## ✨ Features
+- **Real refraction.** An SVG displacement map bends the backdrop at the bezel like a lens, with a faint chromatic fringe (Chromium). Every other browser gets a clean blur fallback.
+- **The actual material.** Low frost, two specular rims and a pointer-reactive sheen instead of a heavy frosted blur.
+- **Fluid interaction.** Pressed controls swell, switch and slider thumbs turn into lenses, selections slide and stretch on native CSS springs.
+- **Accessible by default.** Reduced transparency, increased contrast, reduced motion and forced colours fallbacks in every component, plus WCAG AA text.
+- **Zero dependencies.** Plain CSS and one optional vanilla JS file. Copy, paste, ship.
+- **AI-ready.** Installs as a skill for Claude Code, Cursor, Copilot, Codex, Gemini CLI and Windsurf.
 
-- 🔮 **Authentic Glass Aesthetic** — `backdrop-filter`, specular borders with `mask-composite`, and native CSS spring physics
-- ♿ **Accessible by Default** — WCAG AA contrast, `prefers-reduced-transparency`, `forced-colors`, and `prefers-reduced-motion` fallbacks built into every component
-- ⚡ **Zero Dependencies** — Pure CSS + vanilla JS. No framework lock-in. Copy and paste
-- 🤖 **AI-Ready Skill** — Install as a skill for Claude Code, Cursor, Copilot, Codex, Gemini CLI, or Windsurf
-- 🎨 **Customizable Tokens** — Tune blur, opacity, saturation, radii, and spring animations via CSS custom properties
-- 🌗 **Light & Dark Mode** — Automatic adaptation with `prefers-color-scheme`
-- 📱 **Mobile Optimized** — Progressive enhancement: solid fallback → glass → glass with specular reflections
+## Components
 
-## 🧩 Components
+| Component | File | Highlights |
+|---|---|---|
+| Surface | `glass-surface.css` | Base material for custom glass elements |
+| Button | `glass-button.css` | Regular, prominent, icon, small and plain variants |
+| Card | `glass-card.css` | Floating panel for players, widgets and inspectors |
+| Tab Bar | `glass-tab-bar.css` | Icon and label tabs with a sliding indicator |
+| Toolbar | `glass-toolbar.css` | Floating tool pill and fixed navbar |
+| Segmented Control | `glass-segmented.css` | Selection that slides and stretches |
+| Toggle | `glass-toggle.css` | Thumb that becomes a lens while pressed |
+| Slider | `glass-slider.css` | Capsule thumb that becomes a lens while dragged |
+| Search Field | `glass-search.css` | Pill that springs wider on focus |
+| Modal / Sheet | `glass-modal.css` | Native `<dialog>`, centred or bottom sheet |
+| Toast | `glass-toast.css` | Springs in from the bottom or top edge |
+| Popover | `glass-popover.css` | Contextual menu with shortcuts and dividers |
+| Sidebar | `glass-sidebar.css` | Navigation with a sliding current-page indicator |
+| Dock | `glass-dock.css` | Proximity magnification |
 
-| Component | Status | Description |
-|-----------|--------|-------------|
-| Glass Card | ✅ Ready | Panel with specular border, variants: regular, clear, prominent, elevated |
-| Button (Pill) | ✅ Ready | Pill-shaped button with spring press animation |
-| Icon Button | ✅ Ready | Circular icon button (44×44 touch target) |
-| Tab Bar | ✅ Ready | Horizontal tab bar with sliding active indicator |
-| Toolbar / Navbar | ✅ Ready | Floating fixed navbar with specular border |
-| Segmented Control | ✅ Ready | Radio group with glass active indicator |
-| Toggle / Switch | ✅ Ready | Switch with glass thumb and spring animation |
-| Search Field | ✅ Ready | Expandable search pill |
-| Modal / Sheet | ✅ Ready | Centered modal and bottom sheet variants |
-| Toast | ✅ Ready | Floating notification pill |
-| Slider | ✅ Ready | Fluid range slider with glass track and spring thumb |
-| Popover / Menu | ✅ Ready | Floating contextual menu with shortcuts and dividers |
-| Sidebar | ✅ Ready | Translucent navigation panel with badges and user card |
-| Dock | ✅ Ready | macOS Tahoe / iPadOS floating dock with magnification |
+## Quick start
 
-## 🚀 Quick Start
-
-### Copy & Paste (Recommended)
-
-1. Copy `skills/liquid-glass/snippets/tokens.css` into your project
-2. Import it: `@import url('./tokens.css');`
-3. Copy any component CSS file from `skills/liquid-glass/snippets/`
-4. Use the HTML structure documented at the top of each CSS file
-
-### CDN (Coming Soon)
+1. Copy `skills/liquid-glass/snippets/tokens.css` and the component files you need.
+2. Optionally copy `liquid-glass.js` for refraction and behaviours.
+3. Use the markup from the docblock at the top of each CSS file.
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/liquid-glass-components/tokens.css">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="glass-tab-bar.css">
+<script src="liquid-glass.js" defer></script>
+
+<nav class="glass-tabs" role="tablist" aria-label="Main" data-refract>
+  <button class="glass-tabs__tab" type="button" role="tab" aria-selected="true">
+    <span class="glass-tabs__label">Home</span>
+  </button>
+  <button class="glass-tabs__tab" type="button" role="tab" aria-selected="false">
+    <span class="glass-tabs__label">Search</span>
+  </button>
+</nav>
 ```
 
-## 🤖 Install as AI Skill
+`data-refract` opts an element into refraction. Glass needs something to look through: place
+it over photos, video, wallpapers or scrolling content.
 
-### Universal Prompt (works with any agent)
+## Install as an AI skill
 
-Copy this prompt and paste it into your AI coding agent:
+### Universal prompt
+
+Copy this prompt into any AI coding agent:
 
 ```
 Install the "liquid-glass" skill from https://github.com/jcm-developer/liquid-glass-components and use it in this project.
@@ -76,19 +82,19 @@ Install the "liquid-glass" skill from https://github.com/jcm-developer/liquid-gl
 5. Confirm the installation path and give me a 3-line summary of the main rules.
 6. Then ask me which component I want to create or restyle first with Liquid Glass.
 
-Always respect: WCAG AA contrast (≥4.5:1), prefers-reduced-transparency fallback, prefers-reduced-motion suppression, no glass on content layer, no glass on glass, min font-weight 500 on glass, max 1 backdrop-filter layer on mobile.
+Always respect: WCAG AA contrast (≥4.5:1), prefers-reduced-transparency fallback, prefers-reduced-motion suppression, no glass on content layer, no glass on glass, min font-weight 500 on glass, at most 3 glass surfaces visible at once on mobile.
 ```
 
-### By Agent
+### By agent
 
 <details>
 <summary><strong>Claude Code</strong></summary>
 
 ```bash
-# Option A: npx skills (if available)
+# Option A: npx skills (recommended)
 npx skills add jcm-developer/liquid-glass-components
 
-# Option B: Manual
+# Option B: Manual clone
 git clone https://github.com/jcm-developer/liquid-glass-components /tmp/lgc
 cp -r /tmp/lgc/skills/liquid-glass .claude/skills/
 rm -rf /tmp/lgc
@@ -101,8 +107,11 @@ Skill location: `.claude/skills/liquid-glass/SKILL.md`
 <summary><strong>Cursor</strong></summary>
 
 ```bash
+# Install Cursor AI rule
 mkdir -p .cursor/rules
 cp agents/cursor-rule.mdc .cursor/rules/liquid-glass.mdc
+
+# Or paste the "Any agent" prompt into Cursor Composer
 ```
 </details>
 
@@ -110,6 +119,7 @@ cp agents/cursor-rule.mdc .cursor/rules/liquid-glass.mdc
 <summary><strong>GitHub Copilot</strong></summary>
 
 ```bash
+# Add Copilot instructions
 mkdir -p .github/instructions
 cp agents/copilot-instructions.md .github/instructions/liquid-glass.instructions.md
 ```
@@ -119,6 +129,7 @@ cp agents/copilot-instructions.md .github/instructions/liquid-glass.instructions
 <summary><strong>OpenAI Codex</strong></summary>
 
 ```bash
+# Configure Codex project skills
 cp agents/AGENTS.md ./AGENTS.md
 mkdir -p .agents/skills
 cp -r skills/liquid-glass .agents/skills/
@@ -132,7 +143,7 @@ cp -r skills/liquid-glass .agents/skills/
 # Option A: CLI install
 gemini skills install https://github.com/jcm-developer/liquid-glass-components
 
-# Option B: Manual
+# Option B: Manual copy
 mkdir -p .gemini/skills
 cp -r skills/liquid-glass .gemini/skills/
 
@@ -145,58 +156,69 @@ npx skills add jcm-developer/liquid-glass-components
 <summary><strong>Windsurf</strong></summary>
 
 ```bash
+# Install Windsurf Cascade rule
 mkdir -p .windsurf/rules
 cp agents/windsurf-rule.md .windsurf/rules/liquid-glass.md
 ```
 </details>
 
-## 🎨 Design Tokens
+## Design tokens
 
-Customize every aspect via CSS custom properties:
+Every optical parameter is a CSS custom property. Override them globally or on one element:
 
 ```css
 :root {
-  --glass-blur: 20px;            /* Gaussian blur radius */
-  --glass-bg: rgba(255,255,255,0.12);  /* Surface background */
-  --glass-saturation: 180%;      /* Backdrop saturation boost */
-  --glass-border-radius-lg: 24px;/* Large corner radius */
-  --glass-easing-spring: linear( /* Native CSS spring curve */
-    0, 0.009, 0.035 2.1%, 0.141 4.4%, 0.723 12.9%, ...
-  );
+  --glass-tint: 0.08;          /* surface fill opacity */
+  --glass-rim: 0.6;            /* specular rim intensity, 0 to 1 */
+  --glass-blur: 2px;           /* frost while refraction is active */
+  --glass-blur-fallback: 8px;  /* frost without refraction */
+  --glass-refraction: 48;      /* displacement strength in px */
+  --glass-bezel: 22px;         /* width of the curved lens edge */
+  --glass-chroma: 0.5;         /* chromatic dispersion, 0 to 1 */
 }
 ```
 
-See [`tokens.css`](skills/liquid-glass/snippets/tokens.css) for the complete set including dark mode, high contrast, and forced-colors overrides.
+The playground on the [live demo](https://jcm-developer.github.io/liquid-glass-components/#playground) exports these values. See [`tokens.css`](skills/liquid-glass/snippets/tokens.css) for the full set, including the light and dark schemes (`data-glass-scheme`) and every accessibility override.
 
-## 🌐 Browser Support
+## Browser support
 
-| Feature | Chrome | Safari | Firefox | iOS Safari |
-|---------|--------|--------|---------|------------|
-| `backdrop-filter` | 76+ | 9+ (webkit) | 103+ | 9+ (webkit) |
-| `mask-composite` | 120+ | 15.4+ | 53+ | 15.4+ |
-| CSS `linear()` springs | 113+ | 17.2+ | 112+ | 17.2+ |
-| View Transitions | 111+ | 18+ | 144+ | 18+ |
-| **Overall** | **~98% global** |||||
+| Feature | Chrome / Edge | Safari | Firefox |
+|---|---|---|---|
+| Glass material (`backdrop-filter`) | 76+ | 9+ (`-webkit-`) | 103+ |
+| Real refraction (`backdrop-filter: url()`) | Yes | Blur fallback | Blur fallback |
+| CSS `linear()` springs | 113+ | 17.2+ | 112+ |
+| View Transitions (landing only) | 111+ | 18+ | 144+ |
 
-## 📁 Repository Structure
+Refraction also stays off on touch devices by default (battery), under reduced transparency,
+increased contrast and forced colours.
+
+## Repository structure
 
 ```
 liquid-glass-components/
-├── skills/liquid-glass/       # AI skill (SKILL.md + references + snippets)
-├── agents/                    # Multi-agent adapters (Cursor, Copilot, Codex, Windsurf)
-├── site/                      # Landing page (coming soon)
-├── README.md
-├── LICENSE (MIT)
-└── TRADEMARKS.md
+├── skills/liquid-glass/   # The skill: SKILL.md, references/, snippets/
+├── agents/                # Adapters for Cursor, Copilot, Codex, Windsurf
+├── site/                  # Landing page (GitHub Pages)
+├── docs/                  # Contributor documentation
+├── scripts/               # check-docs.mjs
+├── AGENTS.md              # Rules for agents working on this repo
+└── CONTRIBUTING.md
 ```
 
-## 📄 License
+## Contributing
 
-[MIT](LICENSE) — Free for personal and commercial use. Copy, modify, distribute.
+Start with [CONTRIBUTING.md](CONTRIBUTING.md). Contributor docs live in [`docs/`](docs/):
+[code style](docs/code-style.md), [component contract](docs/domains/components.md),
+[refraction engine](docs/domains/refraction-engine.md), [operations](docs/operations.md) and
+the [decision log](docs/decisions.md).
+
+## License
+
+[MIT](LICENSE). Free for personal and commercial use.
 
 ---
 
-## Legal Disclaimer & Trademark Notice
+## Legal disclaimer and trademark notice
 
 **Liquid Glass Components** is an independent, community-driven open-source project.
 
