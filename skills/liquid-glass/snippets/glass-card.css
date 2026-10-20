@@ -2,6 +2,7 @@
  * Floating glass panel for players, widgets and inspectors.
  *
  * Liquid Glass Components v2.1.0. Requires tokens.css. Optional: liquid-glass.js (refraction, sheen).
+ * MIT License. https://github.com/jcm-developer/liquid-glass-components
  *
  * Usage:
  *   <div class="glass-card glass-sheen" role="region" aria-label="Now playing" data-refract data-refract-bezel="22">

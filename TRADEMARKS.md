@@ -4,13 +4,13 @@
 
 This project references the following trademarks for descriptive and nominative purposes only:
 
-- **Apple**, **Liquid Glass**, **macOS**, **iOS**, **iPadOS**, **watchOS**, **tvOS**, **visionOS**, **SF Pro**, **SF Symbols**, **Safari**, **SwiftUI**, and **Xcode** are trademarks of Apple Inc., registered in the U.S. and other countries.
+- **Apple**, **Liquid Glass**, **macOS**, **iOS**, **iPadOS**, **watchOS**, **tvOS**, **visionOS**, **SF Pro**, **SF Symbols**, **Safari**, **SwiftUI**, and **Xcode** are trademarks or registered trademarks of Apple Inc.
 
 These trademarks are the property of their respective owners. This project does not claim any affiliation with, endorsement by, or official connection to Apple Inc.
 
 ## Use of "Liquid Glass" in This Project
 
-"Liquid Glass" is used in this project's name and documentation as a descriptive term referring to a visual design style, consistent with its use in Apple's public developer documentation and Human Interface Guidelines. As of October 2026, "Liquid Glass" is not registered as a trademark by Apple Inc. in the USPTO.
+"Liquid Glass" is used in this project's name and documentation as a descriptive term referring to a visual design style, consistent with its use in Apple's public developer documentation and Human Interface Guidelines.
 
 ## Project Identity
 

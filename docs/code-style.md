@@ -34,14 +34,16 @@ or editing code. What a component must contain (material, states, fallbacks) liv
 ### File docblock
 
 Every snippet starts with a `/** */` docblock: a summary sentence, a line with the version and
-dependencies, then the usage markup indented two spaces after `*  `, then any notes. The
-markup is the contract: the landing and the README use it verbatim.
+dependencies, the licence line (it travels with every copied snippet, as MIT requires), then
+the usage markup indented two spaces after `*  `, then any notes. The markup is the contract:
+the landing and the README use it verbatim.
 
 ```css
 /**
  * Switch whose thumb swells into a clear lens while pressed.
  *
  * Liquid Glass Components v2.1.0. Requires tokens.css. Optional: liquid-glass.js (toggles aria-checked).
+ * MIT License. https://github.com/jcm-developer/liquid-glass-components
  *
  * Usage:
  *   <button class="glass-toggle" type="button" role="switch" aria-checked="true" aria-labelledby="wifi-label">

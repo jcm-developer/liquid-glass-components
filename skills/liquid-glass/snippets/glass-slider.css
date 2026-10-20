@@ -2,6 +2,7 @@
  * Range slider whose capsule thumb turns into a lens while dragged.
  *
  * Liquid Glass Components v2.1.0. Requires tokens.css. Optional: liquid-glass.js (fill + <output> sync).
+ * MIT License. https://github.com/jcm-developer/liquid-glass-components
  *
  * Usage:
  *   <div class="glass-slider-wrap glass-slider-wrap--panel" data-refract>

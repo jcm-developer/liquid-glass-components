@@ -2,6 +2,7 @@
  * Dock with flat app icons and proximity magnification.
  *
  * Liquid Glass Components v2.1.0. Requires tokens.css. Optional: liquid-glass.js (proximity magnification, refraction).
+ * MIT License. https://github.com/jcm-developer/liquid-glass-components
  *
  * Usage:
  *   <nav class="glass-dock" aria-label="Dock" data-refract data-refract-bezel="20">

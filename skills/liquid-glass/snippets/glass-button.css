@@ -2,6 +2,7 @@
  * Glass button with regular, prominent, icon, small and plain variants.
  *
  * Liquid Glass Components v2.1.0. Requires tokens.css. Optional: liquid-glass.js (refraction, press highlight).
+ * MIT License. https://github.com/jcm-developer/liquid-glass-components
  *
  * Usage:
  *   <button class="glass-btn" type="button" data-refract>Continue</button>

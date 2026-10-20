@@ -2,6 +2,7 @@
  * Tab bar with stacked icon and label tabs and a sliding indicator.
  *
  * Liquid Glass Components v2.1.0. Requires tokens.css. Optional: liquid-glass.js (sliding indicator, arrow keys).
+ * MIT License. https://github.com/jcm-developer/liquid-glass-components
  *
  * Usage:
  *   <nav class="glass-tabs" role="tablist" aria-label="Main" data-refract>
